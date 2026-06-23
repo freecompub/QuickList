@@ -17,6 +17,8 @@ toutes par ce module.
 - `Spacing/Radius+QL.swift` : rayons d'arrondi (`Radius.qlMedium`, …).
 - `Components/AddItemBar.swift` : barre de saisie permanente (US-01),
   bouton [+] externe à droite (décision QO-2).
+- `Components/UndoToast.swift` : toast d'annulation (US-02) affiché en
+  overlay après une suppression, avec bouton « Annuler ».
 - `Resources/{fr,en}.lproj/Localizable.strings` : strings localisables
   consommés par le design system (FR par défaut, EN en repli). Format
   classique conservé pour US-01 — migration vers `Localizable.xcstrings`

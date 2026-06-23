@@ -2,3 +2,7 @@
 "ql.addItem.submit" = "Ajouter";
 "ql.list.empty.title" = "Liste vide";
 "ql.list.empty.subtitle" = "Commencez à taper pour ajouter votre premier item.";
+"ql.list.item.delete" = "Supprimer";
+"ql.undoToast.deleted" = "« %@ » supprimé";
+"ql.undoToast.undo" = "Annuler";
+"ql.undoToast.undo.accessibility" = "Annuler la suppression";

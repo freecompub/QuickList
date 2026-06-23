@@ -24,4 +24,31 @@ public enum QuickListStrings {
         bundle: .module,
         comment: "Subtitle shown on a list that has no item yet."
     )
+
+    public static let listItemDelete = String(
+        localized: "ql.list.item.delete",
+        bundle: .module,
+        comment: "Title of the swipe action that deletes an item from a list."
+    )
+
+    public static let undoToastUndo = String(
+        localized: "ql.undoToast.undo",
+        bundle: .module,
+        comment: "Visible label of the undo button inside the undo toast."
+    )
+
+    public static let undoToastUndoAccessibility = String(
+        localized: "ql.undoToast.undo.accessibility",
+        bundle: .module,
+        comment: "Accessibility label of the undo button inside the undo toast."
+    )
+
+    public static func undoToastDeleted(title: String) -> String {
+        let format = String(
+            localized: "ql.undoToast.deleted",
+            bundle: .module,
+            comment: "Message of the undo toast after deleting an item — %@ is the item title."
+        )
+        return String(format: format, title)
+    }
 }

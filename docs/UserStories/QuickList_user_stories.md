@@ -17,8 +17,8 @@ En tant qu'utilisateur, je veux taper un texte dans un champ et valider avec Ent
 
 **US-02 — Annuler un ajout par erreur**
 En tant qu'utilisateur, je veux supprimer rapidement un item que je viens d'ajouter, afin de corriger une faute de frappe.
-- CA : un balayage (swipe) sur l'item propose « Supprimer ».
-- CA : la suppression est réversible (option « Annuler » pendant quelques secondes).
+- [x] CA : un balayage (swipe) sur l'item propose « Supprimer ».
+- [x] CA : la suppression est réversible (option « Annuler » pendant quelques secondes).
 
 ---
 

@@ -20,4 +20,19 @@ public final class SwiftDataListItemRepository: ListItemRepository {
         try context.save()
         return item
     }
+
+    public func delete(_ item: ListItem) throws {
+        context.delete(item)
+        try context.save()
+    }
+
+    public func restore(_ snapshot: ListItemSnapshot, in list: TaskList) throws -> ListItem {
+        let item = ListItem(title: snapshot.title, category: snapshot.category)
+        item.isDone = snapshot.isDone
+        item.createdAt = snapshot.createdAt
+        item.list = list
+        context.insert(item)
+        try context.save()
+        return item
+    }
 }

@@ -30,6 +30,10 @@ commit** que l'implémentation qui émet l'événement (exigence `CLAUDE.md`).
 |--|--|--|--|--|
 | `item_added` | US-01 | Soumission validée de l'AddItemBar (Return ou tap `[+]`) | `list_type: string` (valeur de `ListType`) | `QuickListAdd` |
 | `item_add_failed` | US-01 | Échec de la persistance lors de l'ajout d'un item | `list_type: string`, `reason: string` (`"persistence"`) | `QuickListAdd` |
+| `item_deleted` | US-02 | Suppression confirmée (expiration du toast Undo sans annulation) | `list_type: string` | `QuickListAdd` |
+| `item_delete_undone` | US-02 | Tap sur « Annuler » du toast d'undo dans le délai | `list_type: string` | `QuickListAdd` |
+| `item_delete_failed` | US-02 | Échec de la persistance lors de la suppression d'un item | `list_type: string`, `reason: string` (`"persistence"`) | `QuickListAdd` |
+| `item_delete_undo_failed` | US-02 | Échec de la persistance lors du restore après undo | `list_type: string`, `reason: string` (`"persistence"`) | `QuickListAdd` |
 
 ## Tags retirés
 
