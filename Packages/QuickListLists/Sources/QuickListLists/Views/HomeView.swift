@@ -34,7 +34,9 @@ public struct HomeView<DetailContent: View>: View {
         .navigationTitle(QuickListStrings.homeTitle)
         .navigationDestination(for: TaskList.self) { list in
             detailContent(list)
-                .onAppear { viewModel.listDidOpen(list) }
+                .task(id: list.persistentModelID) {
+                    viewModel.listDidOpen(list)
+                }
         }
     }
 

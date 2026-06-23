@@ -63,16 +63,6 @@ public struct ListTypeSelector: View {
     }
 
     private func presentation(for type: ListType) -> ListTypePresentation {
-        ListTypePresentation.presentation(for: kind(for: type))
-    }
-
-    private func kind(for type: ListType) -> ListTypeKind {
-        switch type {
-        case .groceries: return .groceries
-        case .tasks: return .tasks
-        case .ideas: return .ideas
-        case .projects: return .projects
-        case .favorites: return .favorites
-        }
+        type.presentation
     }
 }

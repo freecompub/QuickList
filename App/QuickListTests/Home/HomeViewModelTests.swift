@@ -83,26 +83,19 @@ final class HomeViewModelTests: XCTestCase {
         let list = TaskList(name: "Vide")
         list.items = []
 
-        let subtitle = sut.subtitle(for: list)
-
-        XCTAssertFalse(subtitle.isEmpty)
-        XCTAssertTrue(subtitle.contains("0"))
+        XCTAssertEqual(sut.subtitle(for: list), QuickListStrings.itemCount(0))
     }
 
     func test_subtitle_isSingularForOneItem() {
         let list = makeList(openCount: 1)
 
-        let subtitle = sut.subtitle(for: list)
-
-        XCTAssertTrue(subtitle.contains("1"))
+        XCTAssertEqual(sut.subtitle(for: list), QuickListStrings.itemCount(1))
     }
 
     func test_subtitle_isPluralForMultipleItems() {
         let list = makeList(openCount: 4)
 
-        let subtitle = sut.subtitle(for: list)
-
-        XCTAssertTrue(subtitle.contains("4"))
+        XCTAssertEqual(sut.subtitle(for: list), QuickListStrings.itemCount(4))
     }
 
     func test_presentation_returnsMatchingTypePresentation() {
@@ -113,12 +106,17 @@ final class HomeViewModelTests: XCTestCase {
         XCTAssertEqual(presentation.kind, .groceries)
     }
 
-    func test_presentation_coversAllListTypes() {
-        for type in ListType.allCases {
+    func test_presentation_mapsEachListType_toExpectedKind() {
+        let expectations: [(ListType, ListTypeKind)] = [
+            (.groceries, .groceries),
+            (.tasks, .tasks),
+            (.ideas, .ideas),
+            (.projects, .projects),
+            (.favorites, .favorites)
+        ]
+        for (type, expected) in expectations {
             let list = TaskList(name: "X", type: type)
-            let presentation = sut.presentation(for: list)
-            XCTAssertFalse(presentation.systemImageName.isEmpty)
-            XCTAssertFalse(presentation.label.isEmpty)
+            XCTAssertEqual(sut.presentation(for: list).kind, expected)
         }
     }
 

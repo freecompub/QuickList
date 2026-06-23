@@ -23,3 +23,5 @@
 "ql.list.itemCount.singular" = "%d item";
 "ql.list.itemCount.plural" = "%d items";
 "ql.list.itemCount.zero" = "0 item";
+"ql.list.card.accessibility.zero" = "%1$@ — %2$@, aucun item à faire";
+"ql.list.card.accessibility.unfinished" = "%1$@ — %2$@, %3$d à faire";

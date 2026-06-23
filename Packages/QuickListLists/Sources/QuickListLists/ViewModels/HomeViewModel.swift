@@ -1,5 +1,4 @@
 import Foundation
-import Logging
 import QuickListAnalytics
 import QuickListCore
 import QuickListDesignSystem
@@ -8,14 +7,9 @@ import QuickListDesignSystem
 public final class HomeViewModel: ObservableObject {
 
     private let analytics: AnalyticsService
-    private let logger: Logger
 
-    public init(
-        analytics: AnalyticsService,
-        logger: Logger = Logger(label: "quicklist.lists.home")
-    ) {
+    public init(analytics: AnalyticsService) {
         self.analytics = analytics
-        self.logger = logger
     }
 
     public func unfinishedItemsCount(in list: TaskList) -> Int {
@@ -34,7 +28,7 @@ public final class HomeViewModel: ObservableObject {
     }
 
     public func presentation(for list: TaskList) -> ListTypePresentation {
-        ListTypePresentation.presentation(for: kind(for: list.type))
+        list.type.presentation
     }
 
     public func listDidOpen(_ list: TaskList) {
@@ -42,15 +36,5 @@ public final class HomeViewModel: ObservableObject {
             name: "list_opened",
             properties: ["list_type": list.type.rawValue]
         ))
-    }
-
-    private func kind(for type: ListType) -> ListTypeKind {
-        switch type {
-        case .groceries: return .groceries
-        case .tasks: return .tasks
-        case .ideas: return .ideas
-        case .projects: return .projects
-        case .favorites: return .favorites
-        }
     }
 }
