@@ -16,7 +16,7 @@ Légende : `→` dépend de.
 
 ### 1.2 Listes multiples
 - **US-03** — Créer une liste (nom + type) — *en revue*
-- **US-04** — Voir toutes mes listes (accueil) → US-03
+- **US-04** — Voir toutes mes listes (accueil) → US-03 — *en revue*
 - **US-05** — Renommer / supprimer une liste (inline, cascade) → US-03
 
 ### 1.3 Tri intelligent

@@ -8,60 +8,51 @@ import SwiftUI
 
 struct RootView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query(sort: [SortDescriptor(\TaskList.createdAt, order: .forward)])
-    private var lists: [TaskList]
     @State private var isCreateSheetPresented = false
 
     var body: some View {
         NavigationStack {
-            content
-                .toolbar {
-                    ToolbarItem(placement: .primaryAction) {
-                        Button {
-                            isCreateSheetPresented = true
-                        } label: {
-                            Image(systemName: Symbol.qlCreateList)
-                                .symbolRenderingMode(.hierarchical)
-                                .foregroundStyle(Color.qlAccent)
-                        }
-                        .accessibilityLabel(QuickListStrings.rootNewListAccessibility)
+            HomeView(
+                viewModelFactory: {
+                    HomeViewModel(analytics: LoggingAnalyticsService())
+                },
+                detailContent: { list in
+                    ListDetailView {
+                        AddItemViewModel(
+                            list: list,
+                            repository: SwiftDataListItemRepository(context: modelContext),
+                            analytics: LoggingAnalyticsService()
+                        )
                     }
                 }
-                .sheet(isPresented: $isCreateSheetPresented) {
-                    CreateListSheet(
-                        viewModelFactory: {
-                            CreateListViewModel(
-                                repository: SwiftDataTaskListRepository(context: modelContext),
-                                analytics: LoggingAnalyticsService()
-                            )
-                        },
-                        // La navigation post-creation est pilotee par lists.last
-                        // (cf. content). US-04 routera vers ListDetailView via
-                        // une vraie HomeView consommant cette nouvelle liste.
-                        onListCreated: { _ in }
-                    )
+            )
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        isCreateSheetPresented = true
+                    } label: {
+                        Image(systemName: Symbol.qlCreateList)
+                            .symbolRenderingMode(.hierarchical)
+                            .foregroundStyle(Color.qlAccent)
+                    }
+                    .accessibilityLabel(QuickListStrings.rootNewListAccessibility)
                 }
-        }
-    }
-
-    @ViewBuilder
-    private var content: some View {
-        if let activeList = lists.last {
-            ListDetailView {
-                AddItemViewModel(
-                    list: activeList,
-                    repository: SwiftDataListItemRepository(context: modelContext),
-                    analytics: LoggingAnalyticsService()
+            }
+            .sheet(isPresented: $isCreateSheetPresented) {
+                CreateListSheet(
+                    viewModelFactory: {
+                        CreateListViewModel(
+                            repository: SwiftDataTaskListRepository(context: modelContext),
+                            analytics: LoggingAnalyticsService()
+                        )
+                    },
+                    onListCreated: { _ in
+                        // US-04 : la nouvelle liste est visible immediatement
+                        // dans HomeView via @Query. Le push vers ListDetail
+                        // reste un tap explicite de l'utilisateur (HIG).
+                    }
                 )
             }
-        } else {
-            ProgressView()
-                .task {
-                    DefaultListBootstrapper(
-                        repository: SwiftDataTaskListRepository(context: modelContext)
-                    )
-                    .ensureDefault(name: "Démo", type: .tasks)
-                }
         }
     }
 }
