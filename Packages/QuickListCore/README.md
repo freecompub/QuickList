@@ -11,8 +11,10 @@ par toute l'application et les protocoles de persistance qui les manipulent.
 - `ListItemRepository` (protocole) + `SwiftDataListItemRepository`
   (implémentation) : accès aux items, injecté dans les ViewModels.
 - `TaskListRepository` (protocole) + `SwiftDataTaskListRepository`
-  (implémentation) : accès aux listes, utilisé notamment par le bootstrap
-  d'app pour vérifier l'existence d'une liste de démarrage.
+  (implémentation) : accès aux listes — `fetchAll`, `create`, `rename`,
+  `delete`. La suppression cascade les `ListItem` via la `@Relationship`
+  côté modèle. `TaskListRepositoryError.emptyName` est levé si le
+  renommage trim sur une chaîne vide.
 
 ## Règle d'architecture
 
