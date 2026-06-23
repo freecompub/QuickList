@@ -37,3 +37,9 @@
 "ql.list.rename.error.message" = "Could not rename this list. Try again.";
 "ql.list.delete.error.title" = "Could not delete";
 "ql.list.delete.error.message" = "Could not delete this list. Try again.";
+"ql.sort.menu.title" = "Sort";
+"ql.sort.dateAdded" = "Date added";
+"ql.sort.alphabetical" = "Alphabetical";
+"ql.sort.status" = "Status (to do / done)";
+"ql.sort.error.title" = "Could not change sort";
+"ql.sort.error.message" = "Could not change the sort order. Try again.";

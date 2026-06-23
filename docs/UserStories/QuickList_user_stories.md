@@ -45,8 +45,8 @@ En tant qu'utilisateur, je veux renommer ou supprimer une liste, afin de garder 
 
 **US-06 — Choisir un mode de tri**
 En tant qu'utilisateur, je veux trier une liste par ordre d'ajout, alphabétique ou par statut (fait / pas fait), afin de l'organiser selon mon besoin.
-- CA : le mode de tri est accessible depuis la liste.
-- CA : le tri choisi est mémorisé par liste (champ `sortMode` sur `TaskList`).
+- [x] CA : le mode de tri est accessible depuis la liste.
+- [x] CA : le tri choisi est mémorisé par liste (champ `sortMode` sur `TaskList`).
 
 **US-07 — Tri par rayon intelligent (Foundation Models)**
 En tant qu'utilisateur, je veux qu'une liste de courses regroupe automatiquement les articles par rayon, afin d'optimiser mon parcours en magasin.

@@ -37,6 +37,8 @@ commit** que l'implémentation qui émet l'événement (exigence `CLAUDE.md`).
 | `list_rename_failed` | US-05 | Échec de la persistance lors du renommage d'une liste | `list_type: string`, `reason: string` (`"persistence"`) | `QuickListLists` |
 | `list_deleted` | US-05 | Confirmation de l'alert de suppression (`Supprimer`) | `list_type: string` | `QuickListLists` |
 | `list_delete_failed` | US-05 | Échec de la persistance lors de la suppression d'une liste | `list_type: string`, `reason: string` (`"persistence"`) | `QuickListLists` |
+| `list_sort_changed` | US-06 | Sélection d'un mode de tri depuis le Menu de la NavigationBar | `list_type: string`, `sort_mode: string` (valeur de `SortMode`) | `QuickListAdd` |
+| `list_sort_change_failed` | US-06 | Échec de la persistance lors du changement de tri | `list_type: string`, `reason: string` (`"persistence"`) | `QuickListAdd` |
 
 ## Tags retirés
 

@@ -29,8 +29,24 @@ la `ListDetailView` qui affiche les items d'une `TaskList` et héberge la
   ou tap sur le bouton externe `[+]` (qui reste tappable même champ vide
   pour rappeler le focus).
 
+## Tri de la liste (US-06)
+
+- `SortListViewModel` (`@MainActor`) : porte la `TaskList`, expose
+  `currentSortMode`, `setSortMode(_:)` (persiste via
+  `TaskListRepository.updateSortMode`, émet `list_sort_changed`),
+  `sortedItems(_:)` qui trie selon `list.sortMode` (`.dateAdded`,
+  `.alphabetical` localizedCaseInsensitive, `.status` = à faire
+  d'abord puis date), `lastError` + `dismissError()`.
+- `ListDetailView` ajoute un `Menu` dans la `primaryAction` de la toolbar
+  (`Symbol.qlSortMenu`) avec un `Picker` 3 options. `.alert` localisée
+  en cas d'échec de persistance.
+
 ## Analytics
 
 - `item_added` à chaque ajout réussi (`list_type` en propriété).
 - `item_add_failed` quand la persistance échoue (`reason: "persistence"`).
+- `list_sort_changed` quand l'utilisateur sélectionne un mode de tri
+  différent (`list_type`, `sort_mode`).
+- `list_sort_change_failed` quand la persistance du tri échoue
+  (`reason: "persistence"`).
 - Aucune propriété PII (pas de titre d'item, pas de nom de liste).

@@ -20,7 +20,7 @@ Légende : `→` dépend de.
 - **US-05** — Renommer / supprimer une liste (inline, cascade) → US-03 — *en revue*
 
 ### 1.3 Tri intelligent
-- **US-06** — Choisir un mode de tri (par liste, persisté) → US-03
+- **US-06** — Choisir un mode de tri (par liste, persisté) → US-03 — *en revue*
 - **US-07** — Tri par rayon (Foundation Models + fallback JSON) → US-03
 
 ### 1.4 Mode Courses

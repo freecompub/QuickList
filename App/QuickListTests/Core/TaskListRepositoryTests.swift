@@ -95,4 +95,16 @@ final class TaskListRepositoryTests: XCTestCase {
         XCTAssertTrue(try context.fetch(FetchDescriptor<ListItem>()).isEmpty)
         XCTAssertTrue(try listRepo.fetchAll().isEmpty)
     }
+
+    func test_updateSortMode_persistsNewMode() throws {
+        let repo = try makeRepository()
+        let list = try repo.create(name: "Tâches", type: .tasks)
+        XCTAssertEqual(list.sortMode, .dateAdded)
+
+        try repo.updateSortMode(list, to: .alphabetical)
+
+        XCTAssertEqual(list.sortMode, .alphabetical)
+        let fetched = try repo.fetchAll()
+        XCTAssertEqual(fetched.first?.sortMode, .alphabetical)
+    }
 }

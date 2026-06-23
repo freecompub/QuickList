@@ -12,4 +12,5 @@ public enum Symbol {
     public static let qlListTypeFavorites = "star.fill"
     public static let qlRenameList = "pencil"
     public static let qlOptionsList = "ellipsis.circle"
+    public static let qlSortMenu = "line.3.horizontal.decrease.circle"
 }

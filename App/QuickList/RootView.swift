@@ -24,13 +24,22 @@ struct RootView: View {
                     )
                 },
                 detailContent: { list in
-                    ListDetailView {
-                        AddItemViewModel(
-                            list: list,
-                            repository: SwiftDataListItemRepository(context: modelContext),
-                            analytics: LoggingAnalyticsService()
-                        )
-                    }
+                    ListDetailView(
+                        viewModelFactory: {
+                            AddItemViewModel(
+                                list: list,
+                                repository: SwiftDataListItemRepository(context: modelContext),
+                                analytics: LoggingAnalyticsService()
+                            )
+                        },
+                        sortViewModelFactory: {
+                            SortListViewModel(
+                                list: list,
+                                repository: SwiftDataTaskListRepository(context: modelContext),
+                                analytics: LoggingAnalyticsService()
+                            )
+                        }
+                    )
                 }
             )
             .toolbar {
