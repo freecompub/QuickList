@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles.css">
+<title>Mockup — Inbox et Auto-routage (confiance faible)</title>
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumb"><a href="../index.html">← Index</a></nav>
+
+<h1>Mockup — Inbox et Auto-routage (confiance faible)</h1>
+
+<blockquote>
+<p>US couvertes : US-18, US-19<br>
+A VALIDER PAR L'UTILISATEUR AVANT IMPLEMENTATION</p>
+</blockquote>
+
+<hr>
+
+<h2>Concept</h2>
+
+<p>L'Inbox est une liste système invisible tant qu'elle est vide. Elle reçoit les items pour lesquels Foundation Models a une confiance de routage trop faible pour assigner automatiquement une liste.</p>
+
+<p>L'utilisateur n'est jamais bloqué : l'item est toujours sauvegardé, jamais perdu.</p>
+
+<hr>
+
+<h2>HomeView — Inbox visible (badge d'alerte)</h2>
+
+<div class="phone-frame"><pre>┌─────────────────────────────────────────────┐
+│ ████████████████████████████████████████████│
+├─────────────────────────────────────────────┤
+│                                             │
+│  Mes listes                      [person+] │
+│  Font.qlLargeTitle                          │
+│                                             │
+├─────────────────────────────────────────────┤
+│                                             │
+│  ┌──────────────────────────────────────┐  │  ← Inbox card (pleine largeur)
+│  │                                      │  │    Positionnée en TÊTE de liste
+│  │  tray.fill   Inbox          [2] ●   │  │    tray.fill en qlWarning
+│  │  (20pt)      Font.qlHeadline  badge  │  │    Badge qlWarning background
+│  │                                      │  │    Fond : qlWarning opacity 0.08
+│  │  2 items à router                    │  │    Sous-titre : qlSecondaryLabel
+│  │  Font.qlCallout · qlSecondaryLabel  │  │    Border : 1pt qlWarning opacity 0.3
+│  │                                      │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌───────────────────┐ ┌─────────────────┐ │
+│  │  cart.fill  [5] ● │ │ checklist [12] ●│ │
+│  │  Courses          │ │ Tâches          │ │
+│  │  5 items · ☁      │ │ 12 items        │ │
+│  └───────────────────┘ └─────────────────┘ │
+│  ...                                        │
+└─────────────────────────────────────────────┘</pre></div>
+
+<hr>
+
+<h2>InboxView — Liste des items non routés</h2>
+
+<div class="phone-frame"><pre>┌─────────────────────────────────────────────┐
+│ ████████████████████████████████████████████│
+├─────────────────────────────────────────────┤
+│  ◀ Mes listes    Inbox    [2]    [trier]    │  ← NavigationBar
+│                  Font.qlTitle1              │    Badge count dans le titre
+│                                             │
+├─────────────────────────────────────────────┤
+│                                             │
+│  Ces items n'ont pas pu être classés        │  ← Bandeau explicatif (non intrusif)
+│  automatiquement. Choisissez une liste      │    Font.qlCallout
+│  pour chacun.                               │    Color.qlSecondaryLabel
+│  bg qlSecondaryBackground                  │    padding qlL
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │                                      │  │  ← Item 1
+│  │  tray.fill  truc à faire             │  │    Pas de checkbox
+│  │  (tray icon = inbox indicator)       │  │    Icon = tray.fill (inlet)
+│  │             Font.qlBody qlPrimaryLbl │  │    Tap → InboxRoutingSheet
+│  │                                      │  │    chevron.right en trailing
+│  │  [Choisir une liste &gt;]               │  │    Font.qlCallout qlAccent
+│  │  Font.qlCallout · qlAccent           │  │
+│  │                                      │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │                                      │  │
+│  │  tray.fill  acheter un truc          │  │
+│  │             Font.qlBody qlPrimaryLbl │  │
+│  │                                      │  │
+│  │  [Choisir une liste &gt;]               │  │
+│  │  Font.qlCallout · qlAccent           │  │
+│  │                                      │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│                                             │
+│ ████████████████████████████████████████████│
+└─────────────────────────────────────────────┘</pre></div>
+
+<hr>
+
+<h2>InboxRoutingSheet — Choisir la liste de destination</h2>
+
+<div class="phone-frame"><pre>┌─────────────────────────────────────────────┐
+│  (contenu derrière, assombri)                │
+│                                             │
+│                                             │
+├─────────────────────────────────────────────┤
+│            ════                             │  ← Grabber
+│                                             │
+│  Annuler         Dans quelle liste ?        │  ← Titre
+│  qlAccent        Font.qlTitle3.semibold     │
+│                  qlPrimaryLabel             │
+│                                             │
+│  ┌──────────────────────────────────────┐  │  ← Item concerné (readonly, en tête)
+│  │  "truc à faire"                      │  │    bg qlSecondaryBackground
+│  │  Font.qlHeadline · qlPrimaryLabel   │  │    padding qlL
+│  │  (non-éditable ici)                  │  │    Radius.qlMedium
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  SUGGESTIONS IA                             │  ← Si Apple Intelligence dispo
+│  Font.qlCaption1.uppercased               │    Section header
+│  qlSecondaryLabel                           │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  checklist     Tâches         60%   │  │  ← Suggestion IA #1
+│  │  Font.qlBody   qlPrimaryLabel  badge │  │    Badge confidence : "60%"
+│  │                               qlAccent   bg qlAccent opacity 0.15
+│  │                               Font.qlCaption1
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  TOUTES LES LISTES                          │  ← Section "toutes options"
+│  Font.qlCaption1.uppercased               │
+│  qlSecondaryLabel                           │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  cart.fill   Courses                 │  │  ← Chaque liste dispo
+│  ├──────────────────────────────────────┤  │    icon + nom + chevron
+│  │  checklist   Tâches               ✓ │  │  ← Sélection (correspond suggestion)
+│  ├──────────────────────────────────────┤  │    checkmark.fill qlAccent
+│  │  lightbulb   Idées                  │  │
+│  ├──────────────────────────────────────┤  │
+│  │  folder      Projets                │  │
+│  ├──────────────────────────────────────┤  │
+│  │  star        Favoris                │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  tray.fill   Laisser dans l'Inbox    │  │  ← Option de ne rien faire
+│  │              qlSecondaryLabel        │  │    qlTertiaryLabel pour icône
+│  └──────────────────────────────────────┘  │
+│                                             │
+│ ████████████████████████████████████████████│
+└─────────────────────────────────────────────┘</pre></div>
+
+<hr>
+
+<h2>Comportement après sélection</h2>
+
+<p>Tap sur une liste :</p>
+<ol>
+<li>Sheet dismiss (Motion.qlFade)</li>
+<li>Item retiré de l'Inbox et ajouté à la liste sélectionnée</li>
+<li>Toast de confirmation : "[Item] ajouté à [Nom de liste]"</li>
+<li>Si l'Inbox est maintenant vide : la card Inbox disparaît de HomeView (fade)</li>
+</ol>
+
+<p>Feedback haptique : UINotificationFeedbackGenerator(.success)</p>
+
+<hr>
+
+<h2>Etat : Inbox vide</h2>
+
+<p>L'Inbox ne s'affiche pas sur la HomeView. Aucun élément ne signale son existence. Elle est transparente pour l'utilisateur.</p>
+
+<hr>
+
+<h2>Etat : Sans Apple Intelligence (US-19)</h2>
+
+<p>La section "SUGGESTIONS IA" est absente. Seule la liste de toutes les listes est présentée.</p>
+
+<div class="phone-frame"><pre>│                                             │
+│  TOUTES LES LISTES                          │  ← Sans section suggestions
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  cart.fill   Courses                 │  │
+│  ├──────────────────────────────────────┤  │
+│  │  checklist   Tâches                  │  │
+│  ...                                        │</pre></div>
+
+<p>Note : sans Apple Intelligence, la fonction d'auto-routage n'existe pas. Donc l'Inbox ne devrait jamais se remplir (pas de classification automatique). La fiche Inbox est donc présente dans le design pour les cas où Apple Intelligence était disponible mais a renvoyé une confiance faible — ou pour un ajout depuis une capture rapide globale (future feature).</p>
+
+<hr>
+
+<h2>Interactions</h2>
+
+<table>
+<thead>
+<tr><th>Action</th><th>Geste</th><th>Feedback</th></tr>
+</thead>
+<tbody>
+<tr><td>Tap item dans Inbox</td><td>Tap</td><td>UIImpactFeedbackGenerator(.light) + InboxRoutingSheet</td></tr>
+<tr><td>Sélectionner liste</td><td>Tap</td><td>UINotificationFeedbackGenerator(.success) + dismiss</td></tr>
+<tr><td>Laisser dans Inbox</td><td>Tap "Laisser dans l'Inbox"</td><td>UIImpactFeedbackGenerator(.light) + dismiss</td></tr>
+<tr><td>Swipe to delete (Inbox)</td><td>Swipe gauche</td><td>Suppression avec UndoToast</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2>Adaptations iPad / macOS</h2>
+
+<p>iPad : le routage se fait dans un popover ancré sur l'item dans la sidebar ou le detail pane.</p>
+
+<p>macOS : sheet modal natif. Les suggestions IA s'affichent avec le niveau de confiance en pourcentage.</p>
+
+</main>
+</body>
+</html>

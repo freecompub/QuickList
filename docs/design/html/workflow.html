@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuickList — User Flow &amp; Navigation</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<nav class="breadcrumb"><a href="index.html">← Index</a></nav>
+
+<h1>QuickList — User Flow &amp; Navigation</h1>
+
+<blockquote>
+<p>Version 0.2 — Décisions QO-1 à QO-7 intégrées le 2026-06-23<br>
+Auteur : UI Designer Agent</p>
+</blockquote>
+
+<hr>
+
+<h2>1. Architecture de navigation par plateforme</h2>
+
+<h3>1.1 iPhone (TabBar + NavigationStack)</h3>
+
+<p>HIG référence : "Navigation — Tab Bars, NavigationStack"</p>
+
+<p>Décision QO-4 validée : la navigation principale utilise une <code>TabBar</code> à deux onglets. L'idée initiale "pas de TabBar" est annulée.</p>
+
+<div class="flow-diagram"><pre>
+App Launch
+    │
+    ▼
+┌─────────────────────────────────────────────────┐
+│  TabView (TabBar système iOS)                   │
+│                                                 │
+│  ┌──────────────────┐  ┌──────────────────┐    │
+│  │  Onglet 0        │  │  Onglet 1        │    │
+│  │  LISTES          │  │  COURSES         │    │
+│  │  (checklist)     │  │  (cart.fill)     │    │
+│  └────────┬─────────┘  └────────┬─────────┘    │
+│           │                     │              │
+│    NavigationStack        ShoppingModeView     │
+│           │               (dernière liste      │
+│    HomeView (root)         Courses active)     │
+│           │                                    │
+│    ListDetailView (push)                       │
+│                                                │
+│  [checklist  Listes]  [cart.fill  Courses]     │  ← TabBar
+└─────────────────────────────────────────────────┘
+</pre></div>
+
+<p>Modales (présentées par-dessus la TabView depuis n'importe quel onglet) :</p>
+<ul>
+<li><code>CreateListSheet</code> : <code>.sheet</code> (detent .medium puis .large)</li>
+<li><code>ListOptionsSheet</code> : <code>.sheet</code> (detent .medium)</li>
+<li><code>VoiceImportSheet</code> : <code>.sheet</code> (detent .medium)</li>
+<li><code>ReceiptScanView</code> : <code>.fullScreenCover</code></li>
+<li><code>InboxRoutingSheet</code> : <code>.sheet</code> (detent .medium)</li>
+<li><code>ShareListSheet</code> : <code>.sheet</code> (detent .large)</li>
+</ul>
+
+<p>Règles TabBar :</p>
+<ul>
+<li>Tap sur l'onglet actif → scroll to top (comportement HIG)</li>
+<li>Badge rouge sur l'onglet Courses si une liste Courses est non vide</li>
+<li>Les Réglages restent accessibles via <code>gearshape.fill</code> dans la NavigationBar de HomeView (pas de 3e onglet — voir QO-8)</li>
+</ul>
+
+<h3>1.2 iPad (NavigationSplitView)</h3>
+
+<p>HIG référence : "Split Views — NavigationSplitView"</p>
+
+<p>Pas de TabBar sur iPad. La sidebar intègre l'accès "Courses" en tête.</p>
+
+<div class="flow-diagram"><pre>
+┌──────────────────┬──────────────────────────────────────┐
+│  SIDEBAR         │  CONTENT AREA                        │
+│                  │                                      │
+│  ┌────────────┐  │  ┌──────────────────────────────┐   │
+│  │ cart.fill  │  │  │  ShoppingModeView            │   │  ← Courses sélectionnées
+│  │ COURSES    │◄─┤  │  (liste Courses active)      │   │
+│  └────────────┘  │  └──────────────────────────────┘   │
+│  ─────────────   │                                      │
+│  ┌────────────┐  │  ┌──────────────────────────────┐   │
+│  │ ListCard   │  │  │  ListDetailView (sélectée)   │   │
+│  │ ListCard   │◄─┤  │  (items + AddItemBar)         │   │
+│  │ ListCard   │  │  └──────────────────────────────┘   │
+│  │  ...       │  │                                      │
+│  └────────────┘  │                                      │
+│                  │                                      │
+│  [+ Créer]       │                                      │
+└──────────────────┴──────────────────────────────────────┘
+</pre></div>
+
+<ul>
+<li>L'entrée "Courses" en tête de sidebar avec <code>cart.fill</code> est séparée de la liste par un <code>Divider</code></li>
+<li>La sidebar est toujours visible en paysage (style <code>.sidebar</code>)</li>
+<li>En portrait iPad : sidebar rétractable (overlay style)</li>
+<li>Le detail pane affiche un empty state si aucune liste sélectionnée</li>
+<li>Les sheets sont présentées en contexte du panneau actif (pas plein écran)</li>
+</ul>
+
+<h3>1.3 macOS (Window + Sidebar + Menu Bar)</h3>
+
+<p>HIG référence : "Mac Idioms — Navigation"</p>
+
+<div class="flow-diagram"><pre>
+┌─────────────────────────────────────────────────────────────┐
+│  Menu Bar : Fichier | Edition | Liste | Affichage | Aide    │
+├─────────────────┬───────────────────────────────────────────┤
+│  SIDEBAR        │  CONTENT                                  │
+│                 │                                           │
+│  LISTES         │  ┌───────────────────────────────────┐   │
+│  ├ Courses      │  │  Items de la liste sélectionnée   │   │
+│  ├ Tâches       │  │                                   │   │
+│  ├ Idées        │  │  [AddItemBar en bas]              │   │
+│  └ + Nouvelle   │  └───────────────────────────────────┘   │
+│                 │                                           │
+│  PARTAGES       │                                           │
+│  └ Ma liste     │                                           │
+└─────────────────┴───────────────────────────────────────────┘
+</pre></div>
+
+<p>Raccourcis clavier macOS (Menu Bar) :</p>
+<ul>
+<li><code>Cmd+N</code> : Nouvelle liste</li>
+<li><code>Cmd+T</code> : Nouvel item (focus AddItemBar)</li>
+<li><code>Cmd+Delete</code> : Supprimer item sélectionné</li>
+<li><code>Cmd+Z</code> : Annuler dernière action</li>
+<li><code>Cmd+Shift+S</code> : Partager la liste courante</li>
+<li><code>Cmd+Shift+C</code> : Activer mode Courses (raccourci mis à jour depuis <code>Cmd+Option+C</code>)</li>
+</ul>
+
+<hr>
+
+<h2>2. Diagramme complet des écrans et transitions</h2>
+
+<div class="flow-diagram"><pre>
+                    ┌──────────────────┐
+                    │   APP LAUNCH     │
+                    └────────┬─────────┘
+                             │
+                             ▼
+          ╔══════════════════════════════════════════╗
+          ║  TAB BAR — iPhone                        ║
+          ║  [checklist Listes]  [cart.fill Courses] ║
+          ╚═══════╤══════════════════════╤═══════════╝
+                  │                      │
+                  ▼                      ▼
+    ╔═════════════════════╗  ╔═══════════════════════════╗
+    ║ HOME — Toutes       ║  ║ SHOPPING MODE VIEW        ║  [US-08]
+    ║ listes  [US-04]     ║  ║ (liste Courses active     ║
+    ╚══════╤══════════════╝  ║  ou sélecteur si vide)    ║
+           │                 ╚═══════════════════════════╝
+     ┌─────┼──────────────────────────┐
+     │     │                          │
+     │tap  │ tap [+] créer    long press ListCard
+     ▼     ▼                          ▼
+╔═════════════╗ ╔════════════════╗ ╔═════════════════════╗
+║ LIST DETAIL ║ ║ CREATE LIST    ║ ║ LIST OPTIONS SHEET  ║
+║ (items)     ║ ║ SHEET [US-03]  ║ ║ [US-05/06/21]       ║
+╚══════╤══════╝ ╚════════════════╝ ╚═════════════════════╝
+       │
+       ├─── swipe item ──────────────────► Confirm Delete
+       │                                    │
+       │                                    └──► UndoToast [US-02]
+       │
+       ├─── tap [mic] ──────────────────►  VOICE IMPORT SHEET [US-16]
+       │
+       ├─── tap [scan] ─────────────────►  RECEIPT SCAN [US-17]
+       │
+       ├─── IA classifie en BG ─────────►  AIBadge visible → disparaît [US-15]
+       │
+       └─── [type groceries, ajout item] ► CategoryHeader groupé [US-07]
+
+
+VOICE IMPORT SHEET [US-16]
+       │
+       ├── idle → tap mic → recording → stop → processing
+       │
+       └── review (items parsés) → [Ajouter tout] → list detail [US-18]
+                  │
+                  └── item ambigu → INBOX ROUTING [US-18]
+
+
+RECEIPT SCAN [US-17]
+       │
+       ├── camera → snap → processing (Foundation Models)
+       │
+       └── review (items extraits) → sélection → [Ajouter] → list detail
+
+
+INBOX ROUTING [US-18]
+       │
+       ├── confiance faible → sheet "Dans quelle liste ?"
+       │
+       └── utilisateur choisit → item routé → confirmation
+</pre></div>
+
+<hr>
+
+<h2>3. Flows critiques détaillés</h2>
+
+<h3>Flow A — "Ajouter un item en rafale"</h3>
+
+<p>Couvre : US-01, US-15, US-20</p>
+
+<div class="flow-diagram"><pre>
+ETAPE 1 — Ouverture de la liste
+  Ecran : ListDetailView
+  Etat : AddItemBar focus automatique au premier lancement (ou via tap)
+  Transition : NavigationStack push (slide horizontal)
+  Feedback : aucun (immédiat)
+
+ETAPE 2 — Saisie
+  Action : l'utilisateur tape "lait"
+  Ecran : AddItemBar avec texte "lait"
+  Suggestions : SuggestionChips apparaissent sous le champ (Motion.qlQuick)
+    - Chip "Lait entier", "Lait demi-écrémé" (si historique existant)
+  Feedback : aucun haptique pendant la saisie
+
+ETAPE 3 — Validation (Return ou tap +)
+  Action : Return
+  Ecran : item "lait" apparaît en haut de liste (ou en section si courses)
+    - Animation : Motion.qlItemInsert (slide depuis bas de section)
+    - AIBadge visible sur l'item (si Apple Intelligence dispo)
+  Champ : se vide immédiatement, garde le focus
+  Feedback haptique : UIImpactFeedbackGenerator(.light) à l'apparition de l'item
+
+ETAPE 4 — Classification IA (en arrière-plan)
+  Ecran : AIBadge pulse sur l'item "lait"
+  Durée : variable selon modèle, typiquement &lt; 1s
+  Résultat : item déplacé dans section "Crèmerie", AIBadge disparaît (fade)
+  Feedback haptique : aucun (action background, non-intrusive)
+
+ETAPE 5 — Item suivant
+  Action : l'utilisateur tape "pâtes"
+  Même cycle que étapes 2-4
+  Résultat : après 3-4 items, les sections commencent à se former
+</pre></div>
+
+<hr>
+
+<h3>Flow B — "Passage en mode Courses avec tri rayon"</h3>
+
+<p>Couvre : US-07, US-08, US-09</p>
+
+<div class="flow-diagram"><pre>
+ETAPE 1 — Accès via TabBar (décision QO-4 validée)
+  Action : tap sur l'onglet "Courses" (cart.fill) dans la TabBar
+  Transition : switch d'onglet natif TabView (cross-fade système)
+  Feedback haptique : UIImpactFeedbackGenerator(.light) (standard TabBar)
+  Etat : ShoppingModeView de la dernière liste Courses active
+
+  Alternative : si aucune liste Courses n'existe, empty state dédié
+  avec CTA "Créer une liste Courses"
+
+ETAPE 2 — ShoppingModeView
+  Ecran : liste d'items groupés par rayon
+    - CategoryHeaders colorés (Color.qlRayonXxx)
+    - ListRows en variante shoppingMode (hauteur 64pt)
+  Etat initial : tous les items en statut "pas fait"
+
+ETAPE 3 — Cocher un item
+  Action : tap sur item "lait"
+  Effet : checkmark animé (Motion.qlCheckmark), item grisé
+  Comportement : l'item glisse en bas de sa section (décision QO-3 validée)
+  Animation : spring response 0.35, item existant se déplace vers le bas
+  Feedback haptique : UIImpactFeedbackGenerator(.medium)
+
+ETAPE 4 — Corriger un rayon (US-09)
+  Action : long press sur item "tofu"
+  Menu contextuel : ["Déplacer vers...", liste des rayons]
+  Sélection : "Crèmerie"
+  Effet : item déplacé, préférence sauvegardée dans CategoryPreference
+  Prochaine fois : "tofu" ira directement en Crèmerie sans appel IA
+
+ETAPE 5 — Retourner aux listes
+  Action : tap sur l'onglet "Listes" (checklist) dans la TabBar
+  Transition : switch d'onglet natif (cross-fade)
+  L'état de ShoppingModeView est conservé (items cochés persistent)
+</pre></div>
+
+<hr>
+
+<h3>Flow C — "Import vocal"</h3>
+
+<p>Couvre : US-16, US-18</p>
+
+<div class="flow-diagram"><pre>
+ETAPE 1 — Ouvrir la dictée
+  Action : tap sur [mic.fill] dans AddItemBar
+  Prérequis : Apple Intelligence disponible (sinon bouton absent)
+  Transition : sheet montante (.medium detent), Motion.qlExpressive
+  Feedback haptique : UIImpactFeedbackGenerator(.light)
+
+ETAPE 2 — Enregistrement
+  Ecran : VoiceImportSheet, état "recording"
+  Visuel : waveform animée centrée, bouton Stop rouge
+  Action : l'utilisateur dit "du lait, des pâtes et appeler le dentiste"
+  Transcription : texte transcrit en direct sous la waveform
+
+ETAPE 3 — Stop et traitement
+  Action : tap Stop
+  Ecran : état "processing", shimmer sur les futurs items
+  Foundation Models : découpe la phrase en items distincts
+  Résultat attendu : ["Lait", "Pâtes", "Appeler le dentiste"]
+    - Chacun avec rayon proposé / liste proposée
+
+ETAPE 4 — Revue
+  Ecran : VoiceImportSheet état "review"
+  Affichage : liste des items, chacun éditable inline
+  "Appeler le dentiste" → proposition de liste : "Tâches" (confiance haute)
+  "Lait" → proposition : liste Courses courante (confiance haute)
+
+ETAPE 5 — Validation
+  Action : tap "Ajouter [N] items"
+  Items routés vers leurs listes respectives
+  Sheet dismiss, retour sur ListDetail
+  Items visibles immédiatement
+  Feedback haptique : UINotificationFeedbackGenerator(.success)
+
+ETAPE 6 — Cas confiance faible (US-18)
+  Item "truc à faire" → confiance faible → InboxRoutingSheet
+  L'utilisateur choisit la liste, ou laisse en Inbox
+</pre></div>
+
+<hr>
+
+<h3>Flow D — "Scan de ticket"</h3>
+
+<p>Couvre : US-17</p>
+
+<div class="flow-diagram"><pre>
+ETAPE 1 — Accès
+  Depuis AddItemBar : icône doc.viewfinder (visible selon contexte)
+  Depuis ListOptionsSheet : "Scanner un ticket"
+  Transition : fullScreenCover (camera nécessite plein écran)
+
+ETAPE 2 — Camera
+  Ecran : viewfinder avec rectangle guide centré
+  Label : "Cadrez le ticket dans le rectangle"
+  Action : tap déclencheur (ou capture automatique si document détecté)
+
+ETAPE 3 — Traitement Foundation Models
+  Ecran : overlay semi-transparent avec shimmer
+  Label : "Extraction des produits…" (ql.receipt.processing)
+  Durée : variable (entrée image, modèle 2026)
+
+ETAPE 4 — Revue des items extraits
+  Ecran : liste scrollable, chaque ligne avec checkbox de sélection
+  Tous cochés par défaut
+  L'utilisateur peut décocher ce qu'il ne veut pas ajouter
+  Possibilité d'éditer chaque titre
+
+ETAPE 5 — Validation
+  Action : "Ajouter [N] produits"
+  Ajout dans la liste active, catégorisation en arrière-plan
+  Feedback haptique : UINotificationFeedbackGenerator(.success)
+</pre></div>
+
+<hr>
+
+<h3>Flow E — "Partager une liste"</h3>
+
+<p>Couvre : US-21</p>
+
+<div class="flow-diagram"><pre>
+ETAPE 1 — Accès
+  Via ListOptionsSheet : "Partager" (person.2.badge.plus)
+  Ou via ContextMenu sur ListCard : "Partager"
+
+ETAPE 2 — ShareListSheet
+  Présentation : .sheet .large detent
+  Affichage : lien de partage + input email / contacts
+  Bouton : "Envoyer une invitation" (iCloud CloudKit sharing)
+
+ETAPE 3 — Confirmation
+  Invitation envoyée : toast confirmation
+  ListCard affiche désormais icon person.2.fill (partagée)
+  SyncIndicator sync les modifications en temps réel entre collaborateurs
+</pre></div>
+
+<hr>
+
+<h2>4. Règles de transition</h2>
+
+<h3>Principes généraux</h3>
+
+<ul>
+<li>Les transitions de navigation (push/pop) utilisent la transition système SwiftUI (HIG : Transitions).</li>
+<li>Les sheets montent depuis le bas (.spring avec response 0.4).</li>
+<li>Les fullScreenCovers glissent depuis le bas (system default).</li>
+<li>Les toasts apparaissent depuis le bas par-dessus le contenu (.spring response 0.2).</li>
+<li>La suppression d'item use une combinaison scale + fade + collapse de hauteur.</li>
+</ul>
+
+<h3>Gestes supportés</h3>
+
+<div class="flow-diagram"><pre>
+Geste                     | Contexte              | Effet
+--------------------------|-----------------------|-----------------------------
+Swipe left sur item       | ListDetail            | Action "Supprimer"
+Swipe right sur item      | ListDetail            | (réservé, aucune action)
+Swipe down sur sheet      | Toutes sheets         | Dismiss
+Swipe down sur toast      | UndoToast             | Dismiss manuel
+Swipe down en top (list)  | ListDetail            | Pull-to-refresh (sync iCloud)
+Long press sur ListCard   | HomeView              | ContextMenu
+Long press sur item       | ShoppingModeView      | Menu "Déplacer vers rayon"
+Drag &amp; drop item          | ShoppingModeView      | Réordonner dans un rayon
+Pinch (iPad)              | HomeView              | Passer grille 2 → 3 colonnes
+</pre></div>
+
+<hr>
+
+<h2>5. Empty States et états dégradés</h2>
+
+<h3>5.1 Hiérarchie des empty states</h3>
+
+<div class="flow-diagram"><pre>
+App sans aucune liste
+    → HomeView empty state → CTA "Créer ma première liste"
+
+Liste sans items
+    → ListDetail empty state → focus automatique AddItemBar
+
+Apple Intelligence indisponible (US-19)
+    → Boutons mic et scan absents
+    → Tri manuel seulement (pas de CategoryHeaders IA)
+    → Badge "Apple Intelligence requis" dans Settings
+
+Mode offline
+    → SyncIndicator masqué (pas de notifications anxiogènes)
+    → Les actions locales fonctionnent normalement
+    → Sync reprise automatiquement à la reconnexion
+</pre></div>
+
+<h3>5.2 Inbox (US-18)</h3>
+
+<p>L'Inbox est une liste système cachée, visible uniquement quand elle contient des items non routés. Elle apparaît en tête de la HomeView avec une badge orange pour attirer l'attention.</p>
+
+<hr>
+
+<p><em>Fin du document workflow.md</em><br>
+<em>Version 0.2 — Décisions QO-1 à QO-7 intégrées</em></p>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="QuickList P4 — Q minimaliste">
+  <title>QuickList — Q minimaliste</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0A84FF"/>
+      <stop offset="1" stop-color="#0066CC"/>
+    </linearGradient>
+  </defs>
+
+  <!-- iOS rounded square background -->
+  <rect x="0" y="0" width="1024" height="1024" rx="229" ry="229" fill="url(#bg)"/>
+
+  <!-- Q body: thick white ring, centered slightly above middle to leave room for the checkmark tail -->
+  <circle cx="470" cy="460" r="220" fill="none" stroke="#FFFFFF" stroke-width="86" stroke-linecap="round"/>
+
+  <!-- Q tail reimagined as a checkmark: short down-right stroke + long up-right stroke,
+       starting from the lower-right of the Q ring and extending outward. -->
+  <path d="M 560 600 L 640 700 L 820 500"
+        fill="none"
+        stroke="#FFFFFF"
+        stroke-width="86"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+</svg>

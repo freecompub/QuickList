@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="QuickList P1 — Éclair liste">
+  <title>QuickList — Éclair liste</title>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0A84FF"/>
+      <stop offset="1" stop-color="#0066CC"/>
+    </linearGradient>
+
+    <!-- Lightning bolt path, used both as cutout (in mask) and as visible shape -->
+    <path id="bolt" d="M 588 240 L 392 552 L 504 552 L 436 784 L 632 472 L 520 472 Z"/>
+
+    <!-- Mask: white = visible. We hide the bolt area (slightly enlarged) from the list lines. -->
+    <mask id="lineCutout" maskUnits="userSpaceOnUse" x="0" y="0" width="1024" height="1024">
+      <rect x="0" y="0" width="1024" height="1024" fill="#FFFFFF"/>
+      <use href="#bolt" fill="#000000" stroke="#000000" stroke-width="40" stroke-linejoin="round" stroke-linecap="round"/>
+    </mask>
+  </defs>
+
+  <!-- Background: iOS-style rounded square with Apple blue gradient -->
+  <rect x="0" y="0" width="1024" height="1024" rx="229" ry="229" fill="url(#bg)"/>
+
+  <!-- Three white list lines, with the bolt silhouette knocked out -->
+  <g stroke="#FFFFFF" stroke-width="56" stroke-linecap="round" fill="none" mask="url(#lineCutout)">
+    <line x1="192" y1="360" x2="832" y2="360"/>
+    <line x1="192" y1="512" x2="832" y2="512"/>
+    <line x1="192" y1="664" x2="832" y2="664"/>
+  </g>
+
+  <!-- Lightning bolt cutting diagonally across the three lines -->
+  <use href="#bolt" fill="#FFFFFF"/>
+</svg>

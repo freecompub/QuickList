@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles.css">
+<title>Mockup — Réglages</title>
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumb"><a href="../index.html">← Index</a></nav>
+
+<h1>Mockup — Réglages</h1>
+
+<blockquote>
+<p>US couvertes : US-10, US-19, transversales<br>
+A VALIDER PAR L'UTILISATEUR AVANT IMPLEMENTATION</p>
+</blockquote>
+
+<hr>
+
+<h2>Accès</h2>
+
+<p>Les Réglages sont accessibles depuis la HomeView via un bouton <code>gearshape.fill</code> dans la NavigationBar (trailing, secondaire derrière le bouton +) ou depuis les Réglages système iOS (bundle de l'app → Réglages in-app).</p>
+
+<hr>
+
+<h2>iPhone Portrait — SettingsView</h2>
+
+<div class="phone-frame"><pre>
+┌─────────────────────────────────────────────┐
+│ ████████████████████████████████████████████│
+├─────────────────────────────────────────────┤
+│  ◀ Retour            Réglages               │  ← NavigationBar
+│                      Font.qlTitle1          │
+│                      .semibold              │
+├─────────────────────────────────────────────┤
+│                                             │  ← SwiftUI Form (grouped)
+│  SYNCHRONISATION                            │  ← Section header
+│  Font.qlCaption1.uppercased                │    qlSecondaryLabel
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  icloud.fill   iCloud                │  │  ← Row statut iCloud
+│  │  qlAccent      Font.qlBody          │  │    Sous-titre : SyncIndicator inline
+│  │                Actif ☁✓              │  │    "Actif" / "Désactivé" / "Erreur"
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  Compte iCloud   freecompub5@gmail   │  │  ← Email (anonymisé en prod)
+│  │  Font.qlBody     Font.qlCallout      │  │    qlSecondaryLabel pour l'email
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  APPLE INTELLIGENCE                         │  ← Section IA
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  sparkles      Apple Intelligence    │  │  ← Statut Apple Intelligence
+│  │  qlAIAccent    Font.qlBody          │  │    badge "Disponible" / "Indisponible"
+│  │               [Disponible ●]         │  │    ● vert si dispo, gris si non
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  Tri par rayon (IA)    [Toggle ON]   │  │  ← Toggle : activer/désactiver
+│  │  Font.qlBody                         │  │    Désactivé si IA indisponible
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  Suggestions d'items    [Toggle ON]  │  │
+│  │  Font.qlBody                         │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  Import vocal (dictée)  [Toggle ON]  │  │
+│  │  Font.qlBody                         │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  Scan de ticket        [Toggle ON]   │  │
+│  │  Font.qlBody                         │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  APPARENCE                                  │  ← Section apparence
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  Thème           [Auto | Clair | Sombre] ← Picker tri-état
+│  │  Font.qlBody                         │  │    Segmented style
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  Couleur d'accent    [● Bleu (déf.)] │  │  ← Sélecteur couleur d'accent
+│  │  Font.qlBody         Font.qlCallout  │  │    (si couleur personnalisable)
+│  │                      qlAccent        │  │    → voir Questions Ouvertes
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  MODE COURSES                               │  ← Section courses
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  Articles faits       [Bas | Masqués]│  │  ← Segmented picker
+│  │  Font.qlBody                         │  │    "En bas de section" / "Masqués"
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  Réinitialiser les catégories IA     │  │  ← Bouton destructif (modal)
+│  │  Font.qlBody · Color.qlDanger        │  │    Efface CategoryPreference
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  À PROPOS                                   │  ← Section about
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  Version             1.0.0 (42)      │  │
+│  ├──────────────────────────────────────┤  │
+│  │  Confidentialité  [Voir la politique]│  │
+│  ├──────────────────────────────────────┤  │
+│  │  Mentions légales                 &gt;  │  │
+│  ├──────────────────────────────────────┤  │
+│  │  Contacter le support             &gt;  │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│                                             │
+│ ████████████████████████████████████████████│
+└─────────────────────────────────────────────┘
+</pre></div>
+
+<hr>
+
+<h2>Etat : Apple Intelligence indisponible (US-19)</h2>
+
+<div class="phone-frame"><pre>
+│  ┌──────────────────────────────────────┐  │
+│  │  sparkles.slash   Apple Intelligence │  │  ← qlSecondaryLabel (pas qlAIAccent)
+│  │  qlSecondaryLabel Font.qlBody       │  │
+│  │               [Non disponible ○]     │  │    ● gris
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  Tri par rayon (IA)    [Toggle OFF]  │  │  ← Toggles grisés et non-interactifs
+│  │  Font.qlBody · qlTertiaryLabel       │  │    visually disabled
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  Suggestions d'items    [Toggle OFF] │  │
+│  │  qlTertiaryLabel                     │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  En savoir plus sur Apple            │  │  ← Lien vers la page Apple
+│  │  Intelligence              [→ Apple] │  │    Font.qlCallout qlAccent
+│  └──────────────────────────────────────┘  │
+</pre></div>
+
+<hr>
+
+<h2>Interactions</h2>
+
+<table>
+<thead>
+<tr><th>Action</th><th>Geste</th><th>Feedback</th></tr>
+</thead>
+<tbody>
+<tr><td>Toggle IA</td><td>Tap toggle</td><td>UIImpactFeedbackGenerator(.light)</td></tr>
+<tr><td>Thème</td><td>Tap segmented</td><td>UIImpactFeedbackGenerator(.light)</td></tr>
+<tr><td>Réinitialiser catégories</td><td>Tap</td><td>Alert de confirmation → UINotificationFeedbackGenerator(.warning)</td></tr>
+<tr><td>Lien externe</td><td>Tap</td><td>Ouverture Safari</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2>Adaptations iPad / macOS</h2>
+
+<p>iPad : les réglages s'ouvrent dans un detail pane dédié (NavigationSplitView avec sidebar Réglages).</p>
+
+<p>macOS : les Réglages sont accessibles via le menu QuickList &gt; Préférences (Cmd+,). Ils s'ouvrent dans un panneau SwiftUI Settings (macOS 13+ style tabView).</p>
+
+<p>Onglets macOS :</p>
+<ul>
+<li>"Général" (synchronisation, apparence)</li>
+<li>"Apple Intelligence" (IA toggles)</li>
+<li>"Mode Courses" (comportement courses)</li>
+<li>"À propos"</li>
+</ul>
+
+</main>
+</body>
+</html>

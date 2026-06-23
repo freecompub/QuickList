@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles.css">
+<title>Mockup — Partage CloudKit d'une liste</title>
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumb"><a href="../index.html">← Index</a></nav>
+
+<h1>Mockup — Partage CloudKit d'une liste</h1>
+
+<blockquote>
+<p>US couvertes : US-21, US-10, US-11<br>
+A VALIDER PAR L'UTILISATEUR AVANT IMPLEMENTATION</p>
+</blockquote>
+
+<hr>
+
+<h2>Accès</h2>
+
+<p>Via ListOptionsSheet &gt; "Partager" (person.2.badge.plus)<br>
+Via ContextMenu sur ListCard &gt; "Partager"</p>
+
+<hr>
+
+<h2>ShareListSheet — Etat initial (liste non partagée)</h2>
+
+<div class="phone-frame"><pre>
+┌─────────────────────────────────────────────┐
+│  (contenu derrière, assombri)                │
+│                                             │
+├─────────────────────────────────────────────┤
+│            ════                             │  ← Grabber
+│                                             │
+│  Annuler           Partager         [Inviter]│  ← Bouton "Inviter" = partage iCloud
+│  qlAccent          Font.qlTitle3    qlAccent│    Font.qlBody.semibold
+│                    qlPrimaryLabel.semibold  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  [cart.fill 24pt]  Courses           │  │  ← Aperçu de la liste partagée
+│  │  Font.qlHeadline   qlPrimaryLabel   │  │    bg qlSurface, Radius.qlMedium
+│  │  5 items                             │  │    padding qlL
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  PARTAGER AVEC                              │  ← Section header
+│  Font.qlCaption1.uppercased qlSecondaryLabel│
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  person.badge.plus   Inviter         │  │  ← Row CTA pour CloudKit share
+│  │  qlAccent            Font.qlBody    │  │    Déclenche le système natif iOS
+│  │                      qlAccent        │  │    (UICloudSharingController)
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  link       Copier le lien           │  │  ← Alternative : copie du lien
+│  │  qlPrimaryLabel Font.qlBody          │  │    pour envoi manuel
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  AUTORISATION                               │  ← Section permissions
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  Collaborateurs      [Lire et écrire]│  │  ← Picker de permissions
+│  │  Font.qlBody         Font.qlCallout  │  │    "Lire et écrire" / "Lecture seule"
+│  │                      qlAccent        │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  Les collaborateurs verront toutes les      │  ← Note explicative
+│  modifications en temps réel.               │    Font.qlFootnote qlSecondaryLabel
+│                                             │
+│ ████████████████████████████████████████████│
+└─────────────────────────────────────────────┘
+</pre></div>
+
+<hr>
+
+<h2>ShareListSheet — Etat : liste déjà partagée (collaborateurs actifs)</h2>
+
+<div class="phone-frame"><pre>
+├─────────────────────────────────────────────┤
+│            ════                             │
+│                                             │
+│  Fermer            Partage actif    [Gérer] │  ← "Gérer" : UICloudSharingController
+│  qlAccent                           qlAccent│
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  [cart.fill 24pt]  Courses           │  │
+│  │  5 items    person.2.fill (badge)    │  │  ← Badge "partagée"
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  COLLABORATEURS (2)                         │  ← Section avec count
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  [Avatar initiales "SM"]             │  │  ← Avatar généré depuis le prénom
+│  │  Samir Alili (vous)      Propriétaire│  │    bg qlAccent, white initiales
+│  │  Font.qlBody              qlSecLbl   │  │    24pt cercle
+│  ├──────────────────────────────────────┤  │
+│  │  [Avatar "MA"]                       │  │  ← Collaborateur #1
+│  │  Marie A.                Lire/Écrire │  │
+│  │  Font.qlBody              qlSecLbl   │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  person.badge.plus   Inviter d'autres│  │
+│  │  qlAccent            Font.qlBody     │  │
+│  │                      qlAccent        │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  DANGER ZONE                               │  ← Section séparée visuellement
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  person.2.slash  Arrêter le partage  │  │  ← Action destructive (confirmation)
+│  │  qlDanger        Font.qlBody.qlDanger│  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│ ████████████████████████████████████████████│
+└─────────────────────────────────────────────┘
+</pre></div>
+
+<hr>
+
+<h2>Comportement d'invitation (UICloudSharingController)</h2>
+
+<p>Tap "Inviter" déclenche <code>UICloudSharingController</code> (natif iOS) :</p>
+
+<div class="phone-frame"><pre>
+┌─────────────────────────────────────────────┐
+│                                             │
+│  [UICloudSharingController — natif iOS]     │  ← Système Apple
+│                                             │    Design 100% Apple, on ne customise pas
+│  "Inviter des personnes à                   │
+│   afficher ou modifier                      │
+│   'Courses'"                                │
+│                                             │
+│  [Qui peut accéder ?]                       │
+│  ○ Seulement les personnes invitées         │
+│  ○ Toute personne avec le lien              │
+│                                             │
+│  [Autorisation ?]                           │
+│  ○ Lire et écrire                           │
+│  ○ Lecture seule                            │
+│                                             │
+│  [Partager via...]  [Copier le lien]        │
+│                                             │
+└─────────────────────────────────────────────┘
+</pre></div>
+
+<hr>
+
+<h2>Indicateurs de synchronisation en collaboration (US-11)</h2>
+
+<p>Quand un collaborateur modifie la liste :</p>
+
+<ol>
+<li>Les items modifiés reçoivent une légère animation flash (background bref en qlAccent opacity 0.2)</li>
+<li>Si les changements arrivent pendant que l'utilisateur est sur la liste : insertion silencieuse (Motion.qlItemInsert discret)</li>
+<li>Si conflit : la version la plus récente gagne (CloudKit last-write-wins)</li>
+<li>Pas d'indication "Modifié par [prénom]" pour rester minimal (à valider)</li>
+</ol>
+
+<hr>
+
+<h2>ListCard — Etat partagée</h2>
+
+<div class="phone-frame"><pre>
+┌───────────────────────┐
+│  cart.fill  [5] ●     │  ← Badge count
+│    person.2.fill      │  ← Icône en overlay top-right
+│    (14pt, qlAccent)   │    "Partagée avec d'autres"
+│                       │
+│  Courses              │
+│  5 items · ☁          │
+└───────────────────────┘
+</pre></div>
+
+<p>VoiceOver ListCard partagée : "Courses, 5 items, partagée avec 1 collaborateur"</p>
+
+<hr>
+
+<h2>Etat : offline (partage non disponible)</h2>
+
+<div class="phone-frame"><pre>
+│  ╔══════════════════════════════════════╗  │
+│  ║                                      ║  │  ← Alert système
+│  ║  Connexion requise                   ║  │
+│  ║                                      ║  │
+│  ║  Le partage de listes nécessite      ║  │
+│  ║  une connexion Internet.             ║  │
+│  ║                                      ║  │
+│  ╠══════════════════════════════════════╣  │
+│  ║  OK                                  ║  │
+│  ╚══════════════════════════════════════╝  │
+</pre></div>
+
+<hr>
+
+<h2>Interactions</h2>
+
+<table>
+<thead>
+<tr><th>Action</th><th>Geste</th><th>Feedback</th></tr>
+</thead>
+<tbody>
+<tr><td>Ouvrir ShareSheet</td><td>Tap "Partager"</td><td>UIImpactFeedbackGenerator(.light)</td></tr>
+<tr><td>Inviter</td><td>Tap "Inviter"</td><td>System UICloudSharingController</td></tr>
+<tr><td>Copier lien</td><td>Tap "Copier le lien"</td><td>Toast "Lien copié" + UINotificationFeedbackGenerator(.success)</td></tr>
+<tr><td>Arrêter partage</td><td>Tap "Arrêter le partage"</td><td>Alert de confirmation</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2>Adaptations iPad / macOS</h2>
+
+<p>iPad : la ShareSheet est un <code>.formSheet</code>. UICloudSharingController est présenté en <code>.formSheet</code> également.</p>
+
+<p>macOS : UICloudSharingController n'existe pas directement. On utilise NSSharingService et les APIs CloudKit macOS. Le design du panneau est adapté à la présentation NSPanel ou sheet native macOS.</p>
+
+</main>
+</body>
+</html>

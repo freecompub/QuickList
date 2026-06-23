@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles.css">
+<title>Mockup — Home : Toutes les listes</title>
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumb"><a href="../index.html">← Index</a></nav>
+
+<h1>Mockup — Home : Toutes les listes</h1>
+
+<blockquote>
+<p>US couvertes : US-03, US-04, US-05, US-10, US-11, US-18<br>
+A VALIDER PAR L'UTILISATEUR AVANT IMPLEMENTATION</p>
+</blockquote>
+
+<hr>
+
+<h2>iPhone Portrait (défaut)</h2>
+
+<div class="phone-frame"><pre>┌─────────────────────────────────────────────┐
+│ ████████████████████████████████████████████│  ← Status bar (système)
+├─────────────────────────────────────────────┤
+│                                             │
+│  Mes listes                      [person+] │  ← NavigationTitle .largeTitle
+│  Font.qlLargeTitle · Color.qlPrimaryLabel   │    Bouton : person.2.badge.plus
+│                                             │    (accès partage global, discret)
+├─────────────────────────────────────────────┤
+│                                             │
+│  ┌─────────── INBOX ────────────────────┐  │  ← Visible uniquement si items
+│  │  tray.fill  Inbox           [3] ●    │  │    non-routés présents (US-18)
+│  │  Font.qlHeadline · qlPrimaryLabel    │  │    Badge orange qlWarning
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌───────────────────┐ ┌─────────────────┐ │
+│  │                   │ │                 │ │  ← Grille 2 colonnes
+│  │  cart.fill        │ │  checklist      │ │    Spacing.qlL entre cards
+│  │       [5] ●       │ │       [12] ●    │ │
+│  │                   │ │                 │ │    Badge : Font.qlBadgeCount
+│  │  Courses          │ │  Tâches         │ │    bg qlAccent, fg white
+│  │  5 items · ☁      │ │  12 items       │ │
+│  │                   │ │                 │ │    Sync icon : icloud.fill
+│  └───────────────────┘ └─────────────────┘ │    Color.qlSyncSuccess 12pt
+│                                             │
+│  ┌───────────────────┐ ┌─────────────────┐ │
+│  │                   │ │                 │ │
+│  │  lightbulb.fill   │ │  folder.fill    │ │    Icônes : 28pt
+│  │                   │ │                 │ │    Color selon type
+│  │                   │ │                 │ │
+│  │  Idées            │ │  Projets        │ │    Font.qlHeadline (nom liste)
+│  │  2 items          │ │  0 item         │ │    Font.qlFootnote (sous-titre)
+│  │                   │ │                 │ │    Color.qlSecondaryLabel (sous-titre)
+│  └───────────────────┘ └─────────────────┘ │
+│                                             │
+│  ┌───────────────────┐                     │
+│  │                   │                     │
+│  │  star.fill        │                     │
+│  │      [1] ●        │                     │
+│  │                   │                     │
+│  │  Favoris          │                     │
+│  │  1 item           │                     │
+│  │                   │                     │
+│  └───────────────────┘                     │
+│                                             │
+│                                             │
+│                              ┌──────────┐  │
+│                              │   [+]    │  │  ← FAB : plus.circle.fill
+│                              │ Nouvelle │  │    44x44pt minimum
+│                              │  liste   │  │    Color.qlAccent
+│                              └──────────┘  │    Position : bottom trailing
+│                                             │    Au-dessus de la TabBar
+├─────────────────────────────────────────────┤
+│  [checklist]              [cart.fill]       │  ← TabBar (décision QO-4)
+│   Listes                   Courses          │    Onglet 0 actif (sélectionné)
+│   qlAccent                 qlTertiaryLabel  │    qlAccent = onglet actif
+│ ████████████████████████████████████████████│  ← Home indicator
+└─────────────────────────────────────────────┘</pre></div>
+
+<p><strong>Tokens de couleur par card</strong></p>
+<ul>
+<li>Courses : <code>Color.qlRayonFruitsLegumes</code> (légère teinte verte — à affiner)</li>
+<li>Cart icon : <code>.multicolor</code></li>
+<li>Tâches : fond <code>Color.qlSurface</code></li>
+<li>Idées : fond <code>Color.qlSurface</code>, lightbulb <code>.multicolor</code> jaune</li>
+<li>Projets : fond <code>Color.qlSurface</code></li>
+<li>Favoris : fond <code>Color.qlSurface</code>, star <code>.multicolor</code> jaune-orange</li>
+</ul>
+
+<hr>
+
+<h2>Etat : Vide (aucune liste)</h2>
+
+<div class="phone-frame"><pre>┌─────────────────────────────────────────────┐
+│ ████████████████████████████████████████████│
+├─────────────────────────────────────────────┤
+│                                             │
+│  Mes listes                                 │
+│                                             │
+├─────────────────────────────────────────────┤
+│                                             │
+│                                             │
+│                                             │
+│          checklist                          │
+│         (56pt, qlSecondaryLabel)            │
+│                                             │
+│         Aucune liste                        │  ← ql.home.empty.title
+│         Font.qlTitle2                       │    Color.qlPrimaryLabel
+│                                             │
+│    Créez votre première liste en            │  ← ql.home.empty.subtitle
+│    appuyant sur +.                          │    Font.qlBody
+│    Font.qlBody · Color.qlSecondaryLabel     │    Color.qlSecondaryLabel
+│    (centré, max 280pt large)                │    (centré, padding qlXXL)
+│                                             │
+│                                             │
+│                                             │
+│                              ┌──────────┐  │
+│                              │   [+]    │  │
+│                              │ Nouvelle │  │
+│                              │  liste   │  │
+│                              └──────────┘  │
+├─────────────────────────────────────────────┤
+│  [checklist]              [cart.fill]       │  ← TabBar
+│   Listes                   Courses          │    Onglet 0 actif
+│ ████████████████████████████████████████████│
+└─────────────────────────────────────────────┘</pre></div>
+
+<hr>
+
+<h2>Etat : Inbox visible (US-18)</h2>
+
+<p>La card Inbox apparaît en tête de liste, en pleine largeur, avec une teinte d'accent <code>Color.qlWarning</code> légèrement visible en fond.</p>
+
+<div class="phone-frame"><pre>┌─────────────────────────────────────────────┐
+│  ┌──────────────────────────────────────┐   │
+│  │ tray.fill  Inbox            [3] ●    │   │  ← Card pleine largeur
+│  │ "3 items à router"                   │   │    bg légère qlWarning 10% opacity
+│  │ Font.qlBody · qlSecondaryLabel       │   │    badge qlWarning
+│  └──────────────────────────────────────┘   │
+│                                             │
+│  [grille normale des listes...]             │</pre></div>
+
+<hr>
+
+<h2>Interactions</h2>
+
+<table>
+<thead>
+<tr><th>Action</th><th>Geste</th><th>Feedback</th><th>Transition</th></tr>
+</thead>
+<tbody>
+<tr><td>Ouvrir une liste</td><td>Tap ListCard</td><td>scale 0.96 → release</td><td>NavigationStack push (slide)</td></tr>
+<tr><td>Créer une liste</td><td>Tap FAB [+]</td><td>UIImpactFeedbackGenerator(.medium)</td><td>Sheet montante</td></tr>
+<tr><td>Options liste</td><td>Long press ListCard</td><td>UIImpactFeedbackGenerator(.medium) + ContextMenu</td><td>ContextMenu</td></tr>
+<tr><td>Renommer</td><td>ContextMenu "Renommer" → ListOptionsSheet</td><td>UIImpactFeedbackGenerator(.light)</td><td>Inline edit dans ListOptionsSheet</td></tr>
+<tr><td>Supprimer</td><td>ContextMenu "Supprimer"</td><td>UINotificationFeedbackGenerator(.warning)</td><td>Confirmation alert</td></tr>
+<tr><td>Ouvrir Inbox</td><td>Tap card Inbox</td><td>scale 0.96</td><td>NavigationStack push</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2>Adaptations iPad</h2>
+
+<ul>
+<li>Pas de TabBar sur iPad — la navigation utilise NavigationSplitView</li>
+<li>La sidebar affiche en tête : entrée "Courses" (<code>cart.fill</code>) avec <code>Divider</code>, puis la liste des listes</li>
+<li>Grille de listes passe à 3 colonnes en paysage (ou 4 sur iPad 13") dans le detail pane</li>
+<li>Le FAB est remplacé par un bouton "Nouvelle liste" dans la toolbar de la sidebar</li>
+<li>Geste pinch pour alterner 2/3 colonnes en portrait</li>
+</ul>
+
+<h2>Adaptations macOS</h2>
+
+<ul>
+<li>Pas de TabBar — entrée "Courses" (<code>cart.fill</code>) en tête de la sidebar, séparée par un <code>Divider</code></li>
+<li>Layout : sidebar + detail pane (items)</li>
+<li>Pas de FAB : bouton "+" dans la toolbar de la sidebar, raccourci <code>Cmd+N</code></li>
+<li>Mode Courses : raccourci <code>Cmd+Shift+C</code></li>
+<li>ContextMenu disponible via clic droit</li>
+<li>Drag &amp; drop de listes pour les réordonner dans la sidebar</li>
+</ul>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="QuickList P5 — Éclair dans case">
+  <title>QuickList — Éclair dans case</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0A84FF"/>
+      <stop offset="1" stop-color="#0066CC"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="1024" height="1024" rx="229" ry="229" fill="url(#bg)"/>
+  <rect x="222" y="222" width="580" height="580" rx="96" ry="96" fill="none" stroke="#FFFFFF" stroke-width="36" stroke-linejoin="round"/>
+  <path d="M 568 340 L 416 552 L 504 552 L 456 684 L 608 472 L 520 472 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="24" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>

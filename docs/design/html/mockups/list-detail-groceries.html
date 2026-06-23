@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles.css">
+<title>Mockup — Détail de liste type Courses (tri par rayon)</title>
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumb"><a href="../index.html">← Index</a></nav>
+
+<h1>Mockup — Détail de liste type Courses (tri par rayon)</h1>
+
+<blockquote>
+<p>US couvertes : US-07, US-08, US-09, US-15, US-01, US-02<br>
+A VALIDER PAR L'UTILISATEUR AVANT IMPLEMENTATION</p>
+</blockquote>
+
+<hr>
+
+<h2>iPhone Portrait — Courses avec rayons</h2>
+
+<div class="phone-frame"><pre>
+┌─────────────────────────────────────────────┐
+│ ████████████████████████████████████████████│
+├─────────────────────────────────────────────┤
+│  ◀ Retour         Courses              [···][☁]│  ← NavigationBar
+│                   Font.qlTitle1             │    Pas de bouton Mode Courses ici :
+│                                             │    accès via l'onglet Courses (TabBar)
+│                                             │    [ellipsis.circle] : options
+├─────────────────────────────────────────────┤
+│                                             │  ← Contenu List scrollable
+│  ┌──────────────────────────────────────┐  │  ← CategoryHeader : Fruits &amp; Légumes
+│  │ leaf.fill  FRUITS &amp; LÉGUMES  · 3     │  │    bg Color.qlRayonFruitsLegumes
+│  └──────────────────────────────────────┘  │    Icon 18pt · Font.qlCaption1.uppercased
+│                                             │    .bold · Color.qlCategoryHeader
+│  ┌──────────────────────────────────────┐  │    "3" : Font.qlCaption2 qlTertiaryLabel
+│  │ ○  Tomates                           │  │
+│  └──────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────┐  │
+│  │ ○  Pommes                            │  │
+│  └──────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────┐  │
+│  │ ○  Salade                        ✦  │  │  ← AIBadge visible : classification en cours
+│  └──────────────────────────────────────┘  │    sparkles 12pt, qlAIAccent, pulse
+│                                             │
+│  ┌──────────────────────────────────────┐  │  ← CategoryHeader : Crèmerie
+│  │ drop.fill   CRÈMERIE         · 2     │  │    bg Color.qlRayonCremerie
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │ ○  Lait                              │  │
+│  └──────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────┐  │
+│  │ ○  Yaourts                           │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │  ← CategoryHeader : Épicerie
+│  │ archivebox.fill  ÉPICERIE    · 1     │  │    bg Color.qlRayonEpicerie
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │ ○  Pâtes                             │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │  ← CategoryHeader : Autres
+│  │ square.grid.2x2.fill  AUTRES · 1    │  │    bg Color.qlRayonAutres
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │ ○  Truc spécial                      │  │  ← Item non reconnu
+│  └──────────────────────────────────────┘  │
+│                                             │
+├─────────────────────────────────────────────┤
+│  ┌──────────────────────────┐  [+]          │  ← AddItemBar (QO-2 : [+] externe)
+│  │  Ajouter un item…   [🎤] │  external     │    plus.circle.fill 32pt qlAccent
+│  └──────────────────────────┘  qlAccent     │
+│  Material.qlBarBackground                   │
+├─────────────────────────────────────────────┤
+│  [checklist]              [cart.fill]       │  ← TabBar (QO-4)
+│   Listes ●                 Courses          │    Tap Courses → ShoppingModeView
+│ ████████████████████████████████████████████│
+└─────────────────────────────────────────────┘
+</pre></div>
+
+<hr>
+
+<h2>Etat : Item en attente de classification IA (US-15)</h2>
+
+<p>Un item ajouté avant classification s'affiche immédiatement dans "Autres" avec l'AIBadge :</p>
+
+<div class="phone-frame"><pre>
+│  ┌──────────────────────────────────────┐  │  ← Section "Autres" temporaire
+│  │ square.grid.2x2.fill  AUTRES · 1    │  │
+│  └──────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────┐  │
+│  │ ○  Épinards                      ✦  │  │  ← En attente de classification
+│  └──────────────────────────────────────┘  │    AIBadge pulse
+</pre></div>
+
+<p>Après classification :</p>
+<ul>
+<li>L'item "Épinards" glisse depuis "Autres" vers "Fruits &amp; Légumes" (animation Motion.qlItemInsert)</li>
+<li>L'AIBadge disparaît (Motion.qlFade 0.2s)</li>
+<li>Si la section n'existait pas encore : elle apparaît avec l'item (Motion.qlItemInsert)</li>
+</ul>
+
+<hr>
+
+<h2>Etat : Sans Apple Intelligence (US-19)</h2>
+
+<div class="phone-frame"><pre>
+│  ◀ Retour         Courses              [···][☁] │
+├─────────────────────────────────────────────────┤
+│                                                 │
+│  ┌──────────────────────────────────────────┐  │  ← Pas de CategoryHeaders
+│  │ ○  Tomates                               │  │    Tri par ordre d'ajout (fallback)
+│  └──────────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────────┐  │
+│  │ ○  Lait                                  │  │
+│  └──────────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────────┐  │
+│  │ ○  Pâtes                                 │  │
+│  └──────────────────────────────────────────┘  │
+│                                                 │
+│  ℹ️  Tri par rayon nécessite Apple Intelligence.│  ← Bandeau informatif discret
+│     Font.qlFootnote · Color.qlSecondaryLabel   │    (bas de liste, avant AddItemBar)
+│     background qlSecondaryBackground           │    Non-bloquant
+│                                                 │
+├─────────────────────────────────────────────────┤
+│  ┌──────────────────────────┐                   │
+│  │  Ajouter un item…        │  [+]              │  ← Pas de bouton [mic] (IA absent)
+│  └──────────────────────────┘                   │
+│  Material.qlBarBackground                       │
+│ ████████████████████████████████████████████████│
+└─────────────────────────────────────────────────┘
+</pre></div>
+
+<hr>
+
+<h2>Etat : Correction de rayon (US-09 — Long Press)</h2>
+
+<div class="phone-frame"><pre>
+│  ┌──────────────────────────────────────┐  │
+│  │ ○  Tofu                          ✦  │  │  ← Long press sur cet item
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ContextMenu (HIG : Context Menus) :        │
+│  ┌──────────────────────────────────────┐  │
+│  │  Déplacer vers...                    │  │
+│  │  ─────────────────────────────────── │  │
+│  │  leaf.fill      Fruits &amp; Légumes     │  │
+│  │  fork.knife     Boucherie            │  │
+│  │  drop.fill    ✓ Crèmerie             │  │  ← Rayon actuel coché
+│  │  archivebox.fill Épicerie            │  │
+│  │  snowflake      Surgelés             │  │
+│  │  birthday.cake.fill Boulangerie      │  │
+│  │  cup.and.saucer.fill Boissons        │  │
+│  │  shower.fill    Hygiène              │  │
+│  │  square.grid.2x2.fill Autres         │  │
+│  └──────────────────────────────────────┘  │
+</pre></div>
+
+<p>Sélection d'un rayon → item déplacé + <code>CategoryPreference</code> sauvegardée.</p>
+
+<hr>
+
+<h2>Interactions</h2>
+
+<table>
+<thead>
+<tr><th>Action</th><th>Geste</th><th>Feedback</th></tr>
+</thead>
+<tbody>
+<tr><td>Mode Courses</td><td>Tap onglet Courses (TabBar)</td><td>Transition TabView native</td></tr>
+<tr><td>Cocher item</td><td>Tap circle</td><td>UIImpactFeedbackGenerator(.medium)</td></tr>
+<tr><td>Corriger rayon</td><td>Long press item</td><td>UIImpactFeedbackGenerator(.medium) + ContextMenu</td></tr>
+<tr><td>Supprimer item</td><td>Swipe gauche</td><td>UINotificationFeedbackGenerator(.warning)</td></tr>
+<tr><td>Item classifié</td><td>Automatique (BG)</td><td>Aucun haptique, animation silencieuse</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2>Adaptations iPad / macOS</h2>
+
+<p>iPad : même layout avec CategoryHeaders, plus de place pour les sections. La sidebar montre les rayons comme raccourcis de navigation (jump to section).</p>
+
+<p>macOS : les CategoryHeaders sont des sections de liste avec style <code>.sidebar</code>. Drag &amp; drop d'items entre sections pour corriger le rayon.</p>
+
+</main>
+</body>
+</html>

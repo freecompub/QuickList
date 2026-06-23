@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles.css">
+<title>Mockup — Détail de liste (Tâches / Idées / Projets / Favoris)</title>
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumb"><a href="../index.html">← Index</a></nav>
+
+<h1>Mockup — Détail de liste (Tâches / Idées / Projets / Favoris)</h1>
+
+<blockquote>
+<p>US couvertes : US-01, US-02, US-06, US-10, US-11, US-15, US-20<br>
+A VALIDER PAR L'UTILISATEUR AVANT IMPLEMENTATION</p>
+</blockquote>
+
+<hr>
+
+<h2>iPhone Portrait — Etat normal (items présents)</h2>
+
+<div class="phone-frame"><pre>┌─────────────────────────────────────────────┐
+│ ████████████████████████████████████████████│  ← Status bar
+├─────────────────────────────────────────────┤
+│  ◀ Retour          Tâches          [···] [☁]│  ← NavigationBar
+│                    Font.qlTitle1            │    Trailing : ellipsis.circle (options)
+│                    .semibold                │              icloud.fill (sync) SyncIndicator
+│                    Color.qlPrimaryLabel     │    Leading : chevron.left (back)
+├─────────────────────────────────────────────┤
+│                                             │  ← Contenu scrollable (List SwiftUI)
+│  ┌──────────────────────────────────────┐  │
+│  │ ○  Acheter du lait                   │  │  ← ListRow (state: default)
+│  │    Font.qlBody · Color.qlPrimaryLabel│  │    checkbox : circle 24pt
+│  └──────────────────────────────────────┘  │    hauteur min 44pt
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │ ○  Appeler le dentiste          ✦    │  │  ← ListRow (state: loading IA)
+│  │    Font.qlBody                       │  │    AIBadge : sparkles 12pt
+│  └──────────────────────────────────────┘  │    Color.qlAIAccent, pulse animé
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │ ○  Préparer la présentation          │  │
+│  │    Font.qlBody                       │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │ ✓  Envoyer l'email à Paul            │  │  ← ListRow (state: done)
+│  │    ̶F̶o̶n̶t̶.̶q̶l̶B̶o̶d̶y̶ strikethrough        │  │    checkbox : checkmark.circle.fill
+│  │    Color.qlItemDone (grisé, opa 0.6) │  │    Color.qlSuccess
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │ ✓  Commander les fournitures          │  │
+│  │    ̶F̶o̶n̶t̶.̶q̶l̶B̶o̶d̶y̶ strikethrough        │  │
+│  │    Color.qlItemDone                  │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ·  ·  ·  (autres items)                   │
+│                                             │
+│                                             │
+│                                             │
+├─────────────────────────────────────────────┤  ← Séparateur (Color.qlSeparator)
+│                                             │
+│  [chip][chip][chip] ← SuggestionChips       │  ← Scroll horizontal
+│                                             │
+│  ┌──────────────────────────┐  [+]          │  ← AddItemBar (QO-2 validée)
+│  │  Ajouter un item…   [🎤] │  external     │    [+] hors du TextField, à droite
+│  └──────────────────────────┘  plus.circle  │    plus.circle.fill 32pt qlAccent
+│                                .fill        │    cible 44x44pt
+│  Material.qlBarBackground                   │
+│  Shadow.qlAddBar                            │
+├─────────────────────────────────────────────┤
+│  [checklist]              [cart.fill]       │  ← TabBar (décision QO-4)
+│   Listes ●                 Courses          │    Onglet Listes actif
+│ ████████████████████████████████████████████│
+└─────────────────────────────────────────────┘</pre></div>
+
+<hr>
+
+<h2>Etat : Swipe to Delete (US-02)</h2>
+
+<div class="phone-frame"><pre>│  ┌──────────────────────────────┐ [🗑 Supprimer] │
+│  │ ○  Acheter du lait           │ ←────────────── │  ← Swipe leading → trailing
+│  └──────────────────────────────┘                 │    Action bg : Color.qlDanger
+│                                                    │    Label : Font.qlBody.bold
+│                                                    │    Icon : trash.fill 20pt white</pre></div>
+
+<p>Après confirmation de suppression : UndoToast apparaît au-dessus de l'AddItemBar.</p>
+
+<hr>
+
+<h2>UndoToast (US-02)</h2>
+
+<div class="phone-frame"><pre>├─────────────────────────────────────────────┤
+│  ┌──────────────────────────────────────┐   │
+│  │  "Acheter du lait" supprimé  [Annuler]│  │  ← Material.qlToastBG
+│  │  Font.qlCallout · qlPrimaryLabel     │   │    Shadow.qlToast
+│  └──────────────────────────────────────┘   │    Radius.qlMedium
+│                                             │    Margin : Spacing.qlL
+├─────────────────────────────────────────────┤
+│  [AddItemBar]                               │</pre></div>
+
+<p>Durée d'affichage : 4 secondes, puis fade out (Motion.qlFade).</p>
+
+<hr>
+
+<h2>Etat : Tri sélectionné (US-06)</h2>
+
+<p>Pas d'UI séparée pour le tri — le changement de tri est accessible depuis le ContextMenu de l'icône ellipsis.circle dans la NavigationBar. Le tri actif est indiqué par un checkmark dans le menu.</p>
+
+<div class="phone-frame"><pre>Options de tri (dans sheet ListOptions ou ContextMenu) :
+  ✓ Ordre d'ajout           (dateAdded)
+    Alphabétique            (alphabetical)
+    Statut (fait / pas fait)(status)</pre></div>
+
+<hr>
+
+<h2>Etat : Vide (liste sans items)</h2>
+
+<div class="phone-frame"><pre>┌─────────────────────────────────────────────┐
+│ ████████████████████████████████████████████│
+├─────────────────────────────────────────────┤
+│  ◀ Retour          Tâches          [···] [☁]│
+├─────────────────────────────────────────────┤
+│                                             │
+│                                             │
+│                                             │
+│              checklist                      │
+│           (48pt, qlSecondaryLabel)          │
+│                                             │
+│            Liste vide                       │  ← ql.list.empty.title
+│          Font.qlTitle2                      │
+│          Color.qlPrimaryLabel               │
+│                                             │
+│  Commencez à taper pour ajouter votre       │  ← ql.list.empty.subtitle
+│  premier item.                              │    Font.qlBody
+│  Color.qlSecondaryLabel (centré)            │    Color.qlSecondaryLabel
+│                                             │
+│                                             │
+│                                             │
+├─────────────────────────────────────────────┤
+│  ┌──────────────────────────┐  [+]          │  ← AddItemBar focus auto
+│  │  Ajouter un item…   [🎤] │  external     │    cursor clignotant visible
+│  └──────────────────────────┘  qlAccent     │
+│  Material.qlBarBackground                   │
+├─────────────────────────────────────────────┤
+│  [checklist]              [cart.fill]       │  ← TabBar
+│   Listes ●                 Courses          │
+│ ████████████████████████████████████████████│
+└─────────────────────────────────────────────┘</pre></div>
+
+<hr>
+
+<h2>Etat : Sync en cours (US-10/11)</h2>
+
+<div class="phone-frame"><pre>│  ◀ Retour    Tâches    [···] [↻]  │  ← SyncIndicator : arrow.triangle.2.circlepath
+│                                   │    rotation animation 1.5s
+│                                   │    Color.qlSyncPending (orange)</pre></div>
+
+<p>Après sync OK :</p>
+<div class="phone-frame"><pre>│  ◀ Retour    Tâches    [···] [☁✓] │  ← icloud.fill, Color.qlSyncSuccess
+│                                   │    fade in → visible 2s → fade out</pre></div>
+
+<hr>
+
+<h2>Interactions</h2>
+
+<table>
+<thead>
+<tr><th>Action</th><th>Geste</th><th>Feedback</th></tr>
+</thead>
+<tbody>
+<tr><td>Cocher un item</td><td>Tap checkbox</td><td>UIImpactFeedbackGenerator(.medium) + animation checkmark</td></tr>
+<tr><td>Décocher un item</td><td>Tap checkbox</td><td>UIImpactFeedbackGenerator(.light)</td></tr>
+<tr><td>Supprimer</td><td>Swipe gauche → "Supprimer"</td><td>UINotificationFeedbackGenerator(.warning)</td></tr>
+<tr><td>Annuler suppression</td><td>Tap [Annuler] sur toast</td><td>UIImpactFeedbackGenerator(.medium)</td></tr>
+<tr><td>Ajouter un item</td><td>Type + Return</td><td>UIImpactFeedbackGenerator(.light)</td></tr>
+<tr><td>Accéder aux options</td><td>Tap ellipsis.circle</td><td>UIImpactFeedbackGenerator(.light)</td></tr>
+<tr><td>Refresh iCloud</td><td>Pull-to-refresh</td><td>Indicateur système</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2>Adaptations iPad</h2>
+
+<ul>
+<li>Layout NavigationSplitView : la liste des items occupe le panneau detail (pleine hauteur)</li>
+<li>AddItemBar toujours en bas du panneau detail</li>
+<li>La NavigationBar est remplacée par la toolbar du splitview</li>
+<li>En paysage : possibilité d'afficher les items cochés dans un panneau secondaire (à valider)</li>
+</ul>
+
+<h2>Adaptations macOS</h2>
+
+<ul>
+<li>La liste est dans le detail pane de la window</li>
+<li>AddItemBar en bas, avec raccourci Cmd+T pour focus</li>
+<li>Swipe actions remplacées par menu contextuel (clic droit) et raccourcis (Delete)</li>
+<li>Le SyncIndicator est dans la toolbar de la window</li>
+</ul>
+
+</main>
+</body>
+</html>

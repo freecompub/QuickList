@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles.css">
+<title>Mockup — Scan de ticket de caisse (Foundation Models)</title>
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumb"><a href="../index.html">← Index</a></nav>
+
+<h1>Mockup — Scan de ticket de caisse (Foundation Models)</h1>
+
+<blockquote>
+<p>US couvertes : US-17, US-19<br>
+A VALIDER PAR L'UTILISATEUR AVANT IMPLEMENTATION</p>
+</blockquote>
+
+<hr>
+
+<h2>Vue fullScreenCover — Etat : camera</h2>
+
+<div class="phone-frame"><pre>┌─────────────────────────────────────────────┐
+│  (Fond noir — vue camera plein écran)       │  ← AVFoundation Camera
+│                                             │
+│  ████████████████████████████████████████  │  ← Status bar (light content)
+│                                             │
+│  ✕                      Scanner un ticket  │  ← NavigationBar sur fond camera
+│  xmark                  Font.qlTitle3      │    Tout en blanc (fond sombre)
+│  white                  white              │
+│                                             │
+│                                             │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │                                      │  │
+│  │                                      │  │
+│  │   [Zone de capture guidée]           │  │  ← Rectangle guide
+│  │   Coins arrondis lumineux            │  │    Radius.qlLarge
+│  │   (white, 2pt stroke)                │  │    Coin renforcés (L-shapes)
+│  │                                      │  │    Blanc, 2pt stroke
+│  │                                      │  │    Rapport : A4 portrait ~
+│  │                                      │  │    3/4 de la largeur écran
+│  │                                      │  │
+│  │                                      │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  Cadrez le ticket dans le rectangle        │  ← Guide textuel
+│  Font.qlCallout · white opacity 0.9        │    centré, sous le guide
+│                                             │
+│                                             │
+│                                             │
+│         ┌──────────────────────────┐       │
+│         │ ○ [capture]              │       │  ← Bouton déclencheur
+│         │   Cercle blanc 72pt      │       │    Style natif camera
+│         │   ring intérieur 64pt    │       │
+│         └──────────────────────────┘       │
+│                                             │
+│                                             │
+│  ████████████████████████████████████████  │
+└─────────────────────────────────────────────┘</pre></div>
+
+<p>Note : si VisionKit peut détecter automatiquement un document, un flash visuel (highlight vert) signale la détection et déclenche la capture automatiquement.</p>
+
+<hr>
+
+<h2>Etat : Processing (Foundation Models en cours)</h2>
+
+<div class="phone-frame"><pre>┌─────────────────────────────────────────────┐
+│  (Photo capturée visible en fond, assombrie) │  ← Image capturée
+│  overlay : qlOverlay (noir 40% opacity)     │    opacity réduite à 0.3
+│                                             │
+│                                             │
+│                                             │
+│                                             │
+│                                             │
+│                                             │
+│              sparkles (32pt)               │  ← Icône IA
+│              Color.qlAIAccent              │    centré
+│              pulse animation               │
+│                                             │
+│   Extraction des produits…                  │  ← ql.receipt.processing
+│   Font.qlTitle3 · white (centré)           │
+│                                             │
+│   Cela peut prendre quelques instants.      │
+│   Font.qlBody · white opacity 0.7 (centré) │
+│                                             │
+│                                             │
+│                                             │
+│   ┌──────────────────────────────────┐     │  ← Barre de progression indéterminée
+│   │ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │     │    ProgressView système (blanc)
+│   └──────────────────────────────────┘     │
+│                                             │
+│                                             │
+└─────────────────────────────────────────────┘</pre></div>
+
+<hr>
+
+<h2>Etat : Review (items extraits)</h2>
+
+<div class="phone-frame"><pre>┌─────────────────────────────────────────────┐
+│ ████████████████████████████████████████████│
+├─────────────────────────────────────────────┤
+│  ✕ Annuler    Ticket scanné    Ajouter [5] →│  ← "Ajouter [N] sélectionnés"
+│              Font.qlTitle3     Font.qlBody  │    Actif si ≥ 1 item coché
+│                               .semibold     │    qlAccent
+│                               qlAccent      │
+├─────────────────────────────────────────────┤
+│                                             │
+│  5 produits détectés                        │  ← Résumé
+│  Font.qlCallout · qlSecondaryLabel          │
+│                                             │
+│  ┌──────────────────────────────────────┐  │  ← Liste des items extraits
+│  │  ☑  Lait demi-écrémé 1L             │  │    Tous cochés par défaut
+│  │     Font.qlBody · qlPrimaryLabel    │  │    Checkbox 24pt
+│  ├──────────────────────────────────────┤  │    Minimum 44pt hauteur
+│  │  ☑  Yaourts nature x4               │  │
+│  ├──────────────────────────────────────┤  │
+│  │  ☑  Pâtes linguine 500g             │  │
+│  ├──────────────────────────────────────┤  │
+│  │  ☐  TAXE TVA 5.5%                   │  │  ← Item non-produit (ligne de taxe)
+│  │     Font.qlBody · qlSecondaryLabel  │  │    Décoché automatiquement
+│  │     (apparence grisée)              │  │    L'utilisateur peut recocher
+│  ├──────────────────────────────────────┤  │
+│  │  ☑  Pain de campagne                │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │  ← Aperçu du ticket (miniature)
+│  │  [Image du ticket, miniature 80x120] │  │    En bas, collapsable
+│  │  Corner radius qlSmall               │  │    Tap pour agrandir
+│  │  opacity 0.8                         │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  Touchez un item pour le modifier          │  ← Hint édition
+│  Font.qlFootnote · qlTertiaryLabel (centré)│
+│                                             │
+│ ████████████████████████████████████████████│
+└─────────────────────────────────────────────┘</pre></div>
+
+<hr>
+
+<h2>Edition inline d'un item extrait</h2>
+
+<div class="phone-frame"><pre>│  ┌──────────────────────────────────────┐  │
+│  │  ☑  ┌─────────────────────────────┐ │  │  ← Tap sur le texte → éditable
+│  │     │  Lait demi-écrémé 1L|       │ │  │    TextField inline, focus
+│  │     └─────────────────────────────┘ │  │    Clavier monte
+│  └──────────────────────────────────────┘  │    Return pour valider</pre></div>
+
+<hr>
+
+<h2>Etat : Erreur (extraction impossible)</h2>
+
+<div class="phone-frame"><pre>├─────────────────────────────────────────────┤
+│  ✕ Annuler     Ticket scanné               │
+├─────────────────────────────────────────────┤
+│                                             │
+│              doc.badge.exclamationmark      │
+│              (32pt, Color.qlDanger)         │
+│                                             │
+│   Impossible d'extraire les produits.       │
+│   Font.qlTitle3 · qlPrimaryLabel (centré)  │
+│                                             │
+│   Le ticket est peut-être illisible ou      │
+│   mal cadré. Réessayez en veillant à        │
+│   photographier tout le ticket.             │
+│   Font.qlBody · qlSecondaryLabel (centré)  │
+│                                             │
+│         ┌────────────────────────┐         │
+│         │   Rescanner            │         │  ← Retry : revient à la camera
+│         └────────────────────────┘         │    qlAccent
+│                                             │
+│         ┌────────────────────────┐         │
+│         │   Saisir manuellement  │         │  ← Fallback : retour à la liste
+│         └────────────────────────┘         │    qlSecondaryLabel
+│                                             │
+│ ████████████████████████████████████████████│</pre></div>
+
+<hr>
+
+<h2>Etat : Apple Intelligence indisponible (US-19)</h2>
+
+<p>Le bouton de scan est absent de l'interface. Si accès direct :</p>
+
+<div class="phone-frame"><pre>│              doc.viewfinder.slash           │  ← Icône
+│              (32pt, qlSecondaryLabel)       │    (doc.viewfinder + slash overlay)
+│                                             │
+│   Scan de ticket non disponible            │
+│   Font.qlTitle3 · qlPrimaryLabel (centré)  │
+│                                             │
+│   Cette fonctionnalité nécessite Apple      │
+│   Intelligence (iOS 26+).                  │
+│   Font.qlBody · qlSecondaryLabel (centré)  │
+│                                             │
+│         ┌────────────────────────┐         │
+│         │     Fermer             │         │
+│         └────────────────────────┘         │</pre></div>
+
+<hr>
+
+<h2>Interactions</h2>
+
+<table>
+<thead>
+<tr><th>Action</th><th>Geste</th><th>Feedback</th></tr>
+</thead>
+<tbody>
+<tr><td>Déclencher capture</td><td>Tap bouton ou détection auto</td><td>UIImpactFeedbackGenerator(.medium)</td></tr>
+<tr><td>Cocher/décocher item</td><td>Tap checkbox</td><td>UIImpactFeedbackGenerator(.light)</td></tr>
+<tr><td>Editer item</td><td>Tap sur texte</td><td>Focus inline</td></tr>
+<tr><td>Annuler</td><td>Tap ✕</td><td>—</td></tr>
+<tr><td>Ajouter sélection</td><td>Tap "Ajouter [N]"</td><td>UINotificationFeedbackGenerator(.success)</td></tr>
+<tr><td>Agrandir ticket</td><td>Tap miniature</td><td>Motion.qlExpressive (zoom in)</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2>Adaptations iPad / macOS</h2>
+
+<p>iPad : la vue camera utilise <code>UIDocumentCameraViewController</code> pour un meilleur résultat de scan. La review s'affiche en <code>.formSheet</code>.</p>
+
+<p>macOS : la feature scan est absente sur macOS (pas de camera orientée document). Le menu "Scanner un ticket" n'est pas visible sur macOS.</p>
+
+</main>
+</body>
+</html>

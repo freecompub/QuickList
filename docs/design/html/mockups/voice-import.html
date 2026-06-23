@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles.css">
+<title>Mockup — Import vocal (Foundation Models)</title>
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumb"><a href="../index.html">← Index</a></nav>
+
+<h1>Mockup — Import vocal (Foundation Models)</h1>
+
+<blockquote>
+<p>US couvertes : US-16, US-18, US-19<br>
+A VALIDER PAR L'UTILISATEUR AVANT IMPLEMENTATION</p>
+</blockquote>
+
+<hr>
+
+<h2>Sheet VoiceImport — Etat : idle</h2>
+
+<div class="phone-frame"><pre>
+┌─────────────────────────────────────────────┐
+│  (contenu derrière, assombri)                │
+│                                             │
+│                                             │
+├─────────────────────────────────────────────┤
+│            ════                             │  ← Grabber (detent .medium → .large)
+│                                             │
+│  ✕                  Import vocal           │  ← xmark ferme la sheet
+│  Font.qlBody         Font.qlTitle3          │    (si pas d'enregistrement actif)
+│  qlAccent            qlPrimaryLabel.semibold│
+│                                             │
+│                                             │
+│                                             │
+│              ┌───────────────┐              │
+│              │               │              │
+│              │    mic.fill   │              │  ← Bouton microphone principal
+│              │    (36pt)     │              │    Cercle 80pt de diamètre
+│              │               │              │    bg Color.qlAccent
+│              └───────────────┘              │    Color.white pour icône
+│                                             │    Shadow.qlCard
+│                                             │
+│   Dites vos items à voix haute.             │  ← ql.voice.instruction
+│   Font.qlBody · Color.qlSecondaryLabel      │    centré
+│   (centré, padding horizontal Spacing.qlXXL)│
+│                                             │
+│   Exemple : "du lait, des pâtes et          │  ← Hint text
+│   appeler le dentiste"                      │    Font.qlFootnote
+│   Font.qlFootnote                           │    Color.qlTertiaryLabel
+│   Color.qlTertiaryLabel (centré)            │    italique optionnel
+│                                             │
+│                                             │
+│                                             │
+│ ████████████████████████████████████████████│
+└─────────────────────────────────────────────┘
+</pre></div>
+
+<hr>
+
+<h2>Sheet VoiceImport — Etat : recording</h2>
+
+<div class="phone-frame"><pre>
+├─────────────────────────────────────────────┤
+│            ════                             │
+│                                             │
+│  ✕              Import vocal  ●  0:03      │  ← Chronomètre de durée
+│                                 qlDanger    │    Point rouge pulse = REC
+│                                             │
+│                                             │
+│   ▁▂▃▅▆▄▂▁▃▅▇▅▃▁▂▄▆▇▆▄▂▁▃▅▄▃▂▁           │  ← Waveform animée
+│   (représentation ASCII, en réalité SVG     │    Barres de hauteur variable
+│    ou Canvas animé selon amplitude micro)   │    Color.qlAccent pour les barres
+│                                             │    Reduce Motion → barres fixes
+│                                             │
+│   "du lait, des pâtes et appeler…"         │  ← Transcription live (Speech)
+│   Font.qlBody · qlPrimaryLabel             │    Texte apparaît au fur et à mesure
+│   (zone de 3-4 lignes, centré)             │    Légère opacité sur le texte en cours
+│                                             │
+│                                             │
+│              ┌───────────────┐              │  ← Bouton Stop
+│              │               │              │    Cercle 80pt
+│              │ stop.fill     │              │    bg Color.qlDanger
+│              │ (36pt)        │              │    Color.white pour icône
+│              │               │              │
+│              └───────────────┘              │
+│                                             │
+│  "Parlez maintenant…"                       │  ← Label état
+│  Font.qlCallout · qlSecondaryLabel (centré) │
+│                                             │
+│ ████████████████████████████████████████████│
+</pre></div>
+
+<hr>
+
+<h2>Sheet VoiceImport — Etat : processing</h2>
+
+<div class="phone-frame"><pre>
+├─────────────────────────────────────────────┤
+│            ════                             │
+│                                             │
+│  ✕              Import vocal               │
+│                                             │
+│                                             │
+│              sparkles (28pt)               │  ← Icon IA centré
+│              Color.qlAIAccent              │    pulse si Reduce Motion off
+│                                             │
+│   Analyse en cours…                         │  ← ql.voice.processing
+│   Font.qlBody · qlSecondaryLabel (centré)  │
+│                                             │
+│                                             │
+│  ┌──────────────────────────────────────┐  │  ← Placeholder items en shimmer
+│  │  ░░░░░░░░░░░░░░░░░░░░░░░░░░          │  │    (skeleton loading)
+│  │  ░░░░░░░░░░░░░░░                     │  │    3 lignes de hauteur ListRow
+│  │  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░        │  │    bg qlSurface avec shimmer
+│  └──────────────────────────────────────┘  │    animé si Reduce Motion off
+│                                             │
+│                                             │
+│ ████████████████████████████████████████████│
+</pre></div>
+
+<hr>
+
+<h2>Sheet VoiceImport — Etat : review</h2>
+
+<div class="phone-frame"><pre>
+├─────────────────────────────────────────────┤
+│            ════                             │
+│                                             │
+│  Modifier            Import vocal   Ajouter │  ← "Ajouter [3] items"
+│  Font.qlBody.qlAccent Font.qlTitle3  btn    │    Font.qlBody.semibold qlAccent
+│                                             │    désactivé si 0 items cochés
+│                                             │
+│  3 items trouvés                            │  ← Résumé
+│  Font.qlCallout · qlSecondaryLabel          │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  ☑  Lait                  Crèmerie  │  │  ← Item parsé avec checkbox
+│  │     Font.qlBody            qlCaption │  │    Tous cochés par défaut
+│  │     qlPrimaryLabel         qlSecondaryLabel
+│  ├──────────────────────────────────────┤  │
+│  │  ☑  Pâtes                 Épicerie  │  │
+│  ├──────────────────────────────────────┤  │
+│  │  ☑  Appeler le dentiste   Tâches ●  │  │  ← Routage : proposition de liste
+│  │     Font.qlBody            badge     │  │    Badge "Tâches" : qlAccent bg
+│  └──────────────────────────────────────┘  │    Font.qlCaption1.bold white
+│                                             │    (si liste différente de la courante)
+│                                             │
+│  Les items seront ajoutés à :               │  ← Footer explicatif
+│  "Courses" (2 items) · "Tâches" (1 item)   │    Font.qlFootnote qlSecondaryLabel
+│                                             │
+│                                             │
+│ ████████████████████████████████████████████│
+</pre></div>
+
+<hr>
+
+<h2>Cas : confiance faible sur le routage (US-18)</h2>
+
+<p>Si Foundation Models a une confiance faible sur la liste de destination d'un item, cet item est signalé :</p>
+
+<div class="phone-frame"><pre>
+│  ┌──────────────────────────────────────┐  │
+│  │  ☑  truc à faire               [?]  │  │  ← Badge "?" orange
+│  │     Font.qlBody         questionmark │  │    Color.qlWarning
+│  │                          .circle.fill│  │    Tap → InboxRoutingSheet inline
+│  └──────────────────────────────────────┘  │
+</pre></div>
+
+<hr>
+
+<h2>Etat : Erreur</h2>
+
+<div class="phone-frame"><pre>
+│              exclamationmark.triangle.fill   │  ← Icône erreur
+│              (28pt, Color.qlDanger)          │
+│                                             │
+│  Impossible d'analyser l'audio.             │
+│  Font.qlBody · qlPrimaryLabel (centré)      │
+│                                             │
+│  Vérifiez les permissions du microphone     │
+│  et réessayez.                              │
+│  Font.qlCallout · qlSecondaryLabel (centré) │
+│                                             │
+│         ┌──────────────────┐               │
+│         │   Réessayer      │               │  ← Bouton retry qlAccent
+│         └──────────────────┘               │
+</pre></div>
+
+<hr>
+
+<h2>Etat : Apple Intelligence indisponible (US-19)</h2>
+
+<p>Le bouton [mic] est absent de l'AddItemBar. Si l'utilisateur accède malgré tout à la sheet (via un lien direct ou un bug), on montre :</p>
+
+<div class="phone-frame"><pre>
+│              sparkles.slash (28pt)          │
+│              Color.qlSecondaryLabel         │
+│                                             │
+│  Apple Intelligence                         │
+│  non disponible                             │
+│  Font.qlTitle2 · qlPrimaryLabel (centré)   │
+│                                             │
+│  L'import vocal nécessite Apple             │
+│  Intelligence (iOS 26+).                    │
+│  Font.qlBody · qlSecondaryLabel (centré)   │
+│                                             │
+│         ┌──────────────────┐               │
+│         │     Fermer       │               │  ← qlSecondaryLabel
+│         └──────────────────┘               │
+</pre></div>
+
+<hr>
+
+<h2>Interactions</h2>
+
+<table>
+<thead>
+<tr><th>Action</th><th>Geste</th><th>Feedback</th></tr>
+</thead>
+<tbody>
+<tr><td>Démarrer enregistrement</td><td>Tap bouton micro</td><td>UIImpactFeedbackGenerator(.heavy)</td></tr>
+<tr><td>Arrêter</td><td>Tap bouton stop</td><td>UIImpactFeedbackGenerator(.medium)</td></tr>
+<tr><td>Cocher/décocher item</td><td>Tap</td><td>UIImpactFeedbackGenerator(.light)</td></tr>
+<tr><td>Éditer item inline</td><td>Tap sur texte de l'item</td><td>UIImpactFeedbackGenerator(.light) + focus</td></tr>
+<tr><td>Valider</td><td>Tap "Ajouter N items"</td><td>UINotificationFeedbackGenerator(.success)</td></tr>
+<tr><td>Fermer</td><td>Tap ✕ ou swipe down</td><td>—</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2>Adaptations iPad / macOS</h2>
+
+<p>iPad : la sheet s'affiche en <code>.formSheet</code>. La waveform est plus large.</p>
+
+<p>macOS : fonctionnalité disponible via le menu Edition &gt; "Dicter des items" ou raccourci. La sheet devient un panneau flottant (NSPanel). La waveform s'adapte à la fenêtre.</p>
+
+</main>
+</body>
+</html>

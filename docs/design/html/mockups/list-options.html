@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles.css">
+<title>Mockup — Options de liste (Renommer / Supprimer / Tri / Partage)</title>
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumb"><a href="../index.html">← Index</a></nav>
+
+<h1>Mockup — Options de liste (Renommer / Supprimer / Tri / Partage)</h1>
+
+<blockquote>
+<p>US couvertes : US-05, US-06, US-21<br>
+A VALIDER PAR L'UTILISATEUR AVANT IMPLEMENTATION</p>
+</blockquote>
+
+<hr>
+
+<h2>Point d'accès</h2>
+
+<p>L'icône <code>ellipsis.circle</code> dans la NavigationBar du ListDetail ouvre ce panneau. Sur iPhone, c'est une sheet <code>.medium</code>. Sur iPad/macOS, c'est un popover.</p>
+
+<hr>
+
+<h2>iPhone Portrait — ListOptions Sheet (.medium detent)</h2>
+
+<div class="phone-frame"><pre>┌─────────────────────────────────────────────┐
+│  (contenu derrière, assombri)                │
+│                                             │
+│                                             │
+│                                             │
+│                                             │
+│                                             │
+├─────────────────────────────────────────────┤
+│            ════                             │  ← Grabber
+│                                             │
+│   Options  "Tâches"                         │  ← Titre contextuel (nom de la liste)
+│   Font.qlTitle3.semibold                    │    centré ou leading
+│   Color.qlPrimaryLabel                      │
+│                                             │
+│  ┌──────────────────────────────────────┐   │  ← Grouped sections (SwiftUI Form style)
+│  │                                      │   │    bg Color.qlGroupedBackground
+│  │   pencil    Renommer                 │   │    chaque row : 44pt min
+│  │   Font.qlBody    qlPrimaryLabel      │   │
+│  ├──────────────────────────────────────┤   │
+│  │                                      │   │
+│  │   person.2.badge.plus  Partager      │   │
+│  │   Font.qlBody    qlPrimaryLabel      │   │
+│  └──────────────────────────────────────┘   │
+│                                             │
+│  Note : "Mode Courses" n'est plus dans ce   │  ← Accès via onglet Courses (TabBar)
+│  menu depuis la décision QO-4.              │    La ListOptionsSheet ne propose pas
+│                                             │    de raccourci vers ShoppingModeView.
+│                                             │
+│  ┌──────────────────────────────────────┐   │  ← Section "Tri"
+│  │   TRIER PAR                          │   │    Section header : qlCaption1.uppercased
+│  ├──────────────────────────────────────┤   │    Color.qlSecondaryLabel
+│  │                                      │   │
+│  │  ✓  Ordre d'ajout                   │   │  ← Tri actuel : checkmark.fill qlAccent
+│  │     Font.qlBody                      │   │
+│  ├──────────────────────────────────────┤   │
+│  │                                      │   │
+│  │     Alphabétique                     │   │
+│  │     Font.qlBody                      │   │
+│  ├──────────────────────────────────────┤   │
+│  │                                      │   │
+│  │     Statut (fait / pas fait)         │   │
+│  │     Font.qlBody                      │   │
+│  │                                      │   │
+│  └──────────────────────────────────────┘   │
+│                                             │
+│  ┌──────────────────────────────────────┐   │  ← Section "Danger zone"
+│  │                                      │   │
+│  │   trash.fill   Supprimer la liste    │   │    Color.qlDanger pour texte et icône
+│  │   Font.qlBody  Color.qlDanger        │   │    Séparation visuelle claire
+│  │                                      │   │
+│  └──────────────────────────────────────┘   │
+│                                             │
+│ ████████████████████████████████████████████│
+└─────────────────────────────────────────────┘</pre></div>
+
+<hr>
+
+<h2>Action : Renommer (inline — décision QO-6 validée)</h2>
+
+<p>Le renommage est <strong>toujours inline</strong>. La row "Renommer" se transforme en TextField in-place après tap. Pas d'alert système.</p>
+
+<div class="phone-frame"><pre>│  ┌──────────────────────────────────────┐   │
+│  │  pencil  ┌────────────────────────┐  │   │
+│  │          │  Tâches|               │  │   │  ← TextField inline
+│  │          └────────────────────────┘  │   │    focus auto à l'ouverture
+│  │          [Annuler]         [OK]       │   │    texte existant pré-sélectionné
+│  └──────────────────────────────────────┘   │    Return ou tap [OK] pour valider</pre></div>
+
+<p>Comportement détaillé :</p>
+<ul>
+<li>Tap "Renommer" : la row se transforme en TextField avec le nom actuel pré-rempli et entièrement sélectionné</li>
+<li>Le clavier s'ouvre immédiatement (focus auto)</li>
+<li>Return ou tap [OK] : sauvegarde et revient à la row normale (fade)</li>
+<li>Tap [Annuler] ou Escape : annule et revient à la row normale sans modification</li>
+<li>La sheet passe en detent <code>.large</code> automatiquement si le clavier recouvrirait le champ</li>
+</ul>
+
+<hr>
+
+<h2>Action : Supprimer (Confirmation)</h2>
+
+<p>Tap "Supprimer la liste" → Alert de confirmation (HIG : Destructive Actions) :</p>
+
+<div class="phone-frame"><pre>┌─────────────────────────────────────────────┐
+│                                             │
+│  ╔═════════════════════════════════════╗    │
+│  ║                                     ║    │
+│  ║  Supprimer "Tâches" ?               ║    │  ← Alert (system modal)
+│  ║                                     ║    │    Font.qlHeadline (titre)
+│  ║  Cela supprimera également les      ║    │
+│  ║  12 items de cette liste.           ║    │    Message : Font.qlBody
+│  ║  Cette action est irréversible.     ║    │    Color.qlSecondaryLabel
+│  ║                                     ║    │
+│  ╠═════════════════════════════════════╣    │
+│  ║  Annuler                            ║    │  ← Bouton non-destructif (leading)
+│  ╠═════════════════════════════════════╣    │    Font.qlBody.semibold qlAccent
+│  ║  Supprimer                          ║    │  ← Bouton destructif
+│  ╚═════════════════════════════════════╝    │    Font.qlBody.bold Color.qlDanger
+│                                             │    .destructive role
+└─────────────────────────────────────────────┘</pre></div>
+
+<p>Après suppression :</p>
+<ul>
+<li>Sheet dismiss + NavigationStack pop (retour HomeView)</li>
+<li>HomeView : ListCard animée sort (fade + scale 0.9)</li>
+<li>Pas d'UndoToast pour la suppression de liste (action trop lourde pour être annulée trivialement)</li>
+<li>Feedback : UINotificationFeedbackGenerator(.warning)</li>
+</ul>
+
+<hr>
+
+<h2>Action : Partager (US-21)</h2>
+
+<p>Tap "Partager" → dismiss ListOptionsSheet → présentation ShareListSheet (autre sheet <code>.large</code>).</p>
+
+<hr>
+
+<h2>Interactions</h2>
+
+<table>
+<thead>
+<tr><th>Action</th><th>Geste</th><th>Feedback</th></tr>
+</thead>
+<tbody>
+<tr><td>Ouvrir options</td><td>Tap ellipsis.circle</td><td>UIImpactFeedbackGenerator(.light)</td></tr>
+<tr><td>Sélectionner tri</td><td>Tap rangée</td><td>UIImpactFeedbackGenerator(.light) + checkmark animé</td></tr>
+<tr><td>Renommer</td><td>Tap "Renommer"</td><td>UIImpactFeedbackGenerator(.light) + focus inline</td></tr>
+<tr><td>Supprimer</td><td>Tap "Supprimer"</td><td>UINotificationFeedbackGenerator(.warning) avant alert</td></tr>
+<tr><td>Dismiss sheet</td><td>Swipe down</td><td>—</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2>Adaptations iPad / macOS</h2>
+
+<p>iPad : le panneau est un popover ancré sur l'icône ellipsis.circle (pas une sheet). Largeur 320pt.</p>
+
+<p>macOS : menu déroulant depuis l'icône, ou menu contextuel (clic droit sur la liste dans la sidebar). Les options de tri sont dans le menu "Affichage" de la Menu Bar. La suppression ouvre une alert native macOS.</p>
+
+</main>
+</body>
+</html>

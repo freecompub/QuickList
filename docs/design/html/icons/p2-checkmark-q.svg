@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="QuickList P2 — Checkmark-Q">
+  <title>QuickList — Checkmark-Q</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0A84FF"/>
+      <stop offset="1" stop-color="#0066CC"/>
+    </linearGradient>
+  </defs>
+
+  <!-- iOS rounded square background -->
+  <rect x="0" y="0" width="1024" height="1024" rx="229" ry="229" fill="url(#bg)"/>
+
+  <!-- Q ring: a thick white circle that hosts the checkmark, evoking the bowl of a "Q" -->
+  <circle cx="512" cy="512" r="252" fill="none" stroke="#FFFFFF" stroke-width="56"/>
+
+  <!-- Checkmark inside the Q bowl: short stroke down-left, long stroke up-right.
+       Coordinates chosen so the long arm exits through the lower-right of the ring,
+       echoing the descending tail of a "Q". -->
+  <path d="M 396 520 L 484 608 L 660 432"
+        fill="none"
+        stroke="#FFFFFF"
+        stroke-width="64"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+
+  <!-- Q tail: a short diagonal extension that pierces the ring at lower-right,
+       turning the checkmark into a subtle Q. -->
+  <line x1="688" y1="688" x2="788" y2="788"
+        stroke="#FFFFFF"
+        stroke-width="56"
+        stroke-linecap="round"/>
+</svg>

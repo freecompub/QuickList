@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles.css">
+<title>Mockup — Empty States</title>
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumb"><a href="../index.html">← Index</a></nav>
+
+<h1>Mockup — Empty States</h1>
+
+<blockquote>
+<p>US couvertes : US-04, US-01, US-19, US-10<br>
+A VALIDER PAR L'UTILISATEUR AVANT IMPLEMENTATION</p>
+</blockquote>
+
+<hr>
+
+<h2>Principes des empty states (HIG : Empty States)</h2>
+
+<p>Les empty states de QuickList suivent les recommandations HIG :</p>
+<ul>
+<li>Icône grande et expressive (SF Symbol, 56-64pt)</li>
+<li>Titre court et clair</li>
+<li>Sous-titre contextuel et utile (pas générique)</li>
+<li>CTA (Call To Action) quand une action directe est possible</li>
+<li>Jamais d'images illustratives complexes (minimalisme Apple)</li>
+<li>Le vide ne doit pas sembler cassé — il doit sembler prêt</li>
+</ul>
+
+<hr>
+
+<h2>1. Home — Aucune liste</h2>
+
+<div class="phone-frame"><pre>
+┌─────────────────────────────────────────────┐
+│ ████████████████████████████████████████████│
+├─────────────────────────────────────────────┤
+│                                             │
+│  Mes listes                                 │
+│                                             │
+├─────────────────────────────────────────────┤
+│                                             │
+│                                             │
+│                                             │
+│                                             │
+│                                             │
+│            checklist                        │
+│            (56pt)                           │  ← SF Symbol
+│            Color.qlSecondaryLabel           │    rendu .hierarchical
+│                                             │
+│          Aucune liste                        │  ← ql.home.empty.title
+│          Font.qlTitle2                      │    .semibold
+│          Color.qlPrimaryLabel               │
+│          (centré)                           │
+│                                             │
+│   Créez votre première liste               │  ← ql.home.empty.subtitle
+│   en appuyant sur +.                        │    Font.qlBody
+│   Color.qlSecondaryLabel                   │    Color.qlSecondaryLabel
+│   (centré, max 280pt largeur)              │    multiline centré
+│                                             │
+│                                             │
+│              ┌──────────────┐              │
+│              │ + Créer une  │              │  ← CTA inline (optionnel)
+│              │     liste    │              │    Radius.qlPill
+│              └──────────────┘              │    bg qlAccent, white label
+│                                             │    Font.qlBody.semibold
+│                                             │
+│                                             │
+│                                             │
+│                              ┌──────────┐  │
+│                              │   [+]    │  │  ← FAB (toujours présent)
+│                              └──────────┘  │
+│ ████████████████████████████████████████████│
+└─────────────────────────────────────────────┘
+</pre></div>
+
+<hr>
+
+<h2>2. Liste vide (items = 0)</h2>
+
+<div class="phone-frame"><pre>
+┌─────────────────────────────────────────────┐
+│ ████████████████████████████████████████████│
+├─────────────────────────────────────────────┤
+│  ◀ Retour         Tâches     [···] [☁]      │
+├─────────────────────────────────────────────┤
+│                                             │
+│                                             │
+│                                             │
+│                                             │
+│             checklist                       │  ← Icône correspondant au type
+│             (48pt)                          │    de liste (cart, checklist, etc.)
+│             Color.qlSecondaryLabel          │
+│                                             │
+│           Liste vide                        │  ← ql.list.empty.title
+│           Font.qlTitle2                     │
+│           Color.qlPrimaryLabel              │
+│                                             │
+│   Commencez à taper pour ajouter           │  ← ql.list.empty.subtitle
+│   votre premier item.                       │    Font.qlBody
+│   Color.qlSecondaryLabel (centré)          │    Color.qlSecondaryLabel
+│                                             │
+│                                             │
+│                                             │
+├─────────────────────────────────────────────┤
+│  ┌──────────────────────────┐               │  ← AddItemBar
+│  │  Ajouter un item…   [🎤] │  [+]          │    AVEC focus automatique
+│  └──────────────────────────┘               │    cursor visible, clavier ouvert
+│  Material.qlBarBackground                   │
+│ ████████████████████████████████████████████│
+└─────────────────────────────────────────────┘
+</pre></div>
+
+<p>Variante par type de liste :</p>
+
+<table>
+<thead>
+<tr><th>Type</th><th>Icône</th><th>Titre</th><th>Sous-titre</th></tr>
+</thead>
+<tbody>
+<tr><td>Courses</td><td>cart.fill</td><td>"Liste de courses vide"</td><td>"Ajoutez vos premiers articles."</td></tr>
+<tr><td>Tâches</td><td>checklist</td><td>"Aucune tâche"</td><td>"Ajoutez votre première tâche."</td></tr>
+<tr><td>Idées</td><td>lightbulb.fill</td><td>"Aucune idée pour l'instant"</td><td>"Capturez vos idées ici."</td></tr>
+<tr><td>Projets</td><td>folder.fill</td><td>"Projet vide"</td><td>"Commencez par ajouter vos premières actions."</td></tr>
+<tr><td>Favoris</td><td>star.fill</td><td>"Aucun favori"</td><td>"Ajoutez vos items préférés."</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2>3. Apple Intelligence non disponible (US-19)</h2>
+
+<h3>3a. Bandeau informatif dans ListDetail (type Courses)</h3>
+
+<p>Affiché discrètement en bas de la liste, avant l'AddItemBar :</p>
+
+<div class="phone-frame"><pre>
+│  ┌──────────────────────────────────────────┐  │
+│  │  sparkles.slash (14pt)                   │  │  ← Bandeau non-bloquant
+│  │  qlSecondaryLabel                        │  │    bg qlSecondaryBackground
+│  │                                          │  │    border top 1pt qlSeparator
+│  │  Le tri par rayon nécessite Apple        │  │    Font.qlCallout
+│  │  Intelligence. Les articles sont         │  │    Color.qlSecondaryLabel
+│  │  affichés par ordre d'ajout.             │  │    icon 14pt leading
+│  │                                          │  │
+│  └──────────────────────────────────────────┘  │
+</pre></div>
+
+<h3>3b. Ecran dédié "Apple Intelligence indisponible" (Settings)</h3>
+
+<div class="phone-frame"><pre>
+┌─────────────────────────────────────────────┐
+│                                             │
+│                                             │
+│           sparkles.slash                    │  ← 48pt, qlSecondaryLabel
+│                                             │
+│    Apple Intelligence                       │  ← Titre
+│    non disponible                           │    Font.qlTitle2
+│    Color.qlPrimaryLabel (centré)           │
+│                                             │
+│  Les fonctionnalités suivantes ne sont      │  ← Sous-titre
+│  pas disponibles sur cet appareil :         │    Font.qlBody qlSecondaryLabel
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  sparkles.slash  Tri par rayon IA    │  │  ← Liste des features manquantes
+│  ├──────────────────────────────────────┤  │    Chacune avec icon grisé
+│  │  sparkles.slash  Import vocal        │  │
+│  ├──────────────────────────────────────┤  │
+│  │  sparkles.slash  Scan de ticket      │  │
+│  ├──────────────────────────────────────┤  │
+│  │  sparkles.slash  Auto-routage        │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  L'app reste entièrement fonctionnelle      │  ← Message rassurant
+│  pour la gestion de listes et le           │    Font.qlCallout
+│  tri manuel.                               │    Color.qlSecondaryLabel
+│                                             │
+│         ┌──────────────────────────┐       │
+│         │  En savoir plus → Apple  │       │  ← Lien optionnel
+│         └──────────────────────────┘       │
+│                                             │
+└─────────────────────────────────────────────┘
+</pre></div>
+
+<h3>3c. AddItemBar sans features IA</h3>
+
+<div class="phone-frame"><pre>
+│  ┌──────────────────────────┐               │  ← Pas de bouton mic
+│  │  Ajouter un item…        │  [+]          │    Pas de bouton scan
+│  └──────────────────────────┘               │    Champ plus large
+│  Material.qlBarBackground                   │
+</pre></div>
+
+<hr>
+
+<h2>4. Mode offline (pas de connexion iCloud)</h2>
+
+<p>Pas d'empty state bloquant. L'app fonctionne en local. Seul indicateur :</p>
+
+<div class="phone-frame"><pre>
+│  ◀ Retour         Tâches    [···]           │  ← Pas de SyncIndicator
+│                             (absent)         │    On ne montre pas l'état offline
+│                                             │    pour éviter l'anxiété
+</pre></div>
+
+<p>Si l'utilisateur tente une action de partage :</p>
+
+<div class="phone-frame"><pre>
+│  ╔═══════════════════════════════════════╗  │
+│  ║                                       ║  │  ← Alert
+│  ║  Connexion requise                    ║  │
+│  ║                                       ║  │
+│  ║  Le partage nécessite une connexion   ║  │
+│  ║  Internet. Réessayez plus tard.       ║  │
+│  ║                                       ║  │
+│  ╠═══════════════════════════════════════╣  │
+│  ║  OK                                   ║  │
+│  ╚═══════════════════════════════════════╝  │
+</pre></div>
+
+<hr>
+
+<h2>5. Recherche sans résultat (future feature, prévu)</h2>
+
+<p>Design prévu même si la recherche n'est pas dans le MVP :</p>
+
+<div class="phone-frame"><pre>
+│            magnifyingglass (48pt)           │
+│            Color.qlSecondaryLabel           │
+│                                             │
+│          Aucun résultat                     │
+│          Font.qlTitle2                      │
+│          Color.qlPrimaryLabel               │
+│                                             │
+│  Aucun item ne correspond à "laib".         │  ← Reprend le terme recherché
+│  Vérifiez l'orthographe ou essayez          │
+│  un autre mot.                              │
+│  Font.qlBody · qlSecondaryLabel (centré)   │
+</pre></div>
+
+<hr>
+
+<h2>6. Inbox vide</h2>
+
+<p>L'Inbox vide n'a pas d'empty state visible — la card Inbox disparaît de la HomeView. C'est l'état normal : l'Inbox n'existe visuellement que quand elle contient des items.</p>
+
+<hr>
+
+<h2>Tokens communs aux empty states</h2>
+
+<div class="phone-frame"><pre>
+Icône          : 48-56pt selon contexte, Color.qlSecondaryLabel, .hierarchical
+Titre          : Font.qlTitle2, Color.qlPrimaryLabel, centré
+Sous-titre     : Font.qlBody, Color.qlSecondaryLabel, centré, max 280pt largeur
+CTA bouton     : Radius.qlPill, bg qlAccent, Font.qlBody.semibold, Color.white
+Spacing icône → titre : Spacing.qlXXL (24pt)
+Spacing titre → sous-titre : Spacing.qlM (12pt)
+Spacing sous-titre → CTA : Spacing.qlXXXL (32pt)
+</pre></div>
+
+</main>
+</body>
+</html>

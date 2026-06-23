@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles.css">
+<title>Mockup — Barre d'ajout + Suggestions (Zoom)</title>
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumb"><a href="../index.html">← Index</a></nav>
+
+<h1>Mockup — Barre d'ajout + Suggestions (Zoom)</h1>
+
+<blockquote>
+<p>US couvertes : US-01, US-20, US-16<br>
+A VALIDER PAR L'UTILISATEUR AVANT IMPLEMENTATION</p>
+</blockquote>
+
+<hr>
+
+<h2>Anatomie complète de l'AddItemBar (décision QO-2 validée : [+] externe)</h2>
+
+<p>Le bouton [+] est positionné à droite du TextField, hors du champ. C'est la disposition définitive.</p>
+
+<div class="phone-frame"><pre>
+┌──────────────────────────────────────────────────────────┐
+│  Material.qlBarBackground + Shadow.qlAddBar              │
+│  Padding : Spacing.qlL horizontal, Spacing.qlM vertical  │
+│                                                          │
+│  [chip 1]  [chip 2]  [chip 3]  [chip 4] →               │  ← SuggestionChips (si dispo)
+│  Scroll horizontal, LazyHStack, Spacing.qlXS entre chips │
+│                                                          │
+│  ┌──────────────────────────────────┐    [+]            │
+│  │                            [🎤]  │  plus.circle.fill │  ← TextField + boutons
+│  │  Ajouter un item…          16pt  │  32pt symbol      │    Height TextField : 48pt
+│  │  qlPlaceholder             44pt  │  44x44pt target   │    Radius.qlMedium
+│  └──────────────────────────────────┘  Color.qlAccent   │    bg qlSecondaryBackground
+│                                         (si typing)     │
+│  Safe area bottom                       qlTertiaryLabel  │
+│                                         (si idle)       │
+│  ████████████████████████████████████████████████████████│
+└──────────────────────────────────────────────────────────┘
+</pre></div>
+
+<hr>
+
+<h2>Etat : idle (champ vide)</h2>
+
+<div class="phone-frame"><pre>
+│  ┌──────────────────────────────────┐    [+]            │
+│  │                            [🎤]  │  qlTertiaryLabel  │  ← [+] visuellement inactif
+│  │  Ajouter un item…                │                   │    (non-tappable pour éviter
+│  └──────────────────────────────────┘                   │    les soumissions vides)
+</pre></div>
+
+<hr>
+
+<h2>Etat : typing (en cours de saisie)</h2>
+
+<div class="phone-frame"><pre>
+│  ┌──────────────────────────────────┐    [+]            │
+│  │                            [🎤]  │  Color.qlAccent   │  ← [+] passe en qlAccent
+│  │  lait de soja|                   │  spring 0.2s      │    dès la première lettre
+│  └──────────────────────────────────┘                   │    cursor | visible
+│                                                          │
+│  [lait entier]  [lait demi-écrémé]  [lait de coco] →   │  ← Suggestions apparues
+│  SuggestionChips, LazyHStack, scroll horizontal         │    Motion.qlQuick (spring)
+</pre></div>
+
+<hr>
+
+<h2>Etat : voix active (US-16 — mic tap)</h2>
+
+<div class="phone-frame"><pre>
+│                                                          │
+│  ┌──────────────────────────────────────────────────┐  │
+│  │                                                  │  │  ← Le TextField est remplacé
+│  │  ▁▂▄▆▄▂▁▂▃▅▆▅▃▂▁  ●  [Stop]                    │  │    par la waveform
+│  │  Waveform animée (AudioKit ou AVFoundation)      │  │    Bouton Stop : carré rouge
+│  │  Color.qlDanger pour stop                        │  │    44x44pt
+│  │  "du lait, des pâtes…" (transcription live)      │  │    Texte transcrit sous la wave
+│  │  Font.qlCallout · qlSecondaryLabel               │  │
+│  └──────────────────────────────────────────────────┘  │
+│                                                          │
+│  Material.qlBarBackground                               │
+</pre></div>
+
+<hr>
+
+<h2>SuggestionChips — Anatomie détaillée</h2>
+
+<div class="phone-frame"><pre>
+╔══════════════════════╗  ╔══════════════╗  ╔════════════════╗
+║  [leaf]  Tomates     ║  ║  Lait entier ║  ║  [star] Café   ║
+╚══════════════════════╝  ╚══════════════╝  ╚════════════════╝
+
+Hauteur : 32pt
+Padding : Spacing.qlS (8pt) vertical, Spacing.qlM (12pt) horizontal
+bg : Color.qlSurface
+border : 1pt Color.qlSeparator
+corner : Radius.qlPill
+texte : Font.qlSuggestionChip · Color.qlAccent
+icône : SF Symbol 14pt · Color.qlSecondaryLabel (optionnelle, si rayon connu)
+</pre></div>
+
+<hr>
+
+<h2>Comportement des suggestions</h2>
+
+<p>Source des suggestions (par priorité) :</p>
+<ol>
+<li>Items précédemment ajoutés dans cette liste (historique)</li>
+<li>Items fréquents de toutes les listes du même type</li>
+<li>Suggestions génériques selon le type de liste (Courses : aliments courants)</li>
+</ol>
+
+<p>Filtrage : les chips sont filtrées en temps réel sur le texte saisi. Si le texte match une suggestion, elle est mise en premier.</p>
+
+<p>Tap sur une chip :</p>
+<ul>
+<li>Item ajouté immédiatement à la liste</li>
+<li>La chip disparaît de la rangée (si item unique)</li>
+<li>Focus revient sur le TextField</li>
+</ul>
+
+<hr>
+
+<h2>Interactions</h2>
+
+<table>
+<thead>
+<tr><th>Action</th><th>Geste</th><th>Feedback</th></tr>
+</thead>
+<tbody>
+<tr><td>Valider item</td><td>Return ou tap [+]</td><td>UIImpactFeedbackGenerator(.light)</td></tr>
+<tr><td>Utiliser suggestion</td><td>Tap chip</td><td>UIImpactFeedbackGenerator(.light) + scale 0.94</td></tr>
+<tr><td>Dicter</td><td>Tap [mic]</td><td>UIImpactFeedbackGenerator(.medium) + VoiceImportSheet</td></tr>
+<tr><td>Annuler dictée</td><td>Tap Stop</td><td>UIImpactFeedbackGenerator(.light)</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2>VoiceOver</h2>
+
+<ul>
+<li>TextField : accessibilityLabel "Ajouter un item", accessibilityHint "Taper le nom et appuyer sur Entrée"</li>
+<li>Bouton [+] : accessibilityLabel "Ajouter", accessibilityHint "Ajoute le texte saisi à la liste"</li>
+<li>Bouton [mic] : accessibilityLabel "Dicter des items", accessibilityHint "Ouvre l'import vocal"</li>
+<li>Chip : accessibilityLabel "Suggestion : [texte]", accessibilityHint "Toucher deux fois pour ajouter"</li>
+</ul>
+
+<hr>
+
+<h2>Adaptations iPad / macOS</h2>
+
+<p>iPad : la barre est identique, légèrement plus large. Les suggestions s'affichent en grille (2 rangées) si l'espace le permet.</p>
+
+<p>macOS : pas de barre flottante — le champ d'ajout est intégré en bas de la liste dans le detail pane. Le bouton mic est absent (pas de Speech Recognition en temps réel sur macOS via même API). Raccourci : Cmd+T pour focus.</p>
+
+</main>
+</body>
+</html>

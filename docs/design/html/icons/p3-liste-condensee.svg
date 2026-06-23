@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="QuickList P3 — Liste condensée">
+  <title>QuickList — Liste condensée</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0A84FF"/>
+      <stop offset="1" stop-color="#0066CC"/>
+    </linearGradient>
+  </defs>
+
+  <!-- iOS rounded square background -->
+  <rect x="0" y="0" width="1024" height="1024" rx="229" ry="229" fill="url(#bg)"/>
+
+  <!-- Row 1: longest line -->
+  <circle cx="244" cy="324" r="44" fill="#FFFFFF"/>
+  <line x1="340" y1="324" x2="800" y2="324" stroke="#FFFFFF" stroke-width="56" stroke-linecap="round"/>
+
+  <!-- Row 2: shortest line (speed/condensed effect) -->
+  <circle cx="244" cy="512" r="44" fill="#FFFFFF"/>
+  <line x1="340" y1="512" x2="620" y2="512" stroke="#FFFFFF" stroke-width="56" stroke-linecap="round"/>
+
+  <!-- Row 3: medium-long line -->
+  <circle cx="244" cy="700" r="44" fill="#FFFFFF"/>
+  <line x1="340" y1="700" x2="740" y2="700" stroke="#FFFFFF" stroke-width="56" stroke-linecap="round"/>
+</svg>

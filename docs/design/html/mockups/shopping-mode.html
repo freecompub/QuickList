@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles.css">
+<title>Mockup — Mode Courses dédié (plein écran)</title>
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumb"><a href="../index.html">← Index</a></nav>
+
+<h1>Mockup — Mode Courses dédié (plein écran)</h1>
+
+<blockquote>
+<p>US couvertes : US-08, US-09, US-07<br>
+A VALIDER PAR L'UTILISATEUR AVANT IMPLEMENTATION</p>
+</blockquote>
+
+<hr>
+
+<h2>iPhone Portrait — Mode Courses actif</h2>
+
+<p>Accès : onglet "Courses" de la TabBar (décision QO-4). Ce n'est plus un fullScreenCover — c'est la vue racine de l'onglet 1.</p>
+
+<div class="phone-frame"><pre>
+┌─────────────────────────────────────────────┐
+│ ████████████████████████████████████████████│  ← Status bar
+├─────────────────────────────────────────────┤
+│  Courses                     [3/8 faits]    │  ← NavigationTitle (onglet racine)
+│  Font.qlTitle1.semibold       Font.qlCallout│    Pas de bouton [✕] — on change d'onglet
+│  qlPrimaryLabel               qlSecondaryLabel   Compteur : "[N faits]/[N total] faits"
+├─────────────────────────────────────────────┤
+│                                             │
+│  ┌──────────────────────────────────────┐  │  ← CategoryHeader : FRUITS &amp; LÉGUMES
+│  │ leaf.fill   FRUITS &amp; LÉGUMES  · 3   │  │    Hauteur 40pt (plus grand qu'en détail)
+│  └──────────────────────────────────────┘  │    bg Color.qlRayonFruitsLegumes
+│  Color.qlRayonFruitsLegumes (fond section)  │    (s'étend sur toute la section)
+│                                             │
+│  ┌──────────────────────────────────────┐  │  ← ListRow variante shoppingMode
+│  │                                      │  │    Hauteur : 64pt minimum
+│  │  ○   Tomates                         │  │    Font.qlHeadline (plus grand)
+│  │      Font.qlHeadline                 │  │    checkbox : 32pt (grande cible)
+│  │                                      │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │                                      │  │
+│  │  ○   Pommes                          │  │
+│  │      Font.qlHeadline                 │  │
+│  │                                      │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │  ← Item coché (fait) — QO-3 validée
+│  │                                      │  │    L'item glisse en bas de sa section
+│  │  ✓   ̶P̶o̶m̶m̶e̶s̶ ̶d̶e̶ ̶t̶e̶r̶r̶e̶              ✓  │  │    checkmark.circle.fill qlSuccess
+│  │      ̶F̶o̶n̶t̶.̶q̶l̶H̶e̶a̶d̶l̶i̶n̶e̶ strikethrough │  │    Texte grisé, opacité 0.5
+│  │      Color.qlItemDone opacity 0.5    │  │    Animation spring (Motion.qlStandard)
+│  │                                      │  │    L'item reste visible (jamais masqué)
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │  ← CategoryHeader : CRÈMERIE
+│  │ drop.fill   CRÈMERIE          · 2   │  │
+│  └──────────────────────────────────────┘  │
+│  Color.qlRayonCremerie                      │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │                                      │  │
+│  │  ○   Lait                            │  │
+│  │      Font.qlHeadline                 │  │
+│  │                                      │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │                                      │  │
+│  │  ○   Yaourts nature                  │  │
+│  │      Font.qlHeadline                 │  │
+│  │                                      │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ┌──────────────────────────────────────┐  │  ← CategoryHeader : ÉPICERIE
+│  │ archivebox.fill  ÉPICERIE    · 1    │  │
+│  └──────────────────────────────────────┘  │
+│  Color.qlRayonEpicerie                      │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │                                      │  │
+│  │  ○   Pâtes                           │  │
+│  │      Font.qlHeadline                 │  │
+│  │                                      │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+├─────────────────────────────────────────────┤
+│  [checklist]              [cart.fill ●]     │  ← TabBar — onglet Courses actif
+│   Listes                   Courses          │    qlAccent sur Courses
+│ ████████████████████████████████████████████│
+└─────────────────────────────────────────────┘
+</pre></div>
+
+<p>Note design : en mode Courses, l'AddItemBar est absente. Le focus est sur la coche rapide. Pour ajouter un item, l'utilisateur bascule sur l'onglet "Listes" via la TabBar, ouvre la liste Courses, ajoute l'item, puis revient sur "Courses".</p>
+
+<hr>
+
+<h2>Progression : tous les items faits (QO-5 validée — animation minimaliste)</h2>
+
+<p>Décision QO-5 : état de célébration minimaliste. Checkmark + fondu uniquement. Pas de confetti.</p>
+
+<div class="phone-frame"><pre>
+┌─────────────────────────────────────────────┐
+│ ████████████████████████████████████████████│
+├─────────────────────────────────────────────┤
+│  Courses                     [8/8 faits]    │
+│                               Color.qlSuccess│  ← Compteur passe en vert (fade 0.3s)
+├─────────────────────────────────────────────┤
+│                                             │
+│                                             │
+│          checkmark.circle.fill              │  ← Icône (56pt, Color.qlSuccess)
+│          (56pt, Color.qlSuccess)            │    Apparition : scale 0.6 → 1.0
+│          scale spring + fade in             │    spring response 0.4, damping 0.6
+│                                             │    Reduce Motion → simple fade in
+│                                             │
+│         Courses terminées.                  │  ← Titre (pas de "!")
+│         Font.qlTitle2                       │    Ton calme et satisfait
+│         Color.qlPrimaryLabel                │    Fade in 0.3s après l'icône
+│                                             │
+│    Tous vos articles ont été cochés.        │  ← Sous-titre
+│    Font.qlBody · Color.qlSecondaryLabel     │    Fade in 0.4s
+│                                             │
+│         ┌──────────────────────┐            │
+│         │   Terminer les       │            │  ← Bouton primary
+│         │     courses          │            │    bg qlAccent, white label
+│         └──────────────────────────────────┘    Radius.qlPill
+│                                             │    Font.qlHeadline.semibold
+│         ┌──────────────────────┐            │
+│         │  Tout décocher       │            │  ← Bouton secondary (recommencer)
+│         └──────────────────────────────────┘    bg transparent, qlSecondaryLabel
+│                                             │    (moins proéminent que "Terminer")
+├─────────────────────────────────────────────┤
+│  [checklist]              [cart.fill ●]     │  ← TabBar
+│ ████████████████████████████████████████████│
+└─────────────────────────────────────────────┘
+</pre></div>
+
+<hr>
+
+<h2>Long Press — Corriger un rayon (US-09)</h2>
+
+<div class="phone-frame"><pre>
+┌─────────────────────────────────────────────┐
+│                                             │
+│  ┌──────────────────────────────────────┐  │  ← Long press sur item "Tofu"
+│  │                                      │  │    Item se "soulève" légèrement
+│  │  ○   Tofu                            │  │    (scale 1.03, shadow visible)
+│  │      Font.qlHeadline                 │  │
+│  │                                      │  │
+│  └──────────────────────────────────────┘  │
+│                                             │
+│  ContextMenu (HIG : Context Menus) :        │
+│                                             │
+│  ┌──────────────────────────────────────┐  │
+│  │  Déplacer vers le rayon              │  │  ← Menu title (non-tappable)
+│  │  ─────────────────────────────────── │  │
+│  │  leaf.fill      Fruits &amp; Légumes     │  │
+│  │  fork.knife     Boucherie            │  │
+│  │  drop.fill    ✓ Crèmerie             │  │  ← Rayon actuel = checkmark
+│  │  archivebox.fill Épicerie            │  │
+│  │  snowflake      Surgelés             │  │
+│  │  birthday.cake.fill Boulangerie      │  │
+│  │  cup.and.saucer.fill Boissons        │  │
+│  │  shower.fill    Hygiène              │  │
+│  │  square.grid.2x2.fill Autres         │  │
+│  └──────────────────────────────────────┘  │
+</pre></div>
+
+<hr>
+
+<h2>Comportement items faits (QO-3 validée — glissement en bas)</h2>
+
+<p>Les items cochés glissent en bas de leur section. Comportement unique, pas de réglage.</p>
+
+<p>Animation : <code>Motion.qlStandard</code> (spring response 0.3, damping 0.75). L'item se déplace visuellement vers le bas de la section, sous les items non faits. Il reste visible mais grisé (<code>Color.qlItemDone</code>, opacité 0.5, strikethrough). L'utilisateur peut ainsi voir ce qui est déjà dans son panier.</p>
+
+<p>Il n'y a pas d'option de masquage dans les réglages. Cette décision simplifie l'implémentation et l'interface.</p>
+
+<hr>
+
+<h2>Interactions</h2>
+
+<table>
+<thead>
+<tr><th>Action</th><th>Geste</th><th>Feedback</th></tr>
+</thead>
+<tbody>
+<tr><td>Cocher item</td><td>Tap n'importe où sur la row (64pt)</td><td>UIImpactFeedbackGenerator(.medium)</td></tr>
+<tr><td>Décocher item</td><td>Tap sur item grisé</td><td>UIImpactFeedbackGenerator(.light)</td></tr>
+<tr><td>Corriger rayon</td><td>Long press</td><td>UIImpactFeedbackGenerator(.medium) + ContextMenu</td></tr>
+<tr><td>Quitter mode</td><td>Tap onglet Listes (TabBar)</td><td>Transition native TabView</td></tr>
+<tr><td>Faire défiler</td><td>Swipe vertical</td><td>—</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2>Adaptations iPad</h2>
+
+<ul>
+<li>Mode Courses en splitview : sidebar montre les rayons (liens d'ancrage), contenu à droite</li>
+<li>En paysage, les rows peuvent passer en 2 colonnes pour utiliser la largeur disponible (à valider)</li>
+</ul>
+
+<h2>Adaptations macOS</h2>
+
+<ul>
+<li>Le mode Courses est une vue dans le detail pane, pas un fullScreenCover</li>
+<li>Les CategoryHeaders s'affichent comme des section headers de List</li>
+<li>La coche se fait au clavier (Espace) ou à la souris</li>
+</ul>
+
+</main>
+</body>
+</html>
