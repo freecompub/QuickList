@@ -138,4 +138,23 @@ final class ListOptionsViewModelTests: XCTestCase {
 
         XCTAssertEqual(sut.draftName, "Tâches")
     }
+
+    func test_acknowledgeRename_clearsDidRename() {
+        sut.draftName = "Boulot"
+        sut.rename()
+        XCTAssertTrue(sut.didRename)
+
+        sut.acknowledgeRename()
+
+        XCTAssertFalse(sut.didRename)
+    }
+
+    func test_acknowledgeDelete_clearsDidDelete() {
+        sut.delete()
+        XCTAssertTrue(sut.didDelete)
+
+        sut.acknowledgeDelete()
+
+        XCTAssertFalse(sut.didDelete)
+    }
 }

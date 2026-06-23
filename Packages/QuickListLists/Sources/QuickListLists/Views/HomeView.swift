@@ -44,23 +44,18 @@ public struct HomeView<DetailContent: View>: View {
                 }
         }
         .sheet(item: $renameTarget) { list in
-            RenameListSheet(viewModel: optionsViewModelFactory(list))
+            RenameListSheetHost {
+                optionsViewModelFactory(list)
+            }
         }
-        .alert(
-            deleteTarget.map { QuickListStrings.listDeleteConfirmTitle(listName: $0.name) } ?? "",
-            isPresented: deleteAlertPresented,
-            presenting: deleteTarget
-        ) { list in
-            Button(QuickListStrings.listOptionsDelete, role: .destructive) {
-                let optionsVM = optionsViewModelFactory(list)
-                optionsVM.delete()
-                deleteTarget = nil
+        .overlay {
+            if let target = deleteTarget {
+                DeleteListAlertHost(
+                    listName: target.name,
+                    viewModelFactory: { optionsViewModelFactory(target) },
+                    onDismiss: { deleteTarget = nil }
+                )
             }
-            Button(QuickListStrings.listOptionsCancel, role: .cancel) {
-                deleteTarget = nil
-            }
-        } message: { _ in
-            Text(QuickListStrings.listDeleteConfirmMessage)
         }
     }
 
@@ -81,12 +76,18 @@ public struct HomeView<DetailContent: View>: View {
                         Button {
                             renameTarget = list
                         } label: {
-                            Label(QuickListStrings.listOptionsRename, systemImage: "pencil")
+                            Label(
+                                QuickListStrings.listOptionsRename,
+                                systemImage: Symbol.qlRenameList
+                            )
                         }
                         Button(role: .destructive) {
                             deleteTarget = list
                         } label: {
-                            Label(QuickListStrings.listOptionsDelete, systemImage: "trash.fill")
+                            Label(
+                                QuickListStrings.listOptionsDelete,
+                                systemImage: Symbol.qlDeleteItem
+                            )
                         }
                     }
                 }
@@ -112,16 +113,5 @@ public struct HomeView<DetailContent: View>: View {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-
-    private var deleteAlertPresented: Binding<Bool> {
-        Binding(
-            get: { deleteTarget != nil },
-            set: { isPresented in
-                if !isPresented {
-                    deleteTarget = nil
-                }
-            }
-        )
     }
 }

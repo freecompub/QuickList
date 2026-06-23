@@ -45,8 +45,12 @@ final class MockTaskListRepository: TaskListRepository {
     func rename(_ list: TaskList, to newName: String) throws {
         switch renameBehavior {
         case .success:
-            list.name = newName
-            renamedLists.append((list, newName))
+            let trimmed = newName.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmed.isEmpty else {
+                throw TaskListRepositoryError.emptyName
+            }
+            list.name = trimmed
+            renamedLists.append((list, trimmed))
         case .fail(let error):
             throw error
         }
