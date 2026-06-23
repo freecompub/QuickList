@@ -108,6 +108,3 @@ Claude ne doit jamais :
 - Roadmap User Stories : `docs/ROADMAP.md`  
 - User Stories : `docs/UserStories/`  
 - Décisions architecturales : `docs/architecture/` + ADR  
-
-
-Tu veux la version **finale complète** ou tu veux ajouter des sections spécifiques ?
