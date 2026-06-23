@@ -27,8 +27,11 @@ public struct UndoToast: View {
                 Text(actionTitle)
                     .font(.qlCalloutBold)
                     .foregroundStyle(Color.qlAccent)
+                    .frame(
+                        minWidth: IconSize.qlMinimumTapTarget,
+                        minHeight: IconSize.qlMinimumTapTarget
+                    )
                     .padding(.horizontal, Spacing.qlS)
-                    .padding(.vertical, Spacing.qlXS)
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
@@ -36,7 +39,7 @@ public struct UndoToast: View {
         }
         .padding(.horizontal, Spacing.qlL)
         .padding(.vertical, Spacing.qlM)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: Radius.qlMedium, style: .continuous))
+        .background(SurfaceMaterial.qlToastBG, in: RoundedRectangle(cornerRadius: Radius.qlMedium, style: .continuous))
         .qlShadow(Shadow.qlToast)
         .padding(.horizontal, Spacing.qlL)
     }

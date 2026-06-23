@@ -43,7 +43,7 @@ public struct AddItemBar: View {
         }
         .padding(.horizontal, Spacing.qlL)
         .padding(.vertical, Spacing.qlM)
-        .background(.ultraThinMaterial)
+        .background(SurfaceMaterial.qlBarBackground)
         .qlShadow(Shadow.qlAddBar)
     }
 

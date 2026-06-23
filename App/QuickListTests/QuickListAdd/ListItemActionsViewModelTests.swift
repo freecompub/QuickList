@@ -117,7 +117,7 @@ final class ListItemActionsViewModelTests: XCTestCase {
         XCTAssertTrue(analytics.trackedEvents.isEmpty)
     }
 
-    func test_delete_secondDeletion_replacesPendingAndDoesNotConfirmFirst() {
+    func test_delete_secondDeletion_commitsFirstAndKeepsSecondUndoable() {
         let first = makeItem(title: "Lait")
         let second = makeItem(title: "Pain")
 
@@ -126,7 +126,18 @@ final class ListItemActionsViewModelTests: XCTestCase {
 
         XCTAssertEqual(sut.pendingUndo?.snapshot.title, "Pain")
         XCTAssertEqual(repository.deletedItems.count, 2)
-        XCTAssertTrue(analytics.trackedEvents.isEmpty)
+        XCTAssertEqual(analytics.trackedEvents.count, 1)
+        XCTAssertEqual(analytics.trackedEvents.first?.name, "item_deleted")
+        XCTAssertEqual(analytics.trackedEvents.first?.properties["list_type"], "tasks")
+    }
+
+    func test_delete_thirdDeletion_emitsTwoConfirmedDeletes() {
+        sut.delete(makeItem(title: "A"))
+        sut.delete(makeItem(title: "B"))
+        sut.delete(makeItem(title: "C"))
+
+        XCTAssertEqual(sut.pendingUndo?.snapshot.title, "C")
+        XCTAssertEqual(analytics.trackedEvents.filter { $0.name == "item_deleted" }.count, 2)
     }
 
     func test_dismissError_clearsLastError() {

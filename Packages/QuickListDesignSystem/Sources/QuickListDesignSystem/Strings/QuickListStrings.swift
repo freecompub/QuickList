@@ -51,4 +51,28 @@ public enum QuickListStrings {
         )
         return String(format: format, title)
     }
+
+    public static let errorTitle = String(
+        localized: "ql.error.title",
+        bundle: .module,
+        comment: "Title of the generic error alert displayed when a user action could not be completed."
+    )
+
+    public static let errorDeleteMessage = String(
+        localized: "ql.error.delete",
+        bundle: .module,
+        comment: "Body of the error alert shown when an item deletion failed."
+    )
+
+    public static let errorRestoreMessage = String(
+        localized: "ql.error.restore",
+        bundle: .module,
+        comment: "Body of the error alert shown when an item restore (undo) failed."
+    )
+
+    public static let errorDismiss = String(
+        localized: "ql.error.dismiss",
+        bundle: .module,
+        comment: "Acknowledge button of the generic error alert."
+    )
 }

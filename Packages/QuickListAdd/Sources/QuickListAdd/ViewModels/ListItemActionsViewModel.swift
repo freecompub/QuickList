@@ -81,8 +81,9 @@ public final class ListItemActionsViewModel: ObservableObject {
         lastError = nil
     }
 
-    /// Force la fin du compte à rebours d'annulation (exposé pour les tests).
-    /// En production, la fin est gérée par le timer interne.
+    /// Confirme définitivement la suppression en attente : libère le snapshot,
+    /// émet `item_deleted` et annule le timer. Appelé par le timer interne à
+    /// l'expiration, et utilisable aussi pour valider explicitement (tests).
     public func commitPendingDeletion() {
         pendingExpiryTask?.cancel()
         pendingExpiryTask = nil
@@ -95,7 +96,12 @@ public final class ListItemActionsViewModel: ObservableObject {
     }
 
     private func schedulePendingUndo(for snapshot: ListItemSnapshot) {
-        pendingExpiryTask?.cancel()
+        // Si une suppression precedente attendait son expiration, la confirmer
+        // maintenant pour ne pas perdre son evenement `item_deleted` et ne pas
+        // ecraser silencieusement son snapshot annulable.
+        if pendingUndo != nil {
+            commitPendingDeletion()
+        }
         pendingUndo = PendingUndo(snapshot: snapshot)
         lastError = nil
         let timeout = undoTimeout

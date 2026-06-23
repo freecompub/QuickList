@@ -86,6 +86,66 @@ runtime sur iOS 17.0.
   TestFlight, mais le risque de crash runtime est levé pour la cible
   officiellement supportée.
 
+---
+
+## ADR-003 — Suppression-puis-restore par snapshot (vs tombstone)
+
+**Statut** : adoptée, 2026-06-23.
+
+### Contexte
+
+US-02 demande une suppression « réversible quelques secondes ». Deux
+implémentations classiques :
+
+- **Tombstone** : marquer l'item `isDeleted = true` (champ ajouté au modèle
+  `ListItem`), filtrer dans les `@Query`, et le supprimer définitivement à
+  l'expiration du toast.
+- **Snapshot / restore** : supprimer immédiatement de SwiftData, conserver
+  une copie sérialisable (titre, catégorie, isDone, createdAt) en mémoire
+  le temps de l'undo, et la rejouer via le repository si l'utilisateur
+  annule.
+
+### Décision
+
+Adopter la stratégie **snapshot / restore** :
+
+- `ListItemSnapshot` (struct `Sendable`) capture les champs métier de
+  `ListItem` (sans `persistentModelID` qui sera regénéré).
+- `ListItemRepository.delete(_:)` supprime tout de suite via
+  `ModelContext.delete` + `save`.
+- `ListItemRepository.restore(_:in:)` ré-insère un nouveau `ListItem` avec
+  les valeurs du snapshot, en **conservant le `createdAt`** original pour
+  préserver l'ordre dans la liste.
+- `ListItemActionsViewModel` orchestre : timer de 4 s, événement
+  `item_deleted` à expiration, `item_delete_undone` à la restauration.
+
+### Conséquences
+
+- L'UI ne porte aucune connaissance du « tombstone » (filtre @Query
+  simplifié, code prédictible).
+- Le modèle `ListItem` reste minimal — pas de pollution par un flag
+  technique.
+- L'item restauré a un **nouveau `persistentModelID`** : neutre tant qu'on
+  est mono-device, mais devra être documenté pour US-10/US-11 (sync iCloud)
+  car la chaîne CloudKit verra : delete → create.
+
+### Alternatives écartées
+
+- **Tombstone** : refusé pour ne pas alourdir le modèle, pour ne pas avoir
+  à filtrer chaque `@Query`, et pour ne pas devoir purger périodiquement
+  les items définitivement supprimés.
+- **CoreData / NSPersistentHistory** : surdimensionné pour ce besoin
+  immédiat.
+
+### À surveiller (cf. `OPEN-QUESTIONS.md` § SYNC-UNDO à ouvrir avec US-10)
+
+- Si un autre device supprime aussi l'item entre `delete` local et `restore`
+  local, la résolution de conflit CloudKit doit accepter le doublon ou
+  rejeter le restore. Voir US-10/US-11.
+- L'`UndoToast` est porté en mémoire seulement. Un kill de l'app pendant
+  les 4 s entraîne une suppression définitive sans avertissement
+  utilisateur — acceptable pour la promesse « quelques secondes ».
+
 ### Conséquences
 
 - Les tests passent en local et serviront de base CI.
