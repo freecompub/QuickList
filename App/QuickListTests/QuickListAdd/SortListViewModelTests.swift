@@ -116,10 +116,27 @@ final class SortListViewModelTests: XCTestCase {
         XCTAssertTrue(sut.sortedItems([]).isEmpty)
     }
 
-    func test_setSortMode_incrementsSortModeVersion() {
-        let initial = sut.sortModeVersion
+    func test_setSortMode_sameModeWhenAlreadyPersistedDifferently_isNoOp() {
+        list.sortMode = .alphabetical
+
         sut.setSortMode(.alphabetical)
 
-        XCTAssertEqual(sut.sortModeVersion, initial + 1)
+        XCTAssertTrue(repository.updatedSortModes.isEmpty)
+        XCTAssertTrue(analytics.trackedEvents.isEmpty)
+    }
+
+    func test_sortedItems_alphabetical_handlesAccentsCaseInsensitive() {
+        list.sortMode = .alphabetical
+        let items = [
+            makeItem("banane"),
+            makeItem("Éclair"),
+            makeItem("école")
+        ]
+
+        let sorted = sut.sortedItems(items)
+
+        // Tri localise case-insensitive : 'Éclair' < 'école' (E equivalents,
+        // ensuite 'c' = 'c', puis 'l' < 'o').
+        XCTAssertEqual(sorted.map(\.title), ["banane", "Éclair", "école"])
     }
 }

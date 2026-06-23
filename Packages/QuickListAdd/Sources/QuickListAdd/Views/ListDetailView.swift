@@ -85,8 +85,6 @@ public struct ListDetailView: View {
 
     @ViewBuilder
     private var content: some View {
-        // Observer `sortViewModel.sortModeVersion` via @StateObject suffit a
-        // re-trigger ce body quand le tri change.
         let scoped = viewModel.itemsBelongingToList(in: allItems)
         let items = sortViewModel.sortedItems(scoped)
         if items.isEmpty {

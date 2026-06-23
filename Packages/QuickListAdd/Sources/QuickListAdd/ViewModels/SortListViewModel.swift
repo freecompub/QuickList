@@ -7,7 +7,6 @@ import QuickListCore
 public final class SortListViewModel: ObservableObject {
     public let list: TaskList
     @Published public private(set) var lastError: SortListError?
-    @Published public private(set) var sortModeVersion: Int = 0
 
     private let repository: TaskListRepository
     private let analytics: AnalyticsService
@@ -33,7 +32,6 @@ public final class SortListViewModel: ObservableObject {
         guard mode != list.sortMode else { return }
         do {
             try repository.updateSortMode(list, to: mode)
-            sortModeVersion += 1
             lastError = nil
             analytics.track(AnalyticsEvent(
                 name: "list_sort_changed",
