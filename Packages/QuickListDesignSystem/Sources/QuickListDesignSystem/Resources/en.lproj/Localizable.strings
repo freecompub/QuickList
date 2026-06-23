@@ -39,7 +39,7 @@
 "ql.list.options.confirm" = "Save";
 "ql.list.rename.title" = "Rename list";
 "ql.list.rename.placeholder" = "New name";
-"ql.list.delete.confirm.title" = "Delete \"%@\"?";
+"ql.list.delete.confirm.title" = "Delete \"%1$@\"?";
 "ql.list.delete.confirm.message" = "This list and all its items will be deleted. This action cannot be undone.";
 "ql.list.rename.error.title" = "Could not rename";
 "ql.list.rename.error.message" = "Could not rename this list. Try again.";

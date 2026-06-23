@@ -89,6 +89,14 @@ public final class ListOptionsViewModel: ObservableObject {
         lastError = nil
     }
 
+    public func acknowledgeRename() {
+        didRename = false
+    }
+
+    public func acknowledgeDelete() {
+        didDelete = false
+    }
+
     public func resetDraftName() {
         draftName = list.name
     }

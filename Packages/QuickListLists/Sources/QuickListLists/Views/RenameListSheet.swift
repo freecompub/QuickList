@@ -47,7 +47,10 @@ public struct RenameListSheet: View {
             }
             .onAppear { isNameFieldFocused = true }
             .onChange(of: viewModel.didRename) { _, didRename in
-                if didRename { dismiss() }
+                if didRename {
+                    viewModel.acknowledgeRename()
+                    dismiss()
+                }
             }
             .alert(
                 QuickListStrings.listRenameErrorTitle,
