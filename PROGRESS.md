@@ -32,7 +32,7 @@ Registre vivant de l'avancement, consommé et mis à jour par le skill
 | US-12 | MVP      | todo   | 0         |    | Widget extension à ajouter au project.yml (XcodeGen) |
 | US-13 | MVP      | todo   | 0         |    | App Intents pour widget interactif |
 | US-14 | MVP      | todo   | 0         |    | |
-| US-19 | IA       | in-progress | 1     |    | base: feat/US-06-sort (stacked) · pose QuickListAI + LanguageModelService + fallback JSON |
+| US-19 | IA       | awaiting-merge | 1  | #7 | base: feat/US-06-sort (stacked) · review approuvee · QuickListAI + LanguageModelService + fallback JSON |
 | US-15 | IA       | todo   | 0         |    | Derrière `LanguageModelService` mocké en CI, vrai modèle uniquement en dev iOS 26 |
 | US-16 | IA       | todo   | 0         |    | Speech + Foundation Models via le protocole |
 | US-17 | IA       | todo   | 0         |    | Entrée image — version 2026 du framework |
