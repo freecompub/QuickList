@@ -5,6 +5,17 @@ l'ensemble (US-04), renommage et suppression (US-05). Le module héberge ses
 ViewModels, ses vues SwiftUI et ses tests d'intégration aux protocoles
 `TaskListRepository` de `QuickListCore`.
 
+## Couverture US-04
+
+- `HomeViewModel` : expose `unfinishedItemsCount(in:)`, `totalItemsCount(in:)`,
+  `subtitle(for:)` (en passant par `QuickListStrings.itemCount(_:)`),
+  `presentation(for:)` (mappe `ListType` → `ListTypePresentation`), et
+  `listDidOpen(_:)` (analytics `list_opened`).
+- `HomeView<DetailContent>` : `@Query` SwiftData des `TaskList`, grille
+  `LazyVGrid` de `ListCard`, empty state localisé, `NavigationLink(value:)`
+  + `.navigationDestination(for: TaskList.self)` paramétré par un closure
+  pour découpler le push (pas de couplage à `QuickListAdd`).
+
 ## Couverture US-03
 
 - `CreateListViewModel` : porte le nom saisi, le type sélectionné, et

@@ -25,3 +25,9 @@
 "ql.list.type.favorites" = "Favoris";
 "ql.root.newList" = "Nouvelle liste";
 "ql.root.newList.accessibility" = "Créer une nouvelle liste";
+"ql.home.title" = "Mes listes";
+"ql.home.empty.title" = "Aucune liste";
+"ql.home.empty.subtitle" = "Créez votre première liste en appuyant sur +.";
+"ql.list.itemCount.singular" = "%d item";
+"ql.list.itemCount.plural" = "%d items";
+"ql.list.itemCount.zero" = "0 item";
