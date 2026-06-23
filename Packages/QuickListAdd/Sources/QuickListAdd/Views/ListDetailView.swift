@@ -7,16 +7,19 @@ import SwiftUI
 public struct ListDetailView: View {
     @StateObject private var viewModel: AddItemViewModel
     @StateObject private var sortViewModel: SortListViewModel
+    @StateObject private var checkmarkViewModel: ItemCheckmarkViewModel
     @FocusState private var isAddItemFieldFocused: Bool
     @Query(sort: [SortDescriptor(\ListItem.createdAt, order: .forward)])
     private var allItems: [ListItem]
 
     public init(
         viewModelFactory: @escaping () -> AddItemViewModel,
-        sortViewModelFactory: @escaping () -> SortListViewModel
+        sortViewModelFactory: @escaping () -> SortListViewModel,
+        checkmarkViewModelFactory: @escaping () -> ItemCheckmarkViewModel
     ) {
         self._viewModel = StateObject(wrappedValue: viewModelFactory())
         self._sortViewModel = StateObject(wrappedValue: sortViewModelFactory())
+        self._checkmarkViewModel = StateObject(wrappedValue: checkmarkViewModelFactory())
     }
 
     public var body: some View {
@@ -106,23 +109,65 @@ public struct ListDetailView: View {
         .listStyle(.plain)
     }
 
-    /// US-07 : pour les listes de type Courses, l'affichage est regroupé par
+    /// US-07 + US-08 : pour les listes Courses, l'affichage est regroupé par
     /// rayon (`item.category`). Les items en attente de classification ou
     /// classés `Autres` tombent dans une section dédiée en fin de liste.
-    /// Le mode Courses dédié plein écran (US-08) reprendra ce regroupement
-    /// avec un layout grandes cibles tactiles.
+    /// US-08 ajoute la coche tappable (grande cible 64pt+) et le grisé +
+    /// déplacement bas des items cochés.
     private func groceriesGroupedList(items: [ListItem]) -> some View {
-        let groups = groupedByRayon(items: items)
+        let groups = groupedByRayon(items: items).map { group in
+            RayonGroup(
+                title: group.title,
+                items: group.items.sorted(by: shoppingOrder)
+            )
+        }
         return List {
             ForEach(groups, id: \.title) { group in
                 Section(header: rayonSectionHeader(group.title)) {
                     ForEach(group.items) { item in
-                        itemRow(item)
+                        shoppingRow(item)
                     }
                 }
             }
         }
         .listStyle(.insetGrouped)
+    }
+
+    private func shoppingOrder(_ lhs: ListItem, _ rhs: ListItem) -> Bool {
+        if lhs.isDone != rhs.isDone {
+            return !lhs.isDone
+        }
+        return lhs.createdAt < rhs.createdAt
+    }
+
+    private func shoppingRow(_ item: ListItem) -> some View {
+        Button {
+            checkmarkViewModel.toggle(item)
+        } label: {
+            HStack(spacing: Spacing.qlM) {
+                Image(systemName: item.isDone ? "checkmark.circle.fill" : "circle")
+                    .symbolRenderingMode(item.isDone ? .multicolor : .hierarchical)
+                    .font(.system(size: 28))
+                    .foregroundStyle(item.isDone ? Color.qlAccent : Color.qlSecondaryLabel)
+                Text(item.title)
+                    .font(.qlHeadline)
+                    .foregroundStyle(item.isDone ? Color.qlItemDone : Color.qlPrimaryLabel)
+                    .strikethrough(item.isDone)
+                    .opacity(item.isDone ? 0.6 : 1.0)
+                Spacer(minLength: Spacing.qlS)
+            }
+            .padding(.vertical, Spacing.qlM)
+            .frame(minHeight: 64)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(item.title)
+        .accessibilityHint(
+            item.isDone
+                ? QuickListStrings.itemToggleAccessibilityDone
+                : QuickListStrings.itemToggleAccessibilityToDo
+        )
+        .accessibilityAddTraits(item.isDone ? .isSelected : [])
     }
 
     private func rayonSectionHeader(_ title: String) -> some View {

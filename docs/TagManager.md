@@ -42,6 +42,9 @@ commit** que l'implémentation qui émet l'événement (exigence `CLAUDE.md`).
 | `language_model_availability_detected` | US-19 | Sonde de la disponibilité Apple Intelligence à `QuickListApp.init` | `is_available: bool`, `reason: string` (`frameworkMissing` / `osVersionTooLow` / etc., présent uniquement si indisponible) | `QuickList` (app) |
 | `item_classified` | US-07 | Classification d'un item (fire-and-forget après création) | `list_type: string`, `rayon: string` (valeur de `Rayon`), `matched: string` (`"true"` ou `"false"` — `"false"` si retour `Autres`) | `QuickListAdd` |
 | `item_classify_failed` | US-07 | Échec de la classification ou de la persistance du rayon | `list_type: string`, `reason: string` (`language_model`) | `QuickListAdd` |
+| `item_checked` | US-08 | Tap sur un item non-fait dans le mode Courses → marqué fait | `list_type: string` | `QuickListAdd` |
+| `item_unchecked` | US-08 | Tap sur un item fait → re-passé en à faire | `list_type: string` | `QuickListAdd` |
+| `item_toggle_done_failed` | US-08 | Échec de la persistance du changement d'état isDone | `list_type: string`, `reason: string` (`persistence`) | `QuickListAdd` |
 
 ## Tags retirés
 

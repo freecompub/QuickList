@@ -25,4 +25,9 @@ public final class SwiftDataListItemRepository: ListItemRepository {
         item.category = category
         try context.save()
     }
+
+    public func toggleDone(_ item: ListItem) throws {
+        item.isDone.toggle()
+        try context.save()
+    }
 }

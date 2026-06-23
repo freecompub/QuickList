@@ -44,3 +44,5 @@
 "ql.sort.error.title" = "Could not change sort";
 "ql.sort.error.message" = "Could not change the sort order. Try again.";
 "ql.rayon.autres" = "Other";
+"ql.item.toggle.accessibility.toDo" = "Mark as done";
+"ql.item.toggle.accessibility.done" = "Mark as to do";

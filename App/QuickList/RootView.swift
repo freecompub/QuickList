@@ -56,6 +56,13 @@ struct RootView: View {
                                 repository: SwiftDataTaskListRepository(context: modelContext),
                                 analytics: analytics
                             )
+                        },
+                        checkmarkViewModelFactory: {
+                            ItemCheckmarkViewModel(
+                                list: list,
+                                repository: repository,
+                                analytics: analytics
+                            )
                         }
                     )
                 }
