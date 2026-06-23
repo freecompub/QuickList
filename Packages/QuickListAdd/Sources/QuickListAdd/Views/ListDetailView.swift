@@ -1,3 +1,4 @@
+import QuickListAI
 import QuickListCore
 import QuickListDesignSystem
 import SwiftData
@@ -145,23 +146,29 @@ public struct ListDetailView: View {
     }
 
     private func groupedByRayon(items: [ListItem]) -> [RayonGroup] {
-        var bucketsByTitle: [String: [ListItem]] = [:]
+        // Cle technique stable : le rawValue du modele (FR), utilisee aussi
+        // bien pour les items non classes (`item.category == nil`) que pour
+        // ceux explicitement classes "Autres" par le service.
+        let autresKey = Rayon.autres.rawValue
+        var bucketsByKey: [String: [ListItem]] = [:]
         var order: [String] = []
         for item in items {
-            let key = item.category ?? QuickListStrings.rayonAutres
-            if bucketsByTitle[key] == nil {
-                bucketsByTitle[key] = []
+            let key = item.category ?? autresKey
+            if bucketsByKey[key] == nil {
+                bucketsByKey[key] = []
                 order.append(key)
             }
-            bucketsByTitle[key]?.append(item)
+            bucketsByKey[key]?.append(item)
         }
-        if let autres = bucketsByTitle.removeValue(forKey: QuickListStrings.rayonAutres) {
-            order.removeAll { $0 == QuickListStrings.rayonAutres }
-            order.append(QuickListStrings.rayonAutres)
-            bucketsByTitle[QuickListStrings.rayonAutres] = autres
+        if let autres = bucketsByKey.removeValue(forKey: autresKey) {
+            order.removeAll { $0 == autresKey }
+            order.append(autresKey)
+            bucketsByKey[autresKey] = autres
         }
-        return order.compactMap { title in
-            bucketsByTitle[title].map { RayonGroup(title: title, items: $0) }
+        return order.compactMap { key in
+            guard let bucketItems = bucketsByKey[key] else { return nil }
+            let title = (key == autresKey) ? QuickListStrings.rayonAutres : key
+            return RayonGroup(title: title, items: bucketItems)
         }
     }
 
