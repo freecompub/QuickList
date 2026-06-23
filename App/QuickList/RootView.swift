@@ -12,19 +12,21 @@ struct RootView: View {
     var body: some View {
         NavigationStack {
             if let activeList = lists.first {
+                let repository = SwiftDataListItemRepository(context: modelContext)
+                let analytics: AnalyticsService = LoggingAnalyticsService()
                 ListDetailView(
                     viewModelFactory: {
                         AddItemViewModel(
                             list: activeList,
-                            repository: SwiftDataListItemRepository(context: modelContext),
-                            analytics: LoggingAnalyticsService()
+                            repository: repository,
+                            analytics: analytics
                         )
                     },
                     actionsViewModelFactory: {
                         ListItemActionsViewModel(
                             list: activeList,
-                            repository: SwiftDataListItemRepository(context: modelContext),
-                            analytics: LoggingAnalyticsService()
+                            repository: repository,
+                            analytics: analytics
                         )
                     }
                 )

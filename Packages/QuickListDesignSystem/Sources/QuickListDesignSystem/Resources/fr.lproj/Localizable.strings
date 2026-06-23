@@ -6,3 +6,7 @@
 "ql.undoToast.deleted" = "« %@ » supprimé";
 "ql.undoToast.undo" = "Annuler";
 "ql.undoToast.undo.accessibility" = "Annuler la suppression";
+"ql.error.title" = "Une erreur est survenue";
+"ql.error.delete" = "Impossible de supprimer cet item. Réessayez.";
+"ql.error.restore" = "Impossible de restaurer cet item. Réessayez.";
+"ql.error.dismiss" = "OK";

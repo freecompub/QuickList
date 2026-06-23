@@ -41,8 +41,35 @@ public struct ListDetailView: View {
             }
         }
         .animation(.easeInOut(duration: 0.2), value: actionsViewModel.pendingUndo)
+        .alert(
+            QuickListStrings.errorTitle,
+            isPresented: actionsErrorPresented,
+            presenting: actionsViewModel.lastError
+        ) { _ in
+            Button(QuickListStrings.errorDismiss, action: actionsViewModel.dismissError)
+        } message: { error in
+            Text(errorMessage(for: error))
+        }
         .onAppear {
             isAddItemFieldFocused = true
+        }
+    }
+
+    private var actionsErrorPresented: Binding<Bool> {
+        Binding(
+            get: { actionsViewModel.lastError != nil },
+            set: { isPresented in
+                if !isPresented {
+                    actionsViewModel.dismissError()
+                }
+            }
+        )
+    }
+
+    private func errorMessage(for error: ListItemActionsError) -> String {
+        switch error {
+        case .deleteFailed: return QuickListStrings.errorDeleteMessage
+        case .restoreFailed: return QuickListStrings.errorRestoreMessage
         }
     }
 
