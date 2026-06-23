@@ -15,6 +15,12 @@ public final class SwiftDataCategoryPreferenceRepository: CategoryPreferenceRepo
         return all.first { $0.normalizedName == normalizedName }
     }
 
+    /// Helper interne pour les tests : compte le nombre d'entrees persistees.
+    /// Permet de verifier l'unicite apres upsert sans exposer le context.
+    public func countAll() throws -> Int {
+        try context.fetchCount(FetchDescriptor<CategoryPreference>())
+    }
+
     public func upsert(normalizedName: String, category: String) throws {
         let trimmed = normalizedName.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }

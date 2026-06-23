@@ -48,23 +48,41 @@ public final class RayonClassificationCoordinator {
         let normalized = LocalRayonMappingService.normalize(title)
 
         // US-09 : la correction utilisateur a la priorité sur le modèle IA.
-        if let preferenceRepository,
-           let preference = try? preferenceRepository.lookup(normalizedName: normalized) {
-            let rayon = Rayon(rawString: preference.category)
+        if let preferenceRepository {
             do {
-                try repository.updateCategory(item, to: rayon.rawValue)
-                analytics.track(AnalyticsEvent(
-                    name: "item_classified",
-                    properties: [
-                        "list_type": list.type.rawValue,
-                        "rayon": rayon.rawValue,
-                        "matched": "true",
-                        "source": "preference"
-                    ]
-                ))
-                return rayon
+                if let preference = try preferenceRepository.lookup(normalizedName: normalized) {
+                    let rayon = Rayon(rawString: preference.category)
+                    do {
+                        try repository.updateCategory(item, to: rayon.rawValue)
+                        analytics.track(AnalyticsEvent(
+                            name: "item_classified",
+                            properties: [
+                                "list_type": list.type.rawValue,
+                                "rayon": rayon.rawValue,
+                                "matched": "true",
+                                "source": "preference"
+                            ]
+                        ))
+                        return rayon
+                    } catch {
+                        // La preference est connue mais la persistance echoue :
+                        // on ne fall-through pas sur le modele (qui repasserait
+                        // par le meme repository casse). On trace et on rend.
+                        logger.error("apply_preference_failed reason=\(String(describing: error))")
+                        analytics.track(AnalyticsEvent(
+                            name: "item_classify_failed",
+                            properties: [
+                                "list_type": list.type.rawValue,
+                                "reason": "preference_apply"
+                            ]
+                        ))
+                        return nil
+                    }
+                }
             } catch {
-                logger.error("apply_preference_failed reason=\(String(describing: error))")
+                // Lecture preference cassee (corruption, threading, etc.) :
+                // on log et on retombe sur le modele.
+                logger.error("lookup_preference_failed reason=\(String(describing: error))")
             }
         }
 

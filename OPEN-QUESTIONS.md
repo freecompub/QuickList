@@ -23,6 +23,20 @@ résolue est déplacée vers la section « Résolues ».
 
 ## Ouvertes
 
+### SCHEMA-VERSIONING — `VersionedSchema` avant US-10
+- **Origine** : US-09 (ajout de `CategoryPreference` au `Schema`).
+- **Nature** : dette d'infrastructure SwiftData / CloudKit.
+- **Détail** : `QuickListApp.init` utilise un `Schema(...)` simple — aucun
+  `VersionedSchema` / `SchemaMigrationPlan` n'est posé. SwiftData gère
+  les ajouts lightweight automatiquement (US-09 OK), mais sans
+  `VersionedSchema` la synchro CloudKit (US-10/11) entre devices
+  d'éditions d'app différentes risque de casser les données dev.
+- **Action attendue** : avant d'attaquer US-10, basculer le schéma vers
+  un `VersionedSchema` v1 contenant `TaskList`, `ListItem`,
+  `CategoryPreference`, et poser un `SchemaMigrationPlan` minimal.
+  Documenter dans un ADR-006.
+- **Statut** : ouverte.
+
 ### COMPAT-IOS17 — Vérification SwiftData sur device iOS 17.5 réel
 - **Origine** : US-01 (ADR-002 dans `docs/decisions.md`).
 - **Nature** : risque de compatibilité runtime résiduel.

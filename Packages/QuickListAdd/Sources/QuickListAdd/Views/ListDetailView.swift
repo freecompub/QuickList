@@ -216,17 +216,26 @@ public struct ListDetailView: View {
         .contextMenu {
             Menu(QuickListStrings.itemMoveToRayon) {
                 ForEach(Rayon.allCases, id: \.self) { rayon in
-                    Button {
-                        correctionViewModel.setRayon(rayon, for: item)
-                    } label: {
-                        Label(
-                            QuickListStrings.rayonLabel(for: rayon.rawValue),
-                            systemImage: item.category == rayon.rawValue ? "checkmark" : ""
-                        )
-                    }
+                    rayonMenuButton(rayon: rayon, for: item)
                 }
             }
         }
+    }
+
+    @ViewBuilder
+    private func rayonMenuButton(rayon: Rayon, for item: ListItem) -> some View {
+        let isActive = (item.category == rayon.rawValue)
+        Button {
+            correctionViewModel.setRayon(rayon, for: item)
+        } label: {
+            Label(
+                QuickListStrings.rayonLabel(for: rayon.rawValue),
+                systemImage: isActive
+                    ? Symbol.qlItemCheckedOn
+                    : Symbol.icon(forRayonRawValue: rayon.rawValue)
+            )
+        }
+        .accessibilityAddTraits(isActive ? .isSelected : [])
     }
 
     private func rayonSectionHeader(_ title: String) -> some View {
@@ -245,30 +254,7 @@ public struct ListDetailView: View {
     }
 
     private func groupedByRayon(items: [ListItem]) -> [RayonGroup] {
-        // Cle technique stable : le rawValue du modele (FR), utilisee aussi
-        // bien pour les items non classes (`item.category == nil`) que pour
-        // ceux explicitement classes "Autres" par le service.
-        let autresKey = Rayon.autres.rawValue
-        var bucketsByKey: [String: [ListItem]] = [:]
-        var order: [String] = []
-        for item in items {
-            let key = item.category ?? autresKey
-            if bucketsByKey[key] == nil {
-                bucketsByKey[key] = []
-                order.append(key)
-            }
-            bucketsByKey[key]?.append(item)
-        }
-        if let autres = bucketsByKey.removeValue(forKey: autresKey) {
-            order.removeAll { $0 == autresKey }
-            order.append(autresKey)
-            bucketsByKey[autresKey] = autres
-        }
-        return order.compactMap { key in
-            guard let bucketItems = bucketsByKey[key] else { return nil }
-            let title = (key == autresKey) ? QuickListStrings.rayonAutres : key
-            return RayonGroup(title: title, items: bucketItems)
-        }
+        RayonGroup.grouped(items)
     }
 
     private var emptyState: some View {

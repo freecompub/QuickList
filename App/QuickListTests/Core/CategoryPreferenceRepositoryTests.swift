@@ -27,16 +27,14 @@ final class CategoryPreferenceRepositoryTests: XCTestCase {
         XCTAssertEqual(try repo.lookup(normalizedName: "lait")?.category, "Crèmerie")
     }
 
-    func test_upsert_existingKey_replacesValue() throws {
+    func test_upsert_existingKey_replacesValueWithoutDuplicating() throws {
         let repo = try makeRepository()
         try repo.upsert(normalizedName: "lait", category: "Crèmerie")
 
         try repo.upsert(normalizedName: "lait", category: "Surgelés")
 
         XCTAssertEqual(try repo.lookup(normalizedName: "lait")?.category, "Surgelés")
-        let descriptor = FetchDescriptor<CategoryPreference>()
-        XCTAssertEqual((try? makeContext().fetch(descriptor))?.count ?? 0, 0,
-                       "Le test ne partage pas le contexte — on recree juste un fresh repo pour verifier l unicite")
+        XCTAssertEqual(try repo.countAll(), 1, "Un upsert sur cle existante ne doit pas creer de doublon")
     }
 
     func test_upsert_emptyNormalizedName_isNoOp() throws {
@@ -47,10 +45,4 @@ final class CategoryPreferenceRepositoryTests: XCTestCase {
         XCTAssertNil(try repo.lookup(normalizedName: ""))
     }
 
-    private func makeContext() throws -> ModelContext {
-        let schema = Schema([CategoryPreference.self])
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try ModelContainer(for: schema, configurations: [config])
-        return ModelContext(container)
-    }
 }

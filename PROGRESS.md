@@ -26,7 +26,7 @@ Registre vivant de l'avancement, consommé et mis à jour par le skill
 | US-06 | MVP      | awaiting-merge | 1  | #6 | base: feat/US-05-rename-delete (stacked) · review approuvee · Menu toolbar de tri |
 | US-07 | MVP      | awaiting-merge | 1  | #8 | base: feat/US-19-fallback (stacked) · review approuvee (B5 L10N corrige) · RayonClassificationCoordinator + groceries grouping |
 | US-08 | MVP      | awaiting-merge | 1  | #9 | base: feat/US-07-rayon (stacked) · review approuvee (B1-B7 + N1 cross-platform) · TabBar dédiée différée |
-| US-09 | MVP      | in-progress | 1     |    | base: feat/US-08-courses (stacked) · CategoryPreference + ContextMenu choix de rayon |
+| US-09 | MVP      | awaiting-merge | 1  | #10 | base: feat/US-08-courses (stacked) · review approuvee (B1/B2 + N1-N5) · CategoryPreference + ContextMenu |
 | US-10 | MVP      | todo   | 0         |    | iCloud container à configurer côté Apple Developer |
 | US-11 | MVP      | todo   | 0         |    | |
 | US-12 | MVP      | todo   | 0         |    | Widget extension à ajouter au project.yml (XcodeGen) |
