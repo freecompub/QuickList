@@ -9,6 +9,9 @@ public final class CreateListViewModel: ObservableObject {
     @Published public var selectedType: ListType = .tasks
     @Published public private(set) var lastError: CreateListError?
     @Published public private(set) var createdList: TaskList?
+    /// Conservé pour préparer l'async US-04+. Aujourd'hui `create()` est
+    /// synchrone donc le flag bascule à `true` puis `false` dans le même tick
+    /// runloop ; la garde idempotente repose principalement sur `createdList`.
     @Published public private(set) var isCreating: Bool = false
 
     private let repository: TaskListRepository
