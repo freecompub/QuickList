@@ -9,7 +9,6 @@ final class MockTaskListRepository: TaskListRepository {
     }
 
     var createBehavior: Behavior = .success
-    var fetchAllBehavior: Behavior = .success
 
     private(set) var createdNames: [String] = []
     private(set) var createdTypes: [ListType] = []
@@ -17,12 +16,7 @@ final class MockTaskListRepository: TaskListRepository {
     var storedLists: [TaskList] = []
 
     func fetchAll() throws -> [TaskList] {
-        switch fetchAllBehavior {
-        case .success:
-            return storedLists
-        case .fail(let error):
-            throw error
-        }
+        storedLists
     }
 
     func create(name: String, type: ListType) throws -> TaskList {

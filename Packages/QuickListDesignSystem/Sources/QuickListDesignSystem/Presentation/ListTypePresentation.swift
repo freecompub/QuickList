@@ -20,7 +20,7 @@ public struct ListTypePresentation {
         case .groceries:
             return ListTypePresentation(
                 kind: kind,
-                systemImageName: "cart.fill",
+                systemImageName: Symbol.qlListTypeGroceries,
                 renderingMode: .multicolor,
                 tint: .qlAccent,
                 label: QuickListStrings.listTypeGroceries
@@ -28,7 +28,7 @@ public struct ListTypePresentation {
         case .tasks:
             return ListTypePresentation(
                 kind: kind,
-                systemImageName: "checklist",
+                systemImageName: Symbol.qlListTypeTasks,
                 renderingMode: .hierarchical,
                 tint: .qlPrimaryLabel,
                 label: QuickListStrings.listTypeTasks
@@ -36,7 +36,7 @@ public struct ListTypePresentation {
         case .ideas:
             return ListTypePresentation(
                 kind: kind,
-                systemImageName: "lightbulb.fill",
+                systemImageName: Symbol.qlListTypeIdeas,
                 renderingMode: .multicolor,
                 tint: .qlAccent,
                 label: QuickListStrings.listTypeIdeas
@@ -44,7 +44,7 @@ public struct ListTypePresentation {
         case .projects:
             return ListTypePresentation(
                 kind: kind,
-                systemImageName: "folder.fill",
+                systemImageName: Symbol.qlListTypeProjects,
                 renderingMode: .hierarchical,
                 tint: .qlSecondaryLabel,
                 label: QuickListStrings.listTypeProjects
@@ -52,7 +52,7 @@ public struct ListTypePresentation {
         case .favorites:
             return ListTypePresentation(
                 kind: kind,
-                systemImageName: "star.fill",
+                systemImageName: Symbol.qlListTypeFavorites,
                 renderingMode: .multicolor,
                 tint: .qlAccent,
                 label: QuickListStrings.listTypeFavorites
