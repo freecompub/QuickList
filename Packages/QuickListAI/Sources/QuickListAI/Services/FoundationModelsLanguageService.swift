@@ -12,7 +12,7 @@ import FoundationModels
 /// si Apple Intelligence n'est pas disponible. La logique de prompt @Generable
 /// (cf. spec `docs/UserStories/QuickList_user_stories.md` § Foundation Models)
 /// sera branchée en US-07 / US-15 / US-16.
-public final class FoundationModelsLanguageService: LanguageModelService, @unchecked Sendable {
+public final class FoundationModelsLanguageService: LanguageModelService {
     private let fallback: LanguageModelService
     private let logger: Logger
 

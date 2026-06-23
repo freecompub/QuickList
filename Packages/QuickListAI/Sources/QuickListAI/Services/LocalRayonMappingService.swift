@@ -1,19 +1,31 @@
 import Foundation
 import Logging
 
-public final class LocalRayonMappingService: LanguageModelService, @unchecked Sendable {
-    private let mapping: [String: Rayon]
+public final class LocalRayonMappingService: LanguageModelService {
+    /// Entrées triées par longueur de keyword décroissante : le match le plus
+    /// spécifique gagne, et le résultat est déterministe (vs une itération
+    /// directe sur un `Dictionary` Swift dont l'ordre n'est pas spécifié).
+    private let entries: [(keyword: String, rayon: Rayon)]
     private let logger: Logger
 
     public init(
         mapping: [String: Rayon]? = nil,
         logger: Logger = Logger(label: "quicklist.ai.local-mapping")
     ) {
+        let raw: [String: Rayon]
         if let mapping {
-            self.mapping = mapping
+            raw = mapping
         } else {
-            self.mapping = LocalRayonMappingService.loadBundledMapping(logger: logger)
+            raw = LocalRayonMappingService.loadBundledMapping(logger: logger)
         }
+        self.entries = raw
+            .map { (keyword: $0.key, rayon: $0.value) }
+            .sorted { lhs, rhs in
+                if lhs.keyword.count != rhs.keyword.count {
+                    return lhs.keyword.count > rhs.keyword.count
+                }
+                return lhs.keyword < rhs.keyword
+            }
         self.logger = logger
     }
 
@@ -22,8 +34,8 @@ public final class LocalRayonMappingService: LanguageModelService, @unchecked Se
         guard !normalized.isEmpty else {
             return ItemClassification(rayon: .autres, confidence: 0)
         }
-        for (keyword, rayon) in mapping where normalized.contains(keyword) {
-            return ItemClassification(rayon: rayon, confidence: 1.0)
+        for entry in entries where normalized.contains(entry.keyword) {
+            return ItemClassification(rayon: entry.rayon, confidence: 1.0)
         }
         return ItemClassification(rayon: .autres, confidence: 0)
     }

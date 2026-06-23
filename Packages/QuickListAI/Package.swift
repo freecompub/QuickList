@@ -12,14 +12,12 @@ let package = Package(
         .library(name: "QuickListAI", targets: ["QuickListAI"])
     ],
     dependencies: [
-        .package(path: "../QuickListAnalytics"),
         .package(url: "https://github.com/apple/swift-log.git", from: "1.5.4")
     ],
     targets: [
         .target(
             name: "QuickListAI",
             dependencies: [
-                "QuickListAnalytics",
                 .product(name: "Logging", package: "swift-log")
             ],
             resources: [

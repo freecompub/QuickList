@@ -41,10 +41,40 @@ final class LocalRayonMappingServiceTests: XCTestCase {
         XCTAssertEqual(classification.rayon, .cremerie)
     }
 
-    func test_classify_handlesAccents_returnsBoulangerie() async throws {
+    func test_classify_handlesAccents_returnsEpicerie() async throws {
         let classification = try await sut.classify(itemTitle: "Pâtes")
 
         XCTAssertEqual(classification.rayon, .epicerie)
+    }
+
+    func test_classify_collisionCafeFroid_returnsBoissons() async throws {
+        let classification = try await sut.classify(itemTitle: "Café froid")
+
+        // "café froid" est plus long et plus spécifique que "café" (Épicerie),
+        // donc il doit l'emporter et matcher Boissons.
+        XCTAssertEqual(classification.rayon, .boissons)
+    }
+
+    func test_classify_collisionPommeDeTerre_returnsFruitsLegumes() async throws {
+        let classification = try await sut.classify(itemTitle: "Pomme de terre")
+
+        // Les deux keywords renvoient Fruits & Légumes : test garantit la
+        // déterminisme (pas de plantage par doublon) en plus du resultat metier.
+        XCTAssertEqual(classification.rayon, .fruitsLegumes)
+    }
+
+    func test_classify_isDeterministic_overRepeatedRuns() async throws {
+        let inputs = ["Pomme de terre", "Café froid", "Lait demi-écrémé", "Eau gazeuse"]
+        var firstRun: [String: Rayon] = [:]
+        for title in inputs {
+            firstRun[title] = try await sut.classify(itemTitle: title).rayon
+        }
+        for _ in 0..<10 {
+            for title in inputs {
+                let result = try await sut.classify(itemTitle: title).rayon
+                XCTAssertEqual(result, firstRun[title], "Inconsistent classification for \(title)")
+            }
+        }
     }
 
     func test_classify_bread_returnsBoulangerie() async throws {
