@@ -8,6 +8,7 @@ public struct ListDetailView: View {
     @StateObject private var viewModel: AddItemViewModel
     @StateObject private var sortViewModel: SortListViewModel
     @StateObject private var checkmarkViewModel: ItemCheckmarkViewModel
+    @StateObject private var correctionViewModel: CategoryCorrectionViewModel
     @FocusState private var isAddItemFieldFocused: Bool
     @Query(sort: [SortDescriptor(\ListItem.createdAt, order: .forward)])
     private var allItems: [ListItem]
@@ -15,11 +16,13 @@ public struct ListDetailView: View {
     public init(
         viewModelFactory: @escaping () -> AddItemViewModel,
         sortViewModelFactory: @escaping () -> SortListViewModel,
-        checkmarkViewModelFactory: @escaping () -> ItemCheckmarkViewModel
+        checkmarkViewModelFactory: @escaping () -> ItemCheckmarkViewModel,
+        correctionViewModelFactory: @escaping () -> CategoryCorrectionViewModel
     ) {
         self._viewModel = StateObject(wrappedValue: viewModelFactory())
         self._sortViewModel = StateObject(wrappedValue: sortViewModelFactory())
         self._checkmarkViewModel = StateObject(wrappedValue: checkmarkViewModelFactory())
+        self._correctionViewModel = StateObject(wrappedValue: correctionViewModelFactory())
     }
 
     public var body: some View {
@@ -59,6 +62,16 @@ public struct ListDetailView: View {
         } message: {
             Text(QuickListStrings.itemToggleErrorMessage)
         }
+        .alert(
+            QuickListStrings.itemCategoryErrorTitle,
+            isPresented: correctionErrorPresented
+        ) {
+            Button(QuickListStrings.listOptionsCancel) {
+                correctionViewModel.dismissError()
+            }
+        } message: {
+            Text(QuickListStrings.itemCategoryErrorMessage)
+        }
         .onAppear {
             isAddItemFieldFocused = true
         }
@@ -70,6 +83,17 @@ public struct ListDetailView: View {
             set: { isPresented in
                 if !isPresented {
                     checkmarkViewModel.dismissError()
+                }
+            }
+        )
+    }
+
+    private var correctionErrorPresented: Binding<Bool> {
+        Binding(
+            get: { correctionViewModel.lastError != nil },
+            set: { isPresented in
+                if !isPresented {
+                    correctionViewModel.dismissError()
                 }
             }
         )
@@ -189,6 +213,29 @@ public struct ListDetailView: View {
                 : QuickListStrings.itemToggleAccessibilityToDo
         )
         .accessibilityAddTraits(item.isDone ? .isSelected : [])
+        .contextMenu {
+            Menu(QuickListStrings.itemMoveToRayon) {
+                ForEach(Rayon.allCases, id: \.self) { rayon in
+                    rayonMenuButton(rayon: rayon, for: item)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func rayonMenuButton(rayon: Rayon, for item: ListItem) -> some View {
+        let isActive = (item.category == rayon.rawValue)
+        Button {
+            correctionViewModel.setRayon(rayon, for: item)
+        } label: {
+            Label(
+                QuickListStrings.rayonLabel(for: rayon.rawValue),
+                systemImage: isActive
+                    ? Symbol.qlItemCheckedOn
+                    : Symbol.icon(forRayonRawValue: rayon.rawValue)
+            )
+        }
+        .accessibilityAddTraits(isActive ? .isSelected : [])
     }
 
     private func rayonSectionHeader(_ title: String) -> some View {
@@ -207,30 +254,7 @@ public struct ListDetailView: View {
     }
 
     private func groupedByRayon(items: [ListItem]) -> [RayonGroup] {
-        // Cle technique stable : le rawValue du modele (FR), utilisee aussi
-        // bien pour les items non classes (`item.category == nil`) que pour
-        // ceux explicitement classes "Autres" par le service.
-        let autresKey = Rayon.autres.rawValue
-        var bucketsByKey: [String: [ListItem]] = [:]
-        var order: [String] = []
-        for item in items {
-            let key = item.category ?? autresKey
-            if bucketsByKey[key] == nil {
-                bucketsByKey[key] = []
-                order.append(key)
-            }
-            bucketsByKey[key]?.append(item)
-        }
-        if let autres = bucketsByKey.removeValue(forKey: autresKey) {
-            order.removeAll { $0 == autresKey }
-            order.append(autresKey)
-            bucketsByKey[autresKey] = autres
-        }
-        return order.compactMap { key in
-            guard let bucketItems = bucketsByKey[key] else { return nil }
-            let title = (key == autresKey) ? QuickListStrings.rayonAutres : key
-            return RayonGroup(title: title, items: bucketItems)
-        }
+        RayonGroup.grouped(items)
     }
 
     private var emptyState: some View {

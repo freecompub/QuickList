@@ -66,8 +66,8 @@ En tant qu'utilisateur en magasin, je veux une vue avec de gros boutons et une c
 
 **US-09 — Corriger une catégorie et la mémoriser**
 En tant qu'utilisateur, je veux déplacer un article mal classé vers le bon rayon et que l'app retienne mon choix, afin que le classement s'améliore avec le temps.
-- CA : déplacer un article met à jour son `category`.
-- CA : la correction est stockée dans `CategoryPreference` et a priorité sur le modèle IA lors des prochains ajouts du même article.
+- [x] CA : déplacer un article met à jour son `category`.
+- [x] CA : la correction est stockée dans `CategoryPreference` et a priorité sur le modèle IA lors des prochains ajouts du même article.
 
 ---
 

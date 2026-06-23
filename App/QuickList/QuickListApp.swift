@@ -13,7 +13,7 @@ struct QuickListApp: App {
     @MainActor
     init() {
         do {
-            let schema = Schema([TaskList.self, ListItem.self])
+            let schema = Schema([TaskList.self, ListItem.self, CategoryPreference.self])
             let configuration = ModelConfiguration(schema: schema)
             container = try ModelContainer(for: schema, configurations: [configuration])
         } catch {

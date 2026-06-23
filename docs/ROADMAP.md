@@ -26,7 +26,7 @@ Légende : `→` dépend de.
 ### 1.4 Mode Courses
 - **US-08** — Interface de courses dédiée (TabBar) → US-03, US-07 — *en revue (partiel : intégré à ListDetailView; TabBar plein écran différée)*
 - **US-09** — Corriger une catégorie et la mémoriser
-  (`CategoryPreference`) → US-08
+  (`CategoryPreference`) → US-08 — *en revue*
 
 ### 1.5 Synchronisation iCloud
 - **US-10** — Retrouver mes listes sur tous mes appareils (CloudKit) → US-03

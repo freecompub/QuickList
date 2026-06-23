@@ -5,10 +5,10 @@ import QuickListAnalytics
 import QuickListCore
 
 /// Orchestre la classification asynchrone d'un `ListItem` vers un rayon.
-/// Conforme à US-07 :
+/// Conforme à US-07 + US-09 :
 /// - À l'ajout d'un item d'une liste de type `.groceries`, le rayon est
-///   déterminé via `LanguageModelService` (Foundation Models si dispo,
-///   sinon fallback JSON local — cf. US-19 / ADR-004).
+///   d'abord cherché dans `CategoryPreference` (corrections utilisateur,
+///   US-09), puis via `LanguageModelService` si aucune préférence trouvée.
 /// - Article non reconnu → `item.category = "Autres"` (le service local
 ///   retourne déjà `Rayon.autres` dans ce cas).
 /// - Le call est `async` et lancé "fire-and-forget" depuis le ViewModel
@@ -19,17 +19,20 @@ public final class RayonClassificationCoordinator {
 
     private let service: LanguageModelService
     private let repository: ListItemRepository
+    private let preferenceRepository: CategoryPreferenceRepository?
     private let analytics: AnalyticsService
     private let logger: Logger
 
     public init(
         service: LanguageModelService,
         repository: ListItemRepository,
+        preferenceRepository: CategoryPreferenceRepository? = nil,
         analytics: AnalyticsService,
         logger: Logger = Logger(label: "quicklist.ai.rayon-coordinator")
     ) {
         self.service = service
         self.repository = repository
+        self.preferenceRepository = preferenceRepository
         self.analytics = analytics
         self.logger = logger
     }
@@ -42,6 +45,47 @@ public final class RayonClassificationCoordinator {
     public func classify(_ item: ListItem, in list: TaskList) async -> Rayon? {
         guard list.type == .groceries else { return nil }
         let title = item.title
+        let normalized = LocalRayonMappingService.normalize(title)
+
+        // US-09 : la correction utilisateur a la priorité sur le modèle IA.
+        if let preferenceRepository {
+            do {
+                if let preference = try preferenceRepository.lookup(normalizedName: normalized) {
+                    let rayon = Rayon(rawString: preference.category)
+                    do {
+                        try repository.updateCategory(item, to: rayon.rawValue)
+                        analytics.track(AnalyticsEvent(
+                            name: "item_classified",
+                            properties: [
+                                "list_type": list.type.rawValue,
+                                "rayon": rayon.rawValue,
+                                "matched": "true",
+                                "source": "preference"
+                            ]
+                        ))
+                        return rayon
+                    } catch {
+                        // La preference est connue mais la persistance echoue :
+                        // on ne fall-through pas sur le modele (qui repasserait
+                        // par le meme repository casse). On trace et on rend.
+                        logger.error("apply_preference_failed reason=\(String(describing: error))")
+                        analytics.track(AnalyticsEvent(
+                            name: "item_classify_failed",
+                            properties: [
+                                "list_type": list.type.rawValue,
+                                "reason": "preference_apply"
+                            ]
+                        ))
+                        return nil
+                    }
+                }
+            } catch {
+                // Lecture preference cassee (corruption, threading, etc.) :
+                // on log et on retombe sur le modele.
+                logger.error("lookup_preference_failed reason=\(String(describing: error))")
+            }
+        }
+
         do {
             let classification = try await service.classify(itemTitle: title)
             try repository.updateCategory(item, to: classification.rayon.rawValue)
@@ -50,7 +94,8 @@ public final class RayonClassificationCoordinator {
                 properties: [
                     "list_type": list.type.rawValue,
                     "rayon": classification.rayon.rawValue,
-                    "matched": classification.rayon == .autres ? "false" : "true"
+                    "matched": classification.rayon == .autres ? "false" : "true",
+                    "source": "language_model"
                 ]
             ))
             return classification.rayon
