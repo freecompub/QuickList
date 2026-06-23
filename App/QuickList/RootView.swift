@@ -20,7 +20,7 @@ struct RootView: View {
                         Button {
                             isCreateSheetPresented = true
                         } label: {
-                            Image(systemName: "plus.square.fill.on.square.fill")
+                            Image(systemName: Symbol.qlCreateList)
                                 .symbolRenderingMode(.hierarchical)
                                 .foregroundStyle(Color.qlAccent)
                         }
@@ -35,11 +35,10 @@ struct RootView: View {
                                 analytics: LoggingAnalyticsService()
                             )
                         },
-                        onListCreated: { _ in
-                            // US-04 : la nouvelle liste est visible immediatement
-                            // dans HomeView via @Query. Le push vers ListDetail
-                            // reste un tap explicite de l'utilisateur (HIG).
-                        }
+                        // La navigation post-creation est pilotee par lists.last
+                        // (cf. content). US-04 routera vers ListDetailView via
+                        // une vraie HomeView consommant cette nouvelle liste.
+                        onListCreated: { _ in }
                     )
                 }
         }

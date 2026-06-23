@@ -9,6 +9,7 @@ public final class CreateListViewModel: ObservableObject {
     @Published public var selectedType: ListType = .tasks
     @Published public private(set) var lastError: CreateListError?
     @Published public private(set) var createdList: TaskList?
+    @Published public private(set) var isCreating: Bool = false
 
     private let repository: TaskListRepository
     private let analytics: AnalyticsService
@@ -25,12 +26,18 @@ public final class CreateListViewModel: ObservableObject {
     }
 
     public var canCreate: Bool {
-        !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        guard !isCreating, createdList == nil else { return false }
+        return !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     public func create() {
+        // Garde-fou idempotent : un double-tap rapide sur "Créer" ne doit
+        // pas persister deux listes ni émettre deux events `list_created`.
+        guard !isCreating, createdList == nil else { return }
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
+        isCreating = true
+        defer { isCreating = false }
         do {
             let list = try repository.create(name: trimmed, type: selectedType)
             createdList = list
@@ -61,5 +68,6 @@ public final class CreateListViewModel: ObservableObject {
         selectedType = .tasks
         createdList = nil
         lastError = nil
+        isCreating = false
     }
 }

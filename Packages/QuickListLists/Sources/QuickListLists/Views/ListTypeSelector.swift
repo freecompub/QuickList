@@ -43,8 +43,9 @@ public struct ListTypeSelector: View {
                 }
                 Image(systemName: presentation.systemImageName)
                     .symbolRenderingMode(presentation.renderingMode)
-                    .font(.system(size: selected ? 28 : 20))
+                    .font(.system(size: selected ? IconSize.qlListTypeActive : IconSize.qlListTypeInactive))
                     .foregroundStyle(selected ? presentation.tint : Color.qlTertiaryLabel)
+                    .scaleEffect(selected ? 1.0 : 1.0)
             }
             .frame(
                 width: IconSize.qlMinimumTapTarget,
@@ -58,7 +59,8 @@ public struct ListTypeSelector: View {
         }
         .frame(maxWidth: .infinity)
         .contentShape(Rectangle())
-        .animation(.easeOut(duration: 0.15), value: selected)
+        .scaleEffect(selected ? 1.06 : 1.0)
+        .animation(Motion.qlQuick, value: selected)
     }
 
     private func presentation(for type: ListType) -> ListTypePresentation {
