@@ -12,13 +12,22 @@ struct RootView: View {
     var body: some View {
         NavigationStack {
             if let activeList = lists.first {
-                ListDetailView {
-                    AddItemViewModel(
-                        list: activeList,
-                        repository: SwiftDataListItemRepository(context: modelContext),
-                        analytics: LoggingAnalyticsService()
-                    )
-                }
+                ListDetailView(
+                    viewModelFactory: {
+                        AddItemViewModel(
+                            list: activeList,
+                            repository: SwiftDataListItemRepository(context: modelContext),
+                            analytics: LoggingAnalyticsService()
+                        )
+                    },
+                    actionsViewModelFactory: {
+                        ListItemActionsViewModel(
+                            list: activeList,
+                            repository: SwiftDataListItemRepository(context: modelContext),
+                            analytics: LoggingAnalyticsService()
+                        )
+                    }
+                )
             } else {
                 ProgressView()
                     .task {

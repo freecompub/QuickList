@@ -29,8 +29,24 @@ la `ListDetailView` qui affiche les items d'une `TaskList` et héberge la
   ou tap sur le bouton externe `[+]` (qui reste tappable même champ vide
   pour rappeler le focus).
 
+## Suppression et annulation (US-02)
+
+- `ListItemActionsViewModel` orchestre la suppression d'un item via swipe :
+  - `delete(_:)` supprime immédiatement de SwiftData (via `ListItemRepository`)
+    et démarre un `Task` de 4 s. `pendingUndo` porte le snapshot.
+  - `undoLastDeletion()` re-crée l'item depuis le snapshot dans la même
+    `TaskList` (createdAt préservé pour conserver le tri).
+  - `commitPendingDeletion()` (appelé par le timer ou exposé pour tests)
+    confirme définitivement la suppression et émet `item_deleted`.
+- L'`UndoToast` du DesignSystem s'affiche en overlay tant que `pendingUndo`
+  est non nil. Tap sur « Annuler » déclenche `undoLastDeletion`.
+
 ## Analytics
 
-- `item_added` à chaque ajout réussi (`list_type` en propriété).
-- `item_add_failed` quand la persistance échoue (`reason: "persistence"`).
+- `item_added` — ajout réussi (`list_type`).
+- `item_add_failed` — échec persistance ajout (`list_type`, `reason`).
+- `item_deleted` — suppression définitive (`list_type`).
+- `item_delete_undone` — annulation utilisateur (`list_type`).
+- `item_delete_failed` — échec persistance suppression (`list_type`, `reason`).
+- `item_delete_undo_failed` — échec persistance restore (`list_type`, `reason`).
 - Aucune propriété PII (pas de titre d'item, pas de nom de liste).

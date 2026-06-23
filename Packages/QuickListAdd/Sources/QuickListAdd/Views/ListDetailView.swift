@@ -5,12 +5,17 @@ import SwiftUI
 
 public struct ListDetailView: View {
     @StateObject private var viewModel: AddItemViewModel
+    @StateObject private var actionsViewModel: ListItemActionsViewModel
     @FocusState private var isAddItemFieldFocused: Bool
     @Query(sort: [SortDescriptor(\ListItem.createdAt, order: .forward)])
     private var allItems: [ListItem]
 
-    public init(viewModelFactory: @escaping () -> AddItemViewModel) {
+    public init(
+        viewModelFactory: @escaping () -> AddItemViewModel,
+        actionsViewModelFactory: @escaping () -> ListItemActionsViewModel
+    ) {
         self._viewModel = StateObject(wrappedValue: viewModelFactory())
+        self._actionsViewModel = StateObject(wrappedValue: actionsViewModelFactory())
     }
 
     public var body: some View {
@@ -25,6 +30,17 @@ public struct ListDetailView: View {
         .background(Color.qlBackground.ignoresSafeArea())
         .navigationTitle(viewModel.list.name)
         .navigationBarTitleDisplayMode(.inline)
+        .overlay(alignment: .bottom) {
+            if let pending = actionsViewModel.pendingUndo {
+                UndoToast(
+                    message: QuickListStrings.undoToastDeleted(title: pending.snapshot.title),
+                    onUndo: actionsViewModel.undoLastDeletion
+                )
+                .padding(.bottom, Spacing.qlSafeAreaBottom)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+        }
+        .animation(.easeInOut(duration: 0.2), value: actionsViewModel.pendingUndo)
         .onAppear {
             isAddItemFieldFocused = true
         }
@@ -42,6 +58,13 @@ public struct ListDetailView: View {
                         .font(.qlBody)
                         .foregroundStyle(Color.qlPrimaryLabel)
                         .padding(.vertical, Spacing.qlXS)
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button(role: .destructive) {
+                                actionsViewModel.delete(item)
+                            } label: {
+                                Label(QuickListStrings.listItemDelete, systemImage: "trash.fill")
+                            }
+                        }
                 }
             }
             .listStyle(.plain)
