@@ -54,7 +54,7 @@ Légende : `→` dépend de.
 
 - **US-19** — Repli gracieux sans Apple Intelligence
   (`SystemLanguageModel.availability` + mapping JSON local) → US-07
-  *(fait avant les autres pour poser le protocole et le fallback)*
+  *(fait avant les autres pour poser le protocole et le fallback)* — *en revue*
 - **US-15** — Capture instantanée, classification en arrière-plan → US-19
 - **US-16** — Import vocal → items structurés (Speech + `@Generable`) → US-15
 - **US-17** — Scan de ticket → produits (entrée image) → US-15
