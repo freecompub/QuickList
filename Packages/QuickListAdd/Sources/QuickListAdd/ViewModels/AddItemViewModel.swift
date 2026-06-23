@@ -78,8 +78,13 @@ public final class AddItemViewModel: ObservableObject {
     private func scheduleClassification(of item: ListItem) {
         guard let coordinator = classificationCoordinator else { return }
         let listSnapshot = list
-        Task { [weak coordinator] in
-            await coordinator?.classify(item, in: listSnapshot)
+        // Capture forte volontaire de `coordinator` : le Task doit pouvoir
+        // terminer la classification meme si l'utilisateur ferme la
+        // ListDetailView avant que le modele ait repondu, sinon
+        // `item.category` reste `nil` et l'item est silencieusement perdu
+        // dans la rubrique "non classes" (cf. CA US-15).
+        Task {
+            await coordinator.classify(item, in: listSnapshot)
         }
     }
 }

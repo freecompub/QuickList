@@ -43,3 +43,4 @@
 "ql.sort.status" = "Status (to do / done)";
 "ql.sort.error.title" = "Could not change sort";
 "ql.sort.error.message" = "Could not change the sort order. Try again.";
+"ql.rayon.autres" = "Other";

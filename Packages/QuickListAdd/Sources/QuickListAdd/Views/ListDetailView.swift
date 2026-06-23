@@ -89,16 +89,79 @@ public struct ListDetailView: View {
         let items = sortViewModel.sortedItems(scoped)
         if items.isEmpty {
             emptyState
+        } else if viewModel.list.type == .groceries {
+            groceriesGroupedList(items: items)
         } else {
-            List {
-                ForEach(items) { item in
-                    Text(item.title)
-                        .font(.qlBody)
-                        .foregroundStyle(Color.qlPrimaryLabel)
-                        .padding(.vertical, Spacing.qlXS)
+            plainList(items: items)
+        }
+    }
+
+    private func plainList(items: [ListItem]) -> some View {
+        List {
+            ForEach(items) { item in
+                itemRow(item)
+            }
+        }
+        .listStyle(.plain)
+    }
+
+    /// US-07 : pour les listes de type Courses, l'affichage est regroupé par
+    /// rayon (`item.category`). Les items en attente de classification ou
+    /// classés `Autres` tombent dans une section dédiée en fin de liste.
+    /// Le mode Courses dédié plein écran (US-08) reprendra ce regroupement
+    /// avec un layout grandes cibles tactiles.
+    private func groceriesGroupedList(items: [ListItem]) -> some View {
+        let groups = groupedByRayon(items: items)
+        return List {
+            ForEach(groups, id: \.title) { group in
+                Section(header: rayonSectionHeader(group.title)) {
+                    ForEach(group.items) { item in
+                        itemRow(item)
+                    }
                 }
             }
-            .listStyle(.plain)
+        }
+        .listStyle(.insetGrouped)
+    }
+
+    private func rayonSectionHeader(_ title: String) -> some View {
+        Text(title.uppercased())
+            .font(.qlCaption1Bold)
+            .foregroundStyle(Color.qlSecondaryLabel)
+            .padding(.vertical, Spacing.qlXXS)
+            .accessibilityLabel(title)
+    }
+
+    private func itemRow(_ item: ListItem) -> some View {
+        Text(item.title)
+            .font(.qlBody)
+            .foregroundStyle(Color.qlPrimaryLabel)
+            .padding(.vertical, Spacing.qlXS)
+    }
+
+    private struct RayonGroup {
+        let title: String
+        let items: [ListItem]
+    }
+
+    private func groupedByRayon(items: [ListItem]) -> [RayonGroup] {
+        var bucketsByTitle: [String: [ListItem]] = [:]
+        var order: [String] = []
+        for item in items {
+            let key = item.category ?? QuickListStrings.rayonAutres
+            if bucketsByTitle[key] == nil {
+                bucketsByTitle[key] = []
+                order.append(key)
+            }
+            bucketsByTitle[key]?.append(item)
+        }
+        if let autres = bucketsByTitle.removeValue(forKey: QuickListStrings.rayonAutres) {
+            order.removeAll { $0 == QuickListStrings.rayonAutres }
+            order.append(QuickListStrings.rayonAutres)
+            bucketsByTitle[QuickListStrings.rayonAutres] = autres
+        }
+        return order.compactMap { title in
+            bucketsByTitle[title].map { RayonGroup(title: title, items: $0) }
         }
     }
 

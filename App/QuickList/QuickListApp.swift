@@ -7,6 +7,8 @@ import SwiftUI
 @main
 struct QuickListApp: App {
     private let container: ModelContainer
+    private let languageModelService: LanguageModelService
+    private let languageModelAvailability: LanguageModelAvailability
 
     @MainActor
     init() {
@@ -17,24 +19,32 @@ struct QuickListApp: App {
         } catch {
             fatalError("Failed to initialize SwiftData container: \(error)")
         }
-        QuickListApp.reportLanguageModelAvailability()
+        // US-19 CA1 + US-07 : la chaîne LanguageModelService est créée une
+        // seule fois au lancement, partagée entre toutes les surfaces. Évite
+        // une double-sonde si RootView est re-évaluée par SwiftUI.
+        let factory = LanguageModelServiceFactory()
+        let (service, availability) = factory.make()
+        languageModelService = service
+        languageModelAvailability = availability
+        QuickListApp.reportLanguageModelAvailability(availability)
     }
 
     var body: some Scene {
         WindowGroup {
-            RootView()
+            RootView(
+                languageModelService: languageModelService,
+                languageModelAvailability: languageModelAvailability
+            )
         }
         .modelContainer(container)
     }
 
-    /// US-19 CA1 : sonde la disponibilité d'Apple Intelligence au lancement
-    /// et journalise via le module Analytics. La sonde fine via
+    /// US-19 CA1 : journalise la disponibilité d'Apple Intelligence au
+    /// lancement via le module Analytics. La sonde fine via
     /// `SystemLanguageModel.availability` (Apple Intelligence activé, device
-    /// éligible) reste à brancher en US-07 — cf. OPEN-QUESTIONS § AI-AVAIL-FINE.
+    /// éligible) reste à brancher en US-15 — cf. OPEN-QUESTIONS § AI-AVAIL-FINE.
     @MainActor
-    private static func reportLanguageModelAvailability() {
-        let factory = LanguageModelServiceFactory()
-        let availability = factory.detectAvailability()
+    private static func reportLanguageModelAvailability(_ availability: LanguageModelAvailability) {
         let analytics: AnalyticsService = LoggingAnalyticsService()
         var properties: [String: String] = [
             "is_available": availability.isAvailable ? "true" : "false"

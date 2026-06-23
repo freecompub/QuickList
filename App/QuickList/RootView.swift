@@ -13,12 +13,12 @@ struct RootView: View {
     private let languageModelService: LanguageModelService
     private let languageModelAvailability: LanguageModelAvailability
 
-    @MainActor
-    init() {
-        let factory = LanguageModelServiceFactory()
-        let (service, availability) = factory.make()
-        self.languageModelService = service
-        self.languageModelAvailability = availability
+    init(
+        languageModelService: LanguageModelService,
+        languageModelAvailability: LanguageModelAvailability
+    ) {
+        self.languageModelService = languageModelService
+        self.languageModelAvailability = languageModelAvailability
     }
 
     var body: some View {
