@@ -1,4 +1,4 @@
-import QuickAdd
+import QuickListAdd
 import QuickListAnalytics
 import QuickListCore
 import SwiftData
@@ -12,25 +12,22 @@ struct RootView: View {
     var body: some View {
         NavigationStack {
             if let activeList = lists.first {
-                ListDetailView(
-                    list: activeList,
-                    viewModel: AddItemViewModel(
+                ListDetailView {
+                    AddItemViewModel(
                         list: activeList,
                         repository: SwiftDataListItemRepository(context: modelContext),
                         analytics: LoggingAnalyticsService()
                     )
-                )
+                }
             } else {
                 ProgressView()
-                    .onAppear(perform: bootstrapDefaultList)
+                    .task {
+                        DefaultListBootstrapper(
+                            repository: SwiftDataTaskListRepository(context: modelContext)
+                        )
+                        .ensureDefault(name: "Démo", type: .tasks)
+                    }
             }
         }
-    }
-
-    private func bootstrapDefaultList() {
-        guard lists.isEmpty else { return }
-        let list = TaskList(name: "Démo", type: .tasks)
-        modelContext.insert(list)
-        try? modelContext.save()
     }
 }

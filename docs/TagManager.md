@@ -1,8 +1,8 @@
 # TagManager — Analytics
 
 Liste des événements analytics émis par QuickList via le module SPM
-`Analytics`. Source de vérité : à mettre à jour **dans le même commit** que
-l'implémentation qui émet l'événement (exigence `CLAUDE.md`).
+`QuickListAnalytics`. Source de vérité : à mettre à jour **dans le même
+commit** que l'implémentation qui émet l'événement (exigence `CLAUDE.md`).
 
 ## Format d'un tag
 
@@ -28,7 +28,8 @@ l'implémentation qui émet l'événement (exigence `CLAUDE.md`).
 
 | Event | US | Trigger | Properties | Module |
 |--|--|--|--|--|
-| `item_added` | US-01 | Soumission validée de l'AddItemBar (Return ou tap `[+]`) | `list_type: string` (valeur de `ListType`) | `QuickAdd` |
+| `item_added` | US-01 | Soumission validée de l'AddItemBar (Return ou tap `[+]`) | `list_type: string` (valeur de `ListType`) | `QuickListAdd` |
+| `item_add_failed` | US-01 | Échec de la persistance lors de l'ajout d'un item | `list_type: string`, `reason: string` (`"persistence"`) | `QuickListAdd` |
 
 ## Tags retirés
 

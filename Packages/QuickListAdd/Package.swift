@@ -2,13 +2,14 @@
 import PackageDescription
 
 let package = Package(
-    name: "QuickAdd",
+    name: "QuickListAdd",
     defaultLocalization: "fr",
     platforms: [
-        .iOS(.v17)
+        .iOS("17.5"),
+        .macOS(.v14)
     ],
     products: [
-        .library(name: "QuickAdd", targets: ["QuickAdd"])
+        .library(name: "QuickListAdd", targets: ["QuickListAdd"])
     ],
     dependencies: [
         .package(path: "../QuickListCore"),
@@ -18,7 +19,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "QuickAdd",
+            name: "QuickListAdd",
             dependencies: [
                 "QuickListCore",
                 "QuickListAnalytics",

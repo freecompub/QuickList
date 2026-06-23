@@ -1,7 +1,6 @@
+import QuickListCore
 import SwiftData
 import XCTest
-
-@testable import QuickListCore
 
 @MainActor
 final class QuickListAppBootstrapTests: XCTestCase {

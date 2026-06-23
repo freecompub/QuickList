@@ -9,4 +9,6 @@ public enum Spacing {
     public static let qlXL: CGFloat = 20
     public static let qlXXL: CGFloat = 24
     public static let qlXXXL: CGFloat = 32
+    public static let qlSection: CGFloat = 40
+    public static let qlSafeAreaBottom: CGFloat = 88
 }

@@ -4,20 +4,13 @@ import SwiftData
 import SwiftUI
 
 public struct ListDetailView: View {
-    private let list: TaskList
     @StateObject private var viewModel: AddItemViewModel
     @FocusState private var isAddItemFieldFocused: Bool
     @Query(sort: [SortDescriptor(\ListItem.createdAt, order: .forward)])
     private var allItems: [ListItem]
 
-    private var items: [ListItem] {
-        let listID = list.persistentModelID
-        return allItems.filter { $0.list?.persistentModelID == listID }
-    }
-
-    public init(list: TaskList, viewModel: AddItemViewModel) {
-        self.list = list
-        self._viewModel = StateObject(wrappedValue: viewModel)
+    public init(viewModelFactory: @escaping () -> AddItemViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModelFactory())
     }
 
     public var body: some View {
@@ -30,7 +23,7 @@ public struct ListDetailView: View {
             )
         }
         .background(Color.qlBackground.ignoresSafeArea())
-        .navigationTitle(list.name)
+        .navigationTitle(viewModel.list.name)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             isAddItemFieldFocused = true
@@ -39,6 +32,7 @@ public struct ListDetailView: View {
 
     @ViewBuilder
     private var content: some View {
+        let items = viewModel.itemsBelongingToList(in: allItems)
         if items.isEmpty {
             emptyState
         } else {
@@ -58,7 +52,7 @@ public struct ListDetailView: View {
         VStack(spacing: Spacing.qlM) {
             Spacer()
             Image(systemName: "checklist")
-                .font(.system(size: 48))
+                .font(.system(size: IconSize.qlEmptyStateGlyph))
                 .foregroundStyle(Color.qlSecondaryLabel)
             Text(QuickListStrings.listEmptyTitle)
                 .font(.qlTitle2)

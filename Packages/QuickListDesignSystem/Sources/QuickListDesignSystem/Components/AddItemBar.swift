@@ -28,28 +28,34 @@ public struct AddItemBar: View {
                 )
                 .focused(isFocused)
                 .submitLabel(.send)
-                .onSubmit(submit)
+                .onSubmit(onSubmit)
                 .accessibilityLabel(QuickListStrings.addItemPlaceholder)
 
-            Button(action: submit) {
+            Button(action: handleButtonTap) {
                 Image(systemName: "plus.circle.fill")
-                    .font(.system(size: 32, weight: .semibold))
-                    .foregroundStyle(text.isEmpty ? Color.qlTertiaryLabel : Color.qlAccent)
-                    .frame(width: 44, height: 44)
+                    .font(.system(size: IconSize.qlAddButtonSymbol, weight: .semibold))
+                    .foregroundStyle(isEmpty ? Color.qlTertiaryLabel : Color.qlAccent)
+                    .frame(width: IconSize.qlMinimumTapTarget, height: IconSize.qlMinimumTapTarget)
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             .accessibilityLabel(QuickListStrings.addItemSubmit)
         }
         .padding(.horizontal, Spacing.qlL)
         .padding(.vertical, Spacing.qlM)
         .background(.ultraThinMaterial)
+        .qlShadow(Shadow.qlAddBar)
     }
 
-    private func submit() {
-        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else { return }
-        onSubmit()
+    private var isEmpty: Bool {
+        text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    private func handleButtonTap() {
+        if isEmpty {
+            isFocused.wrappedValue = true
+        } else {
+            onSubmit()
+        }
     }
 }

@@ -8,8 +8,11 @@ par toute l'application et les protocoles de persistance qui les manipulent.
 - `TaskList`, `ListItem` : modèles SwiftData compatibles CloudKit
   (pas de `@Attribute(.unique)`, valeurs par défaut, relations optionnelles).
 - `ListType`, `SortMode` : énumérations métier.
-- `ListItemRepository` : protocole d'accès aux items (injection des dépendances
-  pour les vues et les ViewModels).
+- `ListItemRepository` (protocole) + `SwiftDataListItemRepository`
+  (implémentation) : accès aux items, injecté dans les ViewModels.
+- `TaskListRepository` (protocole) + `SwiftDataTaskListRepository`
+  (implémentation) : accès aux listes, utilisé notamment par le bootstrap
+  d'app pour vérifier l'existence d'une liste de démarrage.
 
 ## Règle d'architecture
 

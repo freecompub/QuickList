@@ -11,6 +11,7 @@ final class MockListItemRepository: ListItemRepository {
     var behavior: Behavior = .success
     private(set) var createdTitles: [String] = []
     private(set) var lastList: TaskList?
+    private(set) var lastCreatedItem: ListItem?
 
     func create(title: String, in list: TaskList) throws -> ListItem {
         switch behavior {
@@ -19,6 +20,7 @@ final class MockListItemRepository: ListItemRepository {
             lastList = list
             let item = ListItem(title: title)
             item.list = list
+            lastCreatedItem = item
             return item
         case .fail(let error):
             throw error

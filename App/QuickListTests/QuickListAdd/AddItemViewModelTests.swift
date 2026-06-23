@@ -1,4 +1,4 @@
-import QuickAdd
+import QuickListAdd
 import QuickListAnalytics
 import QuickListCore
 import XCTest
@@ -102,13 +102,62 @@ final class AddItemViewModelTests: XCTestCase {
         XCTAssertEqual(sut.pendingTitle, "")
     }
 
-    func test_submit_repositoryFailure_keepsFieldAndSkipsAnalytics() {
+    func test_submit_repositoryFailure_keepsFieldAndSurfacesError() {
         repository.behavior = .fail(ListItemRepositoryError.emptyTitle)
         sut.pendingTitle = "Lait"
 
         sut.submit()
 
         XCTAssertEqual(sut.pendingTitle, "Lait")
-        XCTAssertTrue(analytics.trackedEvents.isEmpty)
+        XCTAssertEqual(sut.lastError, .persistenceFailed)
+    }
+
+    func test_submit_repositoryFailure_emitsFailureAnalyticsEvent() {
+        repository.behavior = .fail(ListItemRepositoryError.emptyTitle)
+        sut.pendingTitle = "Lait"
+
+        sut.submit()
+
+        XCTAssertEqual(analytics.trackedEvents.count, 1)
+        XCTAssertEqual(analytics.trackedEvents.first?.name, "item_add_failed")
+        XCTAssertEqual(analytics.trackedEvents.first?.properties["reason"], "persistence")
+        XCTAssertEqual(analytics.trackedEvents.first?.properties["list_type"], "tasks")
+    }
+
+    func test_submit_clearsLastErrorOnSuccess() {
+        repository.behavior = .fail(ListItemRepositoryError.emptyTitle)
+        sut.pendingTitle = "Lait"
+        sut.submit()
+        XCTAssertEqual(sut.lastError, .persistenceFailed)
+
+        repository.behavior = .success
+        sut.submit()
+
+        XCTAssertNil(sut.lastError)
+    }
+
+    func test_dismissError_clearsLastError() {
+        repository.behavior = .fail(ListItemRepositoryError.emptyTitle)
+        sut.pendingTitle = "Lait"
+        sut.submit()
+
+        sut.dismissError()
+
+        XCTAssertNil(sut.lastError)
+    }
+
+    func test_itemsBelongingToList_filtersByPersistentModelID() {
+        let otherList = TaskList(name: "Idées")
+        sut.pendingTitle = "Lait"
+        sut.submit()
+        let mineItem = repository.lastCreatedItem
+        XCTAssertNotNil(mineItem)
+        let unrelatedItem = ListItem(title: "Pizza")
+        unrelatedItem.list = otherList
+
+        let filtered = sut.itemsBelongingToList(in: [unrelatedItem, mineItem!])
+
+        XCTAssertEqual(filtered.count, 1)
+        XCTAssertIdentical(filtered.first, mineItem)
     }
 }

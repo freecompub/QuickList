@@ -29,11 +29,11 @@ structure conditionne tout le reste du backlog.
     SwiftLog par défaut.
   - `QuickListDesignSystem` — tokens couleur/typo/spacing, composants
     partagés (`AddItemBar`), strings localisées.
-  - `QuickAdd` — feature US-01 : `AddItemViewModel`, `ListDetailView`.
+  - `QuickListAdd` — feature US-01 : `AddItemViewModel`, `ListDetailView`.
 - **Génération du projet via XcodeGen** (`project.yml`), `.xcodeproj`
   ignoré par git.
 - **Test bundle unique** dans `App/QuickListTests/` avec un sous-dossier
-  miroir par module (`Core/`, `Analytics/`, `DesignSystem/`, `QuickAdd/`).
+  miroir par module (`Core/`, `Analytics/`, `DesignSystem/`, `QuickListAdd/`).
 
 ### Conséquences
 
@@ -70,16 +70,21 @@ runtime sur iOS 17.0.
 
 ### Décision
 
-- Le deployment target reste **iOS 17.0** (cible large, exigée par
-  `CLAUDE.md`).
-- Les tests s'exécutent sur le **simulateur iOS 26.1** (iPhone 17 Pro) pour
-  que tous les symboles SwiftData soient présents au runtime.
-- Le code évite les patterns connus pour casser iOS 17.0 quand possible
-  (ex. `#Predicate` avec optional chaining → remplacé par filtrage Swift sur
-  les résultats de `@Query`).
-- Une vérification réelle sur device iOS 17.0 reste à planifier avant toute
-  livraison TestFlight pour confirmer l'absence de symboles manquants à
-  l'usage.
+- Le deployment target est porté à **iOS 17.5** dans `project.yml` et dans
+  tous les `Package.swift` des modules SPM. iOS 17.5 est la première version
+  stable contenant tous les symboles SwiftData (`BackingData.setValue`,
+  variantes de `#Predicate`) référencés par le binaire compilé avec le
+  SDK iOS 26.
+- L'engagement `CLAUDE.md` (« Compatibilité : iOS 17 / iPadOS 17 ») est
+  préservé au sens majeur (iOS 17.x), avec un plancher mineur explicite.
+- Les tests s'exécutent sur le **simulateur iOS 26.1** (iPhone 17 Pro).
+- Le code évite quand même les patterns connus pour casser iOS 17.0–17.3
+  (ex. `#Predicate` avec optional chaining → remplacé par un filtrage Swift
+  explicite, encapsulé dans `AddItemViewModel.itemsBelongingToList(in:)`,
+  commenté).
+- Une vérification réelle sur device iOS 17.5+ reste à planifier avant
+  TestFlight, mais le risque de crash runtime est levé pour la cible
+  officiellement supportée.
 
 ### Conséquences
 

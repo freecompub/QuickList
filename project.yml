@@ -2,7 +2,7 @@ name: QuickList
 options:
   bundleIdPrefix: app.quicklist
   deploymentTarget:
-    iOS: "17.0"
+    iOS: "17.5"
   createIntermediateGroups: true
   generateEmptyDirectories: true
   developmentLanguage: fr
@@ -19,8 +19,11 @@ packages:
     path: Packages/QuickListAnalytics
   QuickListDesignSystem:
     path: Packages/QuickListDesignSystem
-  QuickAdd:
-    path: Packages/QuickAdd
+  QuickListAdd:
+    path: Packages/QuickListAdd
+  swift-log:
+    url: https://github.com/apple/swift-log.git
+    from: 1.5.4
 
 targets:
   QuickList:
@@ -50,7 +53,9 @@ targets:
       - package: QuickListCore
       - package: QuickListAnalytics
       - package: QuickListDesignSystem
-      - package: QuickAdd
+      - package: QuickListAdd
+      - package: swift-log
+        product: Logging
   QuickListTests:
     type: bundle.unit-test
     platform: iOS
@@ -58,6 +63,12 @@ targets:
       - path: App/QuickListTests
     dependencies:
       - target: QuickList
+      - package: QuickListCore
+      - package: QuickListAnalytics
+      - package: QuickListDesignSystem
+      - package: QuickListAdd
+      - package: swift-log
+        product: Logging
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES

@@ -5,7 +5,7 @@ let package = Package(
     name: "QuickListCore",
     defaultLocalization: "fr",
     platforms: [
-        .iOS(.v17),
+        .iOS("17.5"),
         .macOS(.v14)
     ],
     products: [
