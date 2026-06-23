@@ -12,7 +12,7 @@ commit** que l'implémentation qui émet l'événement (exigence `CLAUDE.md`).
 | `US` | Identifiant de l'US qui l'introduit. |
 | `Trigger` | Action utilisateur ou condition système qui le déclenche. |
 | `Properties` | Paire `clé:type` des propriétés transmises. Pas de PII. |
-| `Module` | Module SPM qui l'émet (`QuickAdd`, `Lists`, `Shopping`…). |
+| `Module` | Module SPM qui l'émet (`QuickListAdd`, `QuickListLists`, `QuickListShopping`…). |
 
 ## Règles
 
