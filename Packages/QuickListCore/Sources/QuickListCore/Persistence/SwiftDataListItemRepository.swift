@@ -25,4 +25,16 @@ public final class SwiftDataListItemRepository: ListItemRepository {
         item.category = category
         try context.save()
     }
+
+    public func toggleDone(_ item: ListItem) throws {
+        item.isDone.toggle()
+        do {
+            try context.save()
+        } catch {
+            // Restaure l'etat memoire pour rester coherent avec le mock et la
+            // promesse "echec de persistance = aucun changement visible".
+            item.isDone.toggle()
+            throw error
+        }
+    }
 }

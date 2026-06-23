@@ -44,3 +44,7 @@
 "ql.sort.error.title" = "Tri impossible";
 "ql.sort.error.message" = "Impossible de changer le tri. Réessayez.";
 "ql.rayon.autres" = "Autres";
+"ql.item.toggle.accessibility.toDo" = "Marquer fait";
+"ql.item.toggle.accessibility.done" = "Marquer à faire";
+"ql.item.toggle.error.title" = "Modification impossible";
+"ql.item.toggle.error.message" = "Impossible de mettre à jour cet item. Réessayez.";

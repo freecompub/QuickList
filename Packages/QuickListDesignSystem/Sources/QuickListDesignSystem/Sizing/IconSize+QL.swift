@@ -6,4 +6,6 @@ public enum IconSize {
     public static let qlEmptyStateGlyph: CGFloat = 48
     public static let qlListTypeActive: CGFloat = 28
     public static let qlListTypeInactive: CGFloat = 20
+    public static let qlCheckboxShopping: CGFloat = 32
+    public static let qlShoppingRowMinHeight: CGFloat = 64
 }

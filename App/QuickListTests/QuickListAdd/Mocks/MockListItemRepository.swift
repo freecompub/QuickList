@@ -38,4 +38,17 @@ final class MockListItemRepository: ListItemRepository {
             throw error
         }
     }
+
+    var toggleDoneBehavior: Behavior = .success
+    private(set) var toggleDoneCalls: [ListItem] = []
+
+    func toggleDone(_ item: ListItem) throws {
+        switch toggleDoneBehavior {
+        case .success:
+            item.isDone.toggle()
+            toggleDoneCalls.append(item)
+        case .fail(let error):
+            throw error
+        }
+    }
 }

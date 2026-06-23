@@ -61,8 +61,8 @@ En tant qu'utilisateur, je veux qu'une liste de courses regroupe automatiquement
 
 **US-08 — Interface de courses dédiée**
 En tant qu'utilisateur en magasin, je veux une vue avec de gros boutons et une coche rapide, afin de pointer mes articles d'une seule main.
-- CA : la zone tappable de chaque article est large (confortable au pouce).
-- CA : cocher un article le grise et le déplace en bas (ou le masque, selon réglage).
+- [x] CA : la zone tappable de chaque article est large (confortable au pouce).
+- [x] CA : cocher un article le grise et le déplace en bas (ou le masque, selon réglage).
 
 **US-09 — Corriger une catégorie et la mémoriser**
 En tant qu'utilisateur, je veux déplacer un article mal classé vers le bon rayon et que l'app retienne mon choix, afin que le classement s'améliore avec le temps.

@@ -24,7 +24,7 @@ Légende : `→` dépend de.
 - **US-07** — Tri par rayon (Foundation Models + fallback JSON) → US-03 — *en revue*
 
 ### 1.4 Mode Courses
-- **US-08** — Interface de courses dédiée (TabBar) → US-03, US-07
+- **US-08** — Interface de courses dédiée (TabBar) → US-03, US-07 — *en revue (partiel : intégré à ListDetailView; TabBar plein écran différée)*
 - **US-09** — Corriger une catégorie et la mémoriser
   (`CategoryPreference`) → US-08
 

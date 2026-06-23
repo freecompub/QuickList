@@ -59,4 +59,35 @@ final class TaskListModelTests: XCTestCase {
 
         XCTAssertEqual(item.title, "Pain")
     }
+
+    func test_repository_updateCategory_persistsValue() throws {
+        let schema = Schema([TaskList.self, ListItem.self])
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: schema, configurations: [config])
+        let context = ModelContext(container)
+        let list = TaskList(name: "Courses", type: .groceries)
+        context.insert(list)
+        let repository = SwiftDataListItemRepository(context: context)
+        let item = try repository.create(title: "Lait", in: list)
+
+        try repository.updateCategory(item, to: "Crèmerie")
+
+        XCTAssertEqual(item.category, "Crèmerie")
+    }
+
+    func test_repository_toggleDone_flipsValue() throws {
+        let schema = Schema([TaskList.self, ListItem.self])
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: schema, configurations: [config])
+        let context = ModelContext(container)
+        let list = TaskList(name: "Courses", type: .groceries)
+        context.insert(list)
+        let repository = SwiftDataListItemRepository(context: context)
+        let item = try repository.create(title: "Lait", in: list)
+
+        try repository.toggleDone(item)
+        XCTAssertTrue(item.isDone)
+        try repository.toggleDone(item)
+        XCTAssertFalse(item.isDone)
+    }
 }
