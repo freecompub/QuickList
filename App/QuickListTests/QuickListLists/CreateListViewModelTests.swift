@@ -142,7 +142,7 @@ final class CreateListViewModelTests: XCTestCase {
         XCTAssertNil(sut.lastError)
     }
 
-    func test_allListTypes_areCreatableInLessThanThreeUserActions() {
+    func test_allListTypes_canBeCreated_withCorrectTypePersisted() {
         for type in ListType.allCases {
             let local = CreateListViewModel(repository: repository, analytics: analytics)
             local.name = "Test"
@@ -152,5 +152,37 @@ final class CreateListViewModelTests: XCTestCase {
 
             XCTAssertEqual(local.createdList?.type, type)
         }
+    }
+
+    func test_create_doubleTap_persistsOnlyOnceAndEmitsSingleAnalytics() {
+        sut.name = "Lait"
+        sut.selectedType = .groceries
+
+        sut.create()
+        sut.create()
+
+        XCTAssertEqual(repository.createdNames, ["Lait"])
+        XCTAssertEqual(analytics.trackedEvents.filter { $0.name == "list_created" }.count, 1)
+    }
+
+    func test_canCreate_isFalseWhileCreatingHasAlreadySucceeded() {
+        sut.name = "Lait"
+
+        sut.create()
+
+        XCTAssertNotNil(sut.createdList)
+        XCTAssertFalse(sut.canCreate)
+    }
+
+    func test_reset_clearsIsCreatingFlag() {
+        sut.name = "Lait"
+        sut.create()
+        XCTAssertFalse(sut.canCreate)
+
+        sut.reset()
+
+        XCTAssertFalse(sut.isCreating)
+        sut.name = "Re-essai"
+        XCTAssertTrue(sut.canCreate)
     }
 }

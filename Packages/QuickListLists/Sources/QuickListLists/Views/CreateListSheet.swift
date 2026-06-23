@@ -53,7 +53,9 @@ public struct CreateListSheet: View {
                 isPresented: errorPresented,
                 presenting: viewModel.lastError
             ) { _ in
-                Button(QuickListStrings.createListErrorDismiss, action: viewModel.dismissError)
+                Button(QuickListStrings.createListErrorDismiss) {
+                    viewModel.dismissError()
+                }
             } message: { _ in
                 Text(QuickListStrings.createListErrorMessage)
             }
@@ -61,6 +63,8 @@ public struct CreateListSheet: View {
                 isNameFieldFocused = true
             }
         }
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
     }
 
     private var nameField: some View {
