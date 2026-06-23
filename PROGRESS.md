@@ -19,7 +19,7 @@ Registre vivant de l'avancement, consommé et mis à jour par le skill
 | ID    | Phase    | Statut | Tentatives | PR | Note |
 |-------|----------|--------|-----------|----|------|
 | US-01 | MVP      | awaiting-merge | 1  | #1 | base: main · review approuvée (B1-B13 corrigés) |
-| US-02 | MVP      | in-progress | 1     |    | base: feat/US-01-ajout-rapide (stacked) |
+| US-02 | MVP      | awaiting-merge | 1  | #2 | base: feat/US-01-ajout-rapide (stacked) · review OK |
 | US-03 | MVP      | todo   | 0         |    | |
 | US-04 | MVP      | todo   | 0         |    | |
 | US-05 | MVP      | todo   | 0         |    | |
