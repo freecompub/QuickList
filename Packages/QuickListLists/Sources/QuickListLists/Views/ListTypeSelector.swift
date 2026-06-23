@@ -45,7 +45,6 @@ public struct ListTypeSelector: View {
                     .symbolRenderingMode(presentation.renderingMode)
                     .font(.system(size: selected ? IconSize.qlListTypeActive : IconSize.qlListTypeInactive))
                     .foregroundStyle(selected ? presentation.tint : Color.qlTertiaryLabel)
-                    .scaleEffect(selected ? 1.0 : 1.0)
             }
             .frame(
                 width: IconSize.qlMinimumTapTarget,
