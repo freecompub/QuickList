@@ -158,3 +158,74 @@ intelligent on-device. Posé en US-19, il expose :
 - **Wrapper `FoundationModels` dans `QuickListCore`** : refusé pour ne
   pas polluer le noyau SwiftData/CloudKit avec une dépendance optionnelle
   fortement plateforme.
+
+---
+
+## ADR-005 — Classification de rayon fire-and-forget (US-07)
+
+**Statut** : adoptée, 2026-06-24.
+
+### Contexte
+
+US-07 demande que le rayon d'un item de liste Courses soit déterminé via
+`LanguageModelService` (Foundation Models ou fallback), et que cela ne
+retarde JAMAIS la persistance et l'affichage de l'item (cf. CA US-01
+« item apparaît immédiatement »). Trois questions s'imposent :
+
+1. Le call modèle (potentiellement de l'ordre de la centaine de ms en
+   Foundation Models) doit-il être attendu par le `submit()` du
+   ViewModel ?
+2. Où instancier la chaîne `LanguageModelService` (et donc l'appel
+   d'availability `SystemLanguageModel.availability`) ?
+3. Comment garantir que la classification termine même si l'utilisateur
+   ferme la `ListDetailView` juste après l'ajout ?
+
+### Décision
+
+- **Pattern fire-and-forget** : `AddItemViewModel.submit()` persiste
+  l'item synchroniquement via le repository, puis lance une `Task`
+  détachée (`.scheduleClassification`) qui appelle
+  `RayonClassificationCoordinator.classify(item, in: list)`. La closure
+  capture le coordinator en **fort** (pas `[weak]`) pour que la Task
+  termine son travail même si le ViewModel est démonté entre temps.
+- **Service créé au niveau `QuickListApp`** (et passé en paramètre à
+  `RootView`). Cela garantit une **unique** sonde d'availability au
+  lancement et un service partagé entre toutes les surfaces (HomeView,
+  toutes les ListDetailView ouvertes ou recréées). Évite la double-sonde
+  qui aurait lieu si chaque `RootView.init` re-faisait le travail.
+- **Coordinator no-op silencieux sur `list.type != .groceries`** : seules
+  les listes de courses appellent le modèle. Économie de batterie et de
+  cycles modèle, et ne pollue pas les analytics des autres types.
+- **Branchement Foundation Models réel reporté à US-15** : cf.
+  `OPEN-QUESTIONS.md` § AI-AVAIL-FINE. US-07 livre l'infrastructure et
+  les hooks UI ; US-15 fournira l'appel `LanguageModelSession.respond(...)`
+  effectif.
+- **UI : regroupement par rayon dans `ListDetailView`** quand
+  `list.type == .groceries`. Section par `item.category`, fallback en
+  fin de liste pour les items non encore classés ou classés `Autres`.
+  Le mode Courses dédié plein écran (US-08) reprendra ce regroupement
+  avec un layout adapté aux grandes cibles tactiles en magasin.
+
+### Conséquences
+
+- L'ajout d'item reste **instantané** (CA US-01 préservé).
+- La classification s'affiche en différé via `@Query` SwiftData (la
+  view se rafraîchit dès que `item.category` est mis à jour).
+- Risque : si l'utilisateur supprime un item *avant* que la
+  classification termine, le `Task` tentera d'écrire sur un objet
+  SwiftData supprimé. À traiter en US-02 (swipe-delete) avec une
+  cancellation token, et à minima notée comme dette ici.
+- L'analytics `item_classified` est émis APRÈS la persistance — ordre
+  important pour ne pas tracer une classification qui n'a pas été
+  persistée. À ne pas inverser.
+
+### Alternatives écartées
+
+- **`submit()` async qui attend la classification** : refusé, contredit
+  US-01 (ajout instantané) et bloque le focus du champ pour le suivant.
+- **Service créé au niveau `RootView.init`** : refusé pour B2 de la
+  revue PR #8 (re-init à chaque rebuild SwiftUI). Une factory
+  potentiellement réinvoquée n'est pas safe.
+- **Mode Courses dédié dès US-07** : refusé pour ne pas charger US-07
+  d'un changement de layout structurant. US-08 livre la vue plein écran
+  optimisée magasin.

@@ -1,4 +1,5 @@
 import QuickListAdd
+import QuickListAI
 import QuickListAnalytics
 import QuickListCore
 import QuickListDesignSystem
@@ -9,6 +10,16 @@ import SwiftUI
 struct RootView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var isCreateSheetPresented = false
+    private let languageModelService: LanguageModelService
+    private let languageModelAvailability: LanguageModelAvailability
+
+    init(
+        languageModelService: LanguageModelService,
+        languageModelAvailability: LanguageModelAvailability
+    ) {
+        self.languageModelService = languageModelService
+        self.languageModelAvailability = languageModelAvailability
+    }
 
     var body: some View {
         NavigationStack {
@@ -24,19 +35,26 @@ struct RootView: View {
                     )
                 },
                 detailContent: { list in
+                    let repository = SwiftDataListItemRepository(context: modelContext)
+                    let analytics: AnalyticsService = LoggingAnalyticsService()
                     ListDetailView(
                         viewModelFactory: {
                             AddItemViewModel(
                                 list: list,
-                                repository: SwiftDataListItemRepository(context: modelContext),
-                                analytics: LoggingAnalyticsService()
+                                repository: repository,
+                                analytics: analytics,
+                                classificationCoordinator: RayonClassificationCoordinator(
+                                    service: languageModelService,
+                                    repository: repository,
+                                    analytics: analytics
+                                )
                             )
                         },
                         sortViewModelFactory: {
                             SortListViewModel(
                                 list: list,
                                 repository: SwiftDataTaskListRepository(context: modelContext),
-                                analytics: LoggingAnalyticsService()
+                                analytics: analytics
                             )
                         }
                     )

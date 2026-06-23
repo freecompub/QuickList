@@ -1,3 +1,4 @@
+import QuickListAI
 import QuickListCore
 import QuickListDesignSystem
 import SwiftData
@@ -89,16 +90,85 @@ public struct ListDetailView: View {
         let items = sortViewModel.sortedItems(scoped)
         if items.isEmpty {
             emptyState
+        } else if viewModel.list.type == .groceries {
+            groceriesGroupedList(items: items)
         } else {
-            List {
-                ForEach(items) { item in
-                    Text(item.title)
-                        .font(.qlBody)
-                        .foregroundStyle(Color.qlPrimaryLabel)
-                        .padding(.vertical, Spacing.qlXS)
+            plainList(items: items)
+        }
+    }
+
+    private func plainList(items: [ListItem]) -> some View {
+        List {
+            ForEach(items) { item in
+                itemRow(item)
+            }
+        }
+        .listStyle(.plain)
+    }
+
+    /// US-07 : pour les listes de type Courses, l'affichage est regroupé par
+    /// rayon (`item.category`). Les items en attente de classification ou
+    /// classés `Autres` tombent dans une section dédiée en fin de liste.
+    /// Le mode Courses dédié plein écran (US-08) reprendra ce regroupement
+    /// avec un layout grandes cibles tactiles.
+    private func groceriesGroupedList(items: [ListItem]) -> some View {
+        let groups = groupedByRayon(items: items)
+        return List {
+            ForEach(groups, id: \.title) { group in
+                Section(header: rayonSectionHeader(group.title)) {
+                    ForEach(group.items) { item in
+                        itemRow(item)
+                    }
                 }
             }
-            .listStyle(.plain)
+        }
+        .listStyle(.insetGrouped)
+    }
+
+    private func rayonSectionHeader(_ title: String) -> some View {
+        Text(title.uppercased())
+            .font(.qlCaption1Bold)
+            .foregroundStyle(Color.qlSecondaryLabel)
+            .padding(.vertical, Spacing.qlXXS)
+            .accessibilityLabel(title)
+    }
+
+    private func itemRow(_ item: ListItem) -> some View {
+        Text(item.title)
+            .font(.qlBody)
+            .foregroundStyle(Color.qlPrimaryLabel)
+            .padding(.vertical, Spacing.qlXS)
+    }
+
+    private struct RayonGroup {
+        let title: String
+        let items: [ListItem]
+    }
+
+    private func groupedByRayon(items: [ListItem]) -> [RayonGroup] {
+        // Cle technique stable : le rawValue du modele (FR), utilisee aussi
+        // bien pour les items non classes (`item.category == nil`) que pour
+        // ceux explicitement classes "Autres" par le service.
+        let autresKey = Rayon.autres.rawValue
+        var bucketsByKey: [String: [ListItem]] = [:]
+        var order: [String] = []
+        for item in items {
+            let key = item.category ?? autresKey
+            if bucketsByKey[key] == nil {
+                bucketsByKey[key] = []
+                order.append(key)
+            }
+            bucketsByKey[key]?.append(item)
+        }
+        if let autres = bucketsByKey.removeValue(forKey: autresKey) {
+            order.removeAll { $0 == autresKey }
+            order.append(autresKey)
+            bucketsByKey[autresKey] = autres
+        }
+        return order.compactMap { key in
+            guard let bucketItems = bucketsByKey[key] else { return nil }
+            let title = (key == autresKey) ? QuickListStrings.rayonAutres : key
+            return RayonGroup(title: title, items: bucketItems)
         }
     }
 

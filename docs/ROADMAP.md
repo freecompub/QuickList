@@ -21,7 +21,7 @@ Légende : `→` dépend de.
 
 ### 1.3 Tri intelligent
 - **US-06** — Choisir un mode de tri (par liste, persisté) → US-03 — *en revue*
-- **US-07** — Tri par rayon (Foundation Models + fallback JSON) → US-03
+- **US-07** — Tri par rayon (Foundation Models + fallback JSON) → US-03 — *en revue*
 
 ### 1.4 Mode Courses
 - **US-08** — Interface de courses dédiée (TabBar) → US-03, US-07

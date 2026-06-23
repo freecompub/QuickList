@@ -43,3 +43,4 @@
 "ql.sort.status" = "Statut (à faire / fait)";
 "ql.sort.error.title" = "Tri impossible";
 "ql.sort.error.message" = "Impossible de changer le tri. Réessayez.";
+"ql.rayon.autres" = "Autres";
