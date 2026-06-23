@@ -9,11 +9,20 @@ final class MockTaskListRepository: TaskListRepository {
     }
 
     var createBehavior: Behavior = .success
+    var renameBehavior: Behavior = .success
+    var deleteBehavior: Behavior = .success
 
     private(set) var createdNames: [String] = []
     private(set) var createdTypes: [ListType] = []
     private(set) var lastCreatedList: TaskList?
+    private(set) var renamedLists: [(TaskList, String)] = []
+    private(set) var deletedLists: [TaskList] = []
     var storedLists: [TaskList] = []
+
+    var behavior: Behavior {
+        get { createBehavior }
+        set { createBehavior = newValue }
+    }
 
     func fetchAll() throws -> [TaskList] {
         storedLists
@@ -28,6 +37,26 @@ final class MockTaskListRepository: TaskListRepository {
             storedLists.append(list)
             lastCreatedList = list
             return list
+        case .fail(let error):
+            throw error
+        }
+    }
+
+    func rename(_ list: TaskList, to newName: String) throws {
+        switch renameBehavior {
+        case .success:
+            list.name = newName
+            renamedLists.append((list, newName))
+        case .fail(let error):
+            throw error
+        }
+    }
+
+    func delete(_ list: TaskList) throws {
+        switch deleteBehavior {
+        case .success:
+            storedLists.removeAll { $0 === list }
+            deletedLists.append(list)
         case .fail(let error):
             throw error
         }

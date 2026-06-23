@@ -33,6 +33,10 @@ commit** que l'implémentation qui émet l'événement (exigence `CLAUDE.md`).
 | `list_created` | US-03 | Création validée d'une liste depuis la sheet (`Créer`) | `list_type: string` | `QuickListLists` |
 | `list_create_failed` | US-03 | Échec de la persistance lors de la création d'une liste | `list_type: string`, `reason: string` (`"persistence"`) | `QuickListLists` |
 | `list_opened` | US-04 | Push d'une `ListCard` vers la `ListDetailView` (tap utilisateur) | `list_type: string` | `QuickListLists` |
+| `list_renamed` | US-05 | Validation de la sheet de renommage (`Valider`) | `list_type: string` | `QuickListLists` |
+| `list_rename_failed` | US-05 | Échec de la persistance lors du renommage d'une liste | `list_type: string`, `reason: string` (`"persistence"`) | `QuickListLists` |
+| `list_deleted` | US-05 | Confirmation de l'alert de suppression (`Supprimer`) | `list_type: string` | `QuickListLists` |
+| `list_delete_failed` | US-05 | Échec de la persistance lors de la suppression d'une liste | `list_type: string`, `reason: string` (`"persistence"`) | `QuickListLists` |
 
 ## Tags retirés
 

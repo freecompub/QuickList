@@ -7,7 +7,10 @@ public struct HomeView<DetailContent: View>: View {
     @StateObject private var viewModel: HomeViewModel
     @Query(sort: [SortDescriptor(\TaskList.createdAt, order: .forward)])
     private var lists: [TaskList]
+    @State private var renameTarget: TaskList?
+    @State private var deleteTarget: TaskList?
     private let detailContent: (TaskList) -> DetailContent
+    private let optionsViewModelFactory: (TaskList) -> ListOptionsViewModel
 
     private let gridColumns = [
         GridItem(.flexible(), spacing: Spacing.qlL),
@@ -16,9 +19,11 @@ public struct HomeView<DetailContent: View>: View {
 
     public init(
         viewModelFactory: @escaping () -> HomeViewModel,
+        optionsViewModelFactory: @escaping (TaskList) -> ListOptionsViewModel,
         @ViewBuilder detailContent: @escaping (TaskList) -> DetailContent
     ) {
         self._viewModel = StateObject(wrappedValue: viewModelFactory())
+        self.optionsViewModelFactory = optionsViewModelFactory
         self.detailContent = detailContent
     }
 
@@ -38,6 +43,25 @@ public struct HomeView<DetailContent: View>: View {
                     viewModel.listDidOpen(list)
                 }
         }
+        .sheet(item: $renameTarget) { list in
+            RenameListSheet(viewModel: optionsViewModelFactory(list))
+        }
+        .alert(
+            deleteTarget.map { QuickListStrings.listDeleteConfirmTitle(listName: $0.name) } ?? "",
+            isPresented: deleteAlertPresented,
+            presenting: deleteTarget
+        ) { list in
+            Button(QuickListStrings.listOptionsDelete, role: .destructive) {
+                let optionsVM = optionsViewModelFactory(list)
+                optionsVM.delete()
+                deleteTarget = nil
+            }
+            Button(QuickListStrings.listOptionsCancel, role: .cancel) {
+                deleteTarget = nil
+            }
+        } message: { _ in
+            Text(QuickListStrings.listDeleteConfirmMessage)
+        }
     }
 
     private var gridContent: some View {
@@ -53,6 +77,18 @@ public struct HomeView<DetailContent: View>: View {
                         )
                     }
                     .buttonStyle(.plain)
+                    .contextMenu {
+                        Button {
+                            renameTarget = list
+                        } label: {
+                            Label(QuickListStrings.listOptionsRename, systemImage: "pencil")
+                        }
+                        Button(role: .destructive) {
+                            deleteTarget = list
+                        } label: {
+                            Label(QuickListStrings.listOptionsDelete, systemImage: "trash.fill")
+                        }
+                    }
                 }
             }
             .padding(Spacing.qlL)
@@ -76,5 +112,16 @@ public struct HomeView<DetailContent: View>: View {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    private var deleteAlertPresented: Binding<Bool> {
+        Binding(
+            get: { deleteTarget != nil },
+            set: { isPresented in
+                if !isPresented {
+                    deleteTarget = nil
+                }
+            }
+        )
     }
 }

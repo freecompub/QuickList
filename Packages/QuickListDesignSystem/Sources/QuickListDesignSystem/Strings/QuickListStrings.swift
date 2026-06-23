@@ -133,6 +133,81 @@ public enum QuickListStrings {
         comment: "Subtitle shown when the user has no list yet — invites to create one."
     )
 
+    public static let listOptionsRename = String(
+        localized: "ql.list.options.rename",
+        bundle: .module,
+        comment: "Context menu / sheet entry that opens the inline rename UI for a list."
+    )
+
+    public static let listOptionsDelete = String(
+        localized: "ql.list.options.delete",
+        bundle: .module,
+        comment: "Context menu / sheet entry that triggers the delete confirmation for a list."
+    )
+
+    public static let listOptionsCancel = String(
+        localized: "ql.list.options.cancel",
+        bundle: .module,
+        comment: "Cancel button shared by list option flows (rename, delete confirmation)."
+    )
+
+    public static let listOptionsConfirm = String(
+        localized: "ql.list.options.confirm",
+        bundle: .module,
+        comment: "Confirmation button of the inline rename flow."
+    )
+
+    public static let listRenameTitle = String(
+        localized: "ql.list.rename.title",
+        bundle: .module,
+        comment: "Title of the rename-list sheet."
+    )
+
+    public static let listRenamePlaceholder = String(
+        localized: "ql.list.rename.placeholder",
+        bundle: .module,
+        comment: "Placeholder of the rename-list text field."
+    )
+
+    public static func listDeleteConfirmTitle(listName: String) -> String {
+        let format = String(
+            localized: "ql.list.delete.confirm.title",
+            bundle: .module,
+            comment: "Title of the delete-list confirmation alert — %@ is the list name."
+        )
+        return String(format: format, listName)
+    }
+
+    public static let listDeleteConfirmMessage = String(
+        localized: "ql.list.delete.confirm.message",
+        bundle: .module,
+        comment: "Body of the delete-list confirmation alert."
+    )
+
+    public static let listRenameErrorTitle = String(
+        localized: "ql.list.rename.error.title",
+        bundle: .module,
+        comment: "Title of the alert displayed when renaming a list failed."
+    )
+
+    public static let listRenameErrorMessage = String(
+        localized: "ql.list.rename.error.message",
+        bundle: .module,
+        comment: "Body of the alert displayed when renaming a list failed."
+    )
+
+    public static let listDeleteErrorTitle = String(
+        localized: "ql.list.delete.error.title",
+        bundle: .module,
+        comment: "Title of the alert displayed when deleting a list failed."
+    )
+
+    public static let listDeleteErrorMessage = String(
+        localized: "ql.list.delete.error.message",
+        bundle: .module,
+        comment: "Body of the alert displayed when deleting a list failed."
+    )
+
     public static func listCardAccessibility(
         typeLabel: String,
         name: String,

@@ -22,7 +22,7 @@ Registre vivant de l'avancement, consommé et mis à jour par le skill
 | US-02 | MVP      | todo   | 0         |    | |
 | US-03 | MVP      | awaiting-merge | 1  | #3 | base: feat/US-01-ajout-rapide (stacked) · review approuvee · pose QuickListLists |
 | US-04 | MVP      | awaiting-merge | 1  | #4 | base: feat/US-03-creer-liste (stacked) · review approuvee · HomeView + ListCard |
-| US-05 | MVP      | todo   | 0         |    | |
+| US-05 | MVP      | in-progress | 1     |    | base: feat/US-04-home (stacked) · ContextMenu sur ListCard + RenameSheet + alert delete |
 | US-06 | MVP      | todo   | 0         |    | |
 | US-07 | MVP      | todo   | 0         |    | Foundation Models — prévoir fallback US-19 |
 | US-08 | MVP      | todo   | 0         |    | Mode Courses = vue racine d'onglet (cf. design v0.2) |
