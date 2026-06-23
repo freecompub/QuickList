@@ -100,17 +100,9 @@ Les décisions QO-1 à QO-6 ont été validées le 2026-06-23. Deux questions re
 
 ---
 
-### QO-8 — Troisième onglet TabBar (Réglages ou autre ?)
+### ~~QO-8~~ — Troisième onglet TabBar — **tranchée 2026-06-23**
 
-La TabBar actuelle a deux onglets (Listes / Courses). Les Réglages sont accessibles via `gearshape.fill` dans la NavigationBar de HomeView. Deux options :
-
-**Option A (actuelle)** : pas de troisième onglet. Réglages via NavigationBar. TabBar minimale.
-
-**Option B** : ajouter un troisième onglet "Réglages" (`gearshape.fill`). Plus d'accessibilité pour les réglages, mais TabBar légèrement plus chargée.
-
-**Option C** : ajouter un troisième onglet "Inbox" (`tray.fill`), visible uniquement quand l'Inbox contient des items (badge). Les Réglages restent dans la NavigationBar.
-
-**Action requise : valider Option A, B ou C avant implémentation.**
+**Décision** : **Option A** retenue. TabBar à **2 onglets seulement** (Listes / Courses). Réglages accessibles via `gearshape.fill` dans la NavigationBar de HomeView. Cohérent avec le minimalisme QuickList. La design v0.2 reste valide telle quelle — pas de retouche nécessaire.
 
 ---
 
