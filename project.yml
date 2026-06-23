@@ -21,6 +21,8 @@ packages:
     path: Packages/QuickListDesignSystem
   QuickListAdd:
     path: Packages/QuickListAdd
+  QuickListLists:
+    path: Packages/QuickListLists
   swift-log:
     url: https://github.com/apple/swift-log.git
     from: 1.5.4
@@ -54,6 +56,7 @@ targets:
       - package: QuickListAnalytics
       - package: QuickListDesignSystem
       - package: QuickListAdd
+      - package: QuickListLists
       - package: swift-log
         product: Logging
   QuickListTests:
@@ -67,6 +70,7 @@ targets:
       - package: QuickListAnalytics
       - package: QuickListDesignSystem
       - package: QuickListAdd
+      - package: QuickListLists
       - package: swift-log
         product: Logging
     settings:
