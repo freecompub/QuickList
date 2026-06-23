@@ -10,10 +10,10 @@ Priorités : **MVP** (Jours 1–7), **IA** (Foundation Models, on-device), **Bon
 
 **US-01 — Ajouter un item en une frappe**
 En tant qu'utilisateur, je veux taper un texte dans un champ et valider avec Entrée, afin d'ajouter un item sans friction.
-- CA : un champ d'ajout est toujours visible en bas de l'écran de liste.
-- CA : après validation, l'item apparaît immédiatement dans la liste.
-- CA : le champ se vide mais garde le focus, pour permettre l'ajout en rafale.
-- CA : aucun pop-up ni formulaire intermédiaire n'apparaît.
+- [x] CA : un champ d'ajout est toujours visible en bas de l'écran de liste.
+- [x] CA : après validation, l'item apparaît immédiatement dans la liste.
+- [x] CA : le champ se vide mais garde le focus, pour permettre l'ajout en rafale.
+- [x] CA : aucun pop-up ni formulaire intermédiaire n'apparaît.
 
 **US-02 — Annuler un ajout par erreur**
 En tant qu'utilisateur, je veux supprimer rapidement un item que je viens d'ajouter, afin de corriger une faute de frappe.

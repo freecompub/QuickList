@@ -1,0 +1,4 @@
+"ql.addItem.placeholder" = "Add an item…";
+"ql.addItem.submit" = "Add";
+"ql.list.empty.title" = "Empty list";
+"ql.list.empty.subtitle" = "Start typing to add your first item.";
