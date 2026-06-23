@@ -1,5 +1,11 @@
 import SwiftUI
 
+#if canImport(UIKit)
+import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
+
 public extension Color {
     /// Vert système conforme HIG. Light : `#34C759`. Dark : `#30D158`.
     static let qlSuccess = Color(
@@ -26,12 +32,13 @@ private extension Color {
         self.init(uiColor: UIColor { traits in
             traits.userInterfaceStyle == .dark ? UIColor(dark) : UIColor(light)
         })
+        #elseif canImport(AppKit)
+        self.init(nsColor: NSColor(name: nil) { appearance in
+            let isDark = appearance.bestMatch(from: [.darkAqua, .vibrantDark]) != nil
+            return isDark ? NSColor(dark) : NSColor(light)
+        })
         #else
         self = light
         #endif
     }
 }
-
-#if canImport(UIKit)
-import UIKit
-#endif
