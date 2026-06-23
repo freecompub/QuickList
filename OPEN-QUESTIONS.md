@@ -23,6 +23,19 @@ résolue est déplacée vers la section « Résolues ».
 
 ## Ouvertes
 
+### COMPAT-IOS17 — Vérification SwiftData sur device iOS 17.0 réel
+- **Origine** : US-01 (ADR-002 dans `docs/decisions.md`).
+- **Nature** : risque de compatibilité runtime.
+- **Détail** : compilé avec le SDK iOS 26, le binaire référence des symboles
+  SwiftData (`BackingData.setValue`, `#Predicate` avec optional chaining)
+  absents du runtime iOS 17.0. Les tests s'exécutent donc sur le simulateur
+  iOS 26.1, et le code de US-01 évite les patterns problématiques connus.
+- **Action attendue** : avant la première release TestFlight, exécuter
+  l'app sur un device physique iOS 17.0 et valider le flux d'ajout sans
+  crash. Si un symbole manque, soit bumper le deployment target à iOS 17.5,
+  soit refactoriser le call site.
+- **Statut** : ouverte.
+
 ### CK-CONTAINER — Configuration du container iCloud
 - **Origine** : US-10 / US-21.
 - **Nature** : asset / config Apple Developer.

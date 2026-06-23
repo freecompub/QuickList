@@ -30,6 +30,11 @@ playground.xcworkspace
 # .swiftpm
 
 .build/
+*.xcodeproj/
+.swiftpm/
+DerivedData/
+*.xcworkspace/xcuserdata/
+.DS_Store
 
 # CocoaPods
 #

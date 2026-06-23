@@ -11,7 +11,7 @@ Légende : `→` dépend de.
 ## Phase 1 — MVP (J1 – J7)
 
 ### 1.1 Ajout ultra-rapide
-- **US-01** — Ajouter un item en une frappe
+- **US-01** — Ajouter un item en une frappe — *en revue*
 - **US-02** — Annuler un ajout par erreur (swipe + undo) → US-01
 
 ### 1.2 Listes multiples

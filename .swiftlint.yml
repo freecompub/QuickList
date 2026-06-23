@@ -1,0 +1,40 @@
+included:
+  - App
+  - Packages
+excluded:
+  - "**/.build"
+  - "**/Tests/**/Mocks"
+disabled_rules:
+  - todo
+  - trailing_comma
+opt_in_rules:
+  - explicit_init
+  - empty_count
+  - empty_string
+  - sorted_imports
+  - first_where
+  - last_where
+  - prefer_self_type_over_type_of_self
+  - redundant_nil_coalescing
+  - vertical_parameter_alignment_on_call
+line_length:
+  warning: 120
+  error: 160
+  ignores_comments: true
+  ignores_urls: true
+identifier_name:
+  excluded:
+    - id
+    - vc
+    - vm
+type_name:
+  min_length: 3
+function_body_length:
+  warning: 80
+  error: 120
+type_body_length:
+  warning: 300
+  error: 400
+file_length:
+  warning: 300
+  error: 400

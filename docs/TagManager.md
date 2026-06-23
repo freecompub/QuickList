@@ -26,11 +26,9 @@ l'implémentation qui émet l'événement (exigence `CLAUDE.md`).
 
 ## Tags actifs
 
-_(Aucun tag pour l'instant — la liste se remplit au fur et à mesure des US
-implémentées.)_
-
 | Event | US | Trigger | Properties | Module |
 |--|--|--|--|--|
+| `item_added` | US-01 | Soumission validée de l'AddItemBar (Return ou tap `[+]`) | `list_type: string` (valeur de `ListType`) | `QuickAdd` |
 
 ## Tags retirés
 

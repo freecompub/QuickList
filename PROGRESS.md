@@ -18,7 +18,7 @@ Registre vivant de l'avancement, consommé et mis à jour par le skill
 
 | ID    | Phase    | Statut | Tentatives | PR | Note |
 |-------|----------|--------|-----------|----|------|
-| US-01 | MVP      | todo   | 0         |    | |
+| US-01 | MVP      | in-progress | 1     |    | base: main · pose project.yml + modules SPM initiaux |
 | US-02 | MVP      | todo   | 0         |    | |
 | US-03 | MVP      | todo   | 0         |    | |
 | US-04 | MVP      | todo   | 0         |    | |
