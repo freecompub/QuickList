@@ -12,4 +12,16 @@ public extension QuickListStrings {
         bundle: .module,
         comment: "Accessibility hint for the tap target that marks a done item as to-do again."
     )
+
+    static let itemToggleErrorTitle = String(
+        localized: "ql.item.toggle.error.title",
+        bundle: .module,
+        comment: "Title of the alert displayed when toggling an item's done state failed."
+    )
+
+    static let itemToggleErrorMessage = String(
+        localized: "ql.item.toggle.error.message",
+        bundle: .module,
+        comment: "Body of the alert displayed when toggling an item's done state failed."
+    )
 }

@@ -49,9 +49,30 @@ public struct ListDetailView: View {
         } message: {
             Text(QuickListStrings.sortErrorMessage)
         }
+        .alert(
+            QuickListStrings.itemToggleErrorTitle,
+            isPresented: checkmarkErrorPresented
+        ) {
+            Button(QuickListStrings.listOptionsCancel) {
+                checkmarkViewModel.dismissError()
+            }
+        } message: {
+            Text(QuickListStrings.itemToggleErrorMessage)
+        }
         .onAppear {
             isAddItemFieldFocused = true
         }
+    }
+
+    private var checkmarkErrorPresented: Binding<Bool> {
+        Binding(
+            get: { checkmarkViewModel.lastError != nil },
+            set: { isPresented in
+                if !isPresented {
+                    checkmarkViewModel.dismissError()
+                }
+            }
+        )
     }
 
     private var sortMenu: some View {
@@ -145,10 +166,10 @@ public struct ListDetailView: View {
             checkmarkViewModel.toggle(item)
         } label: {
             HStack(spacing: Spacing.qlM) {
-                Image(systemName: item.isDone ? "checkmark.circle.fill" : "circle")
+                Image(systemName: item.isDone ? Symbol.qlItemCheckedOn : Symbol.qlItemCheckedOff)
                     .symbolRenderingMode(item.isDone ? .multicolor : .hierarchical)
-                    .font(.system(size: 28))
-                    .foregroundStyle(item.isDone ? Color.qlAccent : Color.qlSecondaryLabel)
+                    .font(.system(size: IconSize.qlCheckboxShopping))
+                    .foregroundStyle(item.isDone ? Color.qlSuccess : Color.qlSecondaryLabel)
                 Text(item.title)
                     .font(.qlHeadline)
                     .foregroundStyle(item.isDone ? Color.qlItemDone : Color.qlPrimaryLabel)
@@ -157,7 +178,7 @@ public struct ListDetailView: View {
                 Spacer(minLength: Spacing.qlS)
             }
             .padding(.vertical, Spacing.qlM)
-            .frame(minHeight: 64)
+            .frame(minHeight: IconSize.qlShoppingRowMinHeight)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -183,11 +204,6 @@ public struct ListDetailView: View {
             .font(.qlBody)
             .foregroundStyle(Color.qlPrimaryLabel)
             .padding(.vertical, Spacing.qlXS)
-    }
-
-    private struct RayonGroup {
-        let title: String
-        let items: [ListItem]
     }
 
     private func groupedByRayon(items: [ListItem]) -> [RayonGroup] {

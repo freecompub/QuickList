@@ -46,3 +46,5 @@
 "ql.rayon.autres" = "Other";
 "ql.item.toggle.accessibility.toDo" = "Mark as done";
 "ql.item.toggle.accessibility.done" = "Mark as to do";
+"ql.item.toggle.error.title" = "Could not update";
+"ql.item.toggle.error.message" = "Could not update this item. Try again.";
