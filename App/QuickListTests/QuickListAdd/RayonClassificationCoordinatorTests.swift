@@ -108,4 +108,42 @@ final class RayonClassificationCoordinatorTests: XCTestCase {
         XCTAssertNil(rayon)
         XCTAssertEqual(analytics.trackedEvents.first?.name, "item_classify_failed")
     }
+
+    func test_classify_userPreferenceTakesPriorityOverLanguageModel() async {
+        let preferences = MockCategoryPreferenceRepository()
+        preferences.storedPreferences["lait"] = "Surgelés"
+        let sutWithPref = RayonClassificationCoordinator(
+            service: service,
+            repository: repository,
+            preferenceRepository: preferences,
+            analytics: analytics
+        )
+        let list = TaskList(name: "Courses", type: .groceries)
+        let item = ListItem(title: "Lait")
+        service.behavior = .success(.cremerie)
+
+        let rayon = await sutWithPref.classify(item, in: list)
+
+        XCTAssertEqual(rayon, .surgeles)
+        XCTAssertTrue(service.classifyRequests.isEmpty, "Le modele ne doit pas etre interroge si une preference existe")
+        XCTAssertEqual(analytics.trackedEvents.first?.properties["source"], "preference")
+    }
+
+    func test_classify_noPreferenceFound_fallsBackToLanguageModel() async {
+        let preferences = MockCategoryPreferenceRepository()
+        let sutWithPref = RayonClassificationCoordinator(
+            service: service,
+            repository: repository,
+            preferenceRepository: preferences,
+            analytics: analytics
+        )
+        let list = TaskList(name: "Courses", type: .groceries)
+        let item = ListItem(title: "Inconnu")
+        service.behavior = .success(.autres)
+
+        _ = await sutWithPref.classify(item, in: list)
+
+        XCTAssertEqual(service.classifyRequests, ["Inconnu"])
+        XCTAssertEqual(analytics.trackedEvents.first?.properties["source"], "language_model")
+    }
 }

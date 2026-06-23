@@ -36,6 +36,7 @@ struct RootView: View {
                 },
                 detailContent: { list in
                     let repository = SwiftDataListItemRepository(context: modelContext)
+                    let preferenceRepository = SwiftDataCategoryPreferenceRepository(context: modelContext)
                     let analytics: AnalyticsService = LoggingAnalyticsService()
                     ListDetailView(
                         viewModelFactory: {
@@ -46,6 +47,7 @@ struct RootView: View {
                                 classificationCoordinator: RayonClassificationCoordinator(
                                     service: languageModelService,
                                     repository: repository,
+                                    preferenceRepository: preferenceRepository,
                                     analytics: analytics
                                 )
                             )
@@ -61,6 +63,14 @@ struct RootView: View {
                             ItemCheckmarkViewModel(
                                 list: list,
                                 repository: repository,
+                                analytics: analytics
+                            )
+                        },
+                        correctionViewModelFactory: {
+                            CategoryCorrectionViewModel(
+                                list: list,
+                                itemRepository: repository,
+                                preferenceRepository: preferenceRepository,
                                 analytics: analytics
                             )
                         }

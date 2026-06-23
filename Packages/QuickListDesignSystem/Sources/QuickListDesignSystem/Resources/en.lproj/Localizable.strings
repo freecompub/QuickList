@@ -48,3 +48,14 @@
 "ql.item.toggle.accessibility.done" = "Mark as to do";
 "ql.item.toggle.error.title" = "Could not update";
 "ql.item.toggle.error.message" = "Could not update this item. Try again.";
+"ql.rayon.fruitsLegumes" = "Fruits & Vegetables";
+"ql.rayon.boucherie" = "Butcher";
+"ql.rayon.cremerie" = "Dairy";
+"ql.rayon.epicerie" = "Pantry";
+"ql.rayon.surgeles" = "Frozen";
+"ql.rayon.boulangerie" = "Bakery";
+"ql.rayon.boissons" = "Beverages";
+"ql.rayon.hygiene" = "Hygiene";
+"ql.item.moveToRayon" = "Move to…";
+"ql.item.category.error.title" = "Could not save";
+"ql.item.category.error.message" = "Could not remember this correction. Try again.";

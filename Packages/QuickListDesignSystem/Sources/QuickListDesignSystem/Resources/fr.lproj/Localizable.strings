@@ -48,3 +48,14 @@
 "ql.item.toggle.accessibility.done" = "Marquer à faire";
 "ql.item.toggle.error.title" = "Modification impossible";
 "ql.item.toggle.error.message" = "Impossible de mettre à jour cet item. Réessayez.";
+"ql.rayon.fruitsLegumes" = "Fruits & Légumes";
+"ql.rayon.boucherie" = "Boucherie";
+"ql.rayon.cremerie" = "Crèmerie";
+"ql.rayon.epicerie" = "Épicerie";
+"ql.rayon.surgeles" = "Surgelés";
+"ql.rayon.boulangerie" = "Boulangerie";
+"ql.rayon.boissons" = "Boissons";
+"ql.rayon.hygiene" = "Hygiène";
+"ql.item.moveToRayon" = "Déplacer vers…";
+"ql.item.category.error.title" = "Correction impossible";
+"ql.item.category.error.message" = "Impossible de mémoriser cette correction. Réessayez.";

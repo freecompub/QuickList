@@ -8,6 +8,7 @@ public struct ListDetailView: View {
     @StateObject private var viewModel: AddItemViewModel
     @StateObject private var sortViewModel: SortListViewModel
     @StateObject private var checkmarkViewModel: ItemCheckmarkViewModel
+    @StateObject private var correctionViewModel: CategoryCorrectionViewModel
     @FocusState private var isAddItemFieldFocused: Bool
     @Query(sort: [SortDescriptor(\ListItem.createdAt, order: .forward)])
     private var allItems: [ListItem]
@@ -15,11 +16,13 @@ public struct ListDetailView: View {
     public init(
         viewModelFactory: @escaping () -> AddItemViewModel,
         sortViewModelFactory: @escaping () -> SortListViewModel,
-        checkmarkViewModelFactory: @escaping () -> ItemCheckmarkViewModel
+        checkmarkViewModelFactory: @escaping () -> ItemCheckmarkViewModel,
+        correctionViewModelFactory: @escaping () -> CategoryCorrectionViewModel
     ) {
         self._viewModel = StateObject(wrappedValue: viewModelFactory())
         self._sortViewModel = StateObject(wrappedValue: sortViewModelFactory())
         self._checkmarkViewModel = StateObject(wrappedValue: checkmarkViewModelFactory())
+        self._correctionViewModel = StateObject(wrappedValue: correctionViewModelFactory())
     }
 
     public var body: some View {
@@ -59,6 +62,16 @@ public struct ListDetailView: View {
         } message: {
             Text(QuickListStrings.itemToggleErrorMessage)
         }
+        .alert(
+            QuickListStrings.itemCategoryErrorTitle,
+            isPresented: correctionErrorPresented
+        ) {
+            Button(QuickListStrings.listOptionsCancel) {
+                correctionViewModel.dismissError()
+            }
+        } message: {
+            Text(QuickListStrings.itemCategoryErrorMessage)
+        }
         .onAppear {
             isAddItemFieldFocused = true
         }
@@ -70,6 +83,17 @@ public struct ListDetailView: View {
             set: { isPresented in
                 if !isPresented {
                     checkmarkViewModel.dismissError()
+                }
+            }
+        )
+    }
+
+    private var correctionErrorPresented: Binding<Bool> {
+        Binding(
+            get: { correctionViewModel.lastError != nil },
+            set: { isPresented in
+                if !isPresented {
+                    correctionViewModel.dismissError()
                 }
             }
         )
@@ -189,6 +213,20 @@ public struct ListDetailView: View {
                 : QuickListStrings.itemToggleAccessibilityToDo
         )
         .accessibilityAddTraits(item.isDone ? .isSelected : [])
+        .contextMenu {
+            Menu(QuickListStrings.itemMoveToRayon) {
+                ForEach(Rayon.allCases, id: \.self) { rayon in
+                    Button {
+                        correctionViewModel.setRayon(rayon, for: item)
+                    } label: {
+                        Label(
+                            QuickListStrings.rayonLabel(for: rayon.rawValue),
+                            systemImage: item.category == rayon.rawValue ? "checkmark" : ""
+                        )
+                    }
+                }
+            }
+        }
     }
 
     private func rayonSectionHeader(_ title: String) -> some View {
