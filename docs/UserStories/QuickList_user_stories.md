@@ -50,9 +50,9 @@ En tant qu'utilisateur, je veux trier une liste par ordre d'ajout, alphabétique
 
 **US-07 — Tri par rayon intelligent (Foundation Models)**
 En tant qu'utilisateur, je veux qu'une liste de courses regroupe automatiquement les articles par rayon, afin d'optimiser mon parcours en magasin.
-- CA : à l'ajout, le rayon est déterminé par le modèle on-device (`@Generable`, voir § Foundation Models).
-- CA : si Apple Intelligence est indisponible, repli sur un mapping local (JSON) → voir US-21.
-- CA : un article non reconnu va dans une section « Autres ».
+- [x] CA : à l'ajout, le rayon est déterminé par le modèle on-device (`@Generable`, voir § Foundation Models).
+- [x] CA : si Apple Intelligence est indisponible, repli sur un mapping local (JSON) → voir US-21.
+- [x] CA : un article non reconnu va dans une section « Autres ».
 
 ---
 

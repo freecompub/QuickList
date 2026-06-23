@@ -24,7 +24,7 @@ Registre vivant de l'avancement, consommé et mis à jour par le skill
 | US-04 | MVP      | awaiting-merge | 1  | #4 | base: feat/US-03-creer-liste (stacked) · review approuvee · HomeView + ListCard |
 | US-05 | MVP      | awaiting-merge | 1  | #5 | base: feat/US-04-home (stacked) · review approuvee · ContextMenu + RenameSheet + alert delete |
 | US-06 | MVP      | awaiting-merge | 1  | #6 | base: feat/US-05-rename-delete (stacked) · review approuvee · Menu toolbar de tri |
-| US-07 | MVP      | todo   | 0         |    | Foundation Models — prévoir fallback US-19 |
+| US-07 | MVP      | in-progress | 1     |    | base: feat/US-19-fallback (stacked) · RayonClassificationCoordinator + item.category fire-and-forget |
 | US-08 | MVP      | todo   | 0         |    | Mode Courses = vue racine d'onglet (cf. design v0.2) |
 | US-09 | MVP      | todo   | 0         |    | |
 | US-10 | MVP      | todo   | 0         |    | iCloud container à configurer côté Apple Developer |
