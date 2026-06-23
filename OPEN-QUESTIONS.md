@@ -35,6 +35,28 @@ résolue est déplacée vers la section « Résolues ».
   le deployment target, soit refactoriser le call site fautif.
 - **Statut** : ouverte.
 
+### AI-AVAIL-FINE — Sonde fine `SystemLanguageModel.availability`
+- **Origine** : US-19 (ADR-004 dans `docs/decisions.md`).
+- **Nature** : dette de précision sur la détection d'Apple Intelligence.
+- **Détail** : `LanguageModelServiceFactory.detectAvailability()` actuel
+  ne contrôle que (a) `canImport(FoundationModels)` à la compilation et
+  (b) `#available(iOS 26.0, *)` au runtime. Il **n'interroge pas**
+  `SystemLanguageModel.availability` qui détecte plus finement si Apple
+  Intelligence est activé par l'utilisateur et si le device est éligible.
+  Sur un device iOS 26 avec Apple Intelligence désactivé, le factory
+  retournera `.available` à tort.
+- **Impact actuel (US-19)** : aucun — `FoundationModelsLanguageService`
+  délègue intégralement au fallback pour US-19, donc aucun call site ne
+  plante.
+- **Impact dès US-07** : critique — `LanguageModelSession.respond(...)`
+  lèvera ou plantera si appelé alors qu'Apple Intelligence est éteint.
+- **Action attendue** : brancher la sonde fine dans `detectAvailability`
+  en US-07 sous `#available(iOS 26.0, *)`, retourner
+  `.unavailable(reason: .appleIntelligenceDisabled)` ou
+  `.deviceNotEligible` selon le verdict de
+  `SystemLanguageModel.availability`.
+- **Statut** : ouverte.
+
 ### CK-CONTAINER — Configuration du container iCloud
 - **Origine** : US-10 / US-21.
 - **Nature** : asset / config Apple Developer.

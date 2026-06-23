@@ -132,8 +132,8 @@ En tant qu'utilisateur, je veux que l'app devine dans quelle liste classer une c
 
 **US-19 — Repli gracieux sans Apple Intelligence**
 En tant qu'utilisateur sur un appareil non compatible, je veux que l'app fonctionne quand même, afin de ne pas être bloqué.
-- CA : on teste la disponibilité du modèle au lancement (`SystemLanguageModel.availability`).
-- CA : si indisponible → tri par mapping JSON local, et les fonctions IA sont masquées proprement.
+- [x] CA : on teste la disponibilité du modèle au lancement (`SystemLanguageModel.availability`).
+- [x] CA : si indisponible → tri par mapping JSON local, et les fonctions IA sont masquées proprement.
 
 ---
 
