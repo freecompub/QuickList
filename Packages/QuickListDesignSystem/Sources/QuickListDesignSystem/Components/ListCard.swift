@@ -55,7 +55,11 @@ public struct ListCard: View {
         )
         .qlShadow(Shadow.qlCard)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(name), \(subtitle)")
+        .accessibilityLabel(QuickListStrings.listCardAccessibility(
+            typeLabel: presentation.label,
+            name: name,
+            unfinishedCount: unfinishedCount
+        ))
     }
 
     private var countBadge: some View {
