@@ -24,7 +24,7 @@ Registre vivant de l'avancement, consommé et mis à jour par le skill
 | US-04 | MVP      | done | 1  | #13 | merged 2026-06-24 |
 | US-05 | MVP      | awaiting-merge | 1  | #5 | base: main (rebased) · ContextMenu + RenameSheet + alert delete |
 | US-06 | MVP      | awaiting-merge | 1  | #16 | redone propre sur main (rebase impossible) |
-| US-07 | MVP      | todo   | 0         |    | Foundation Models — prévoir fallback US-19 |
+| US-07 | MVP      | awaiting-merge | 1  | #18 | stacked sur #17 (US-19) · coordinator + groupage rayon |
 | US-08 | MVP      | todo   | 0         |    | Mode Courses = vue racine d'onglet (cf. design v0.2) |
 | US-09 | MVP      | todo   | 0         |    | |
 | US-10 | MVP      | todo   | 0         |    | iCloud container à configurer côté Apple Developer |
