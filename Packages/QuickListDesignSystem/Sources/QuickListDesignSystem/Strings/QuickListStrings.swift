@@ -74,6 +74,8 @@ public enum QuickListStrings {
         localized: "ql.error.dismiss",
         bundle: .module,
         comment: "Acknowledge button of the generic error alert."
+    )
+
     public static let createListTitle = String(
         localized: "ql.create.list.title",
         bundle: .module,
