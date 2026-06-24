@@ -57,6 +57,13 @@ struct RootView: View {
                                 repository: repository,
                                 analytics: analytics
                             )
+                        },
+                        sortViewModelFactory: {
+                            SortListViewModel(
+                                list: list,
+                                repository: SwiftDataTaskListRepository(context: modelContext),
+                                analytics: analytics
+                            )
                         }
                     )
                 }

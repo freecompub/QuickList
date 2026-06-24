@@ -50,3 +50,5 @@ minimum pour garder l'historique côté analyse.)_
 
 | Event | US d'origine | Retiré dans | Raison |
 |--|--|--|--|
+| `list_sort_changed` | US-06 | Sélection d'un mode de tri depuis le Menu de la NavigationBar | `list_type: string`, `sort_mode: string` (valeur de `SortMode`) | `QuickListAdd` |
+| `list_sort_change_failed` | US-06 | Échec de la persistance lors du changement de tri | `list_type: string`, `reason: string` (`"persistence"`) | `QuickListAdd` |
