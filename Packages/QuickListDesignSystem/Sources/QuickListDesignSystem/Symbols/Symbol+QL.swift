@@ -10,4 +10,6 @@ public enum Symbol {
     public static let qlListTypeIdeas = "lightbulb.fill"
     public static let qlListTypeProjects = "folder.fill"
     public static let qlListTypeFavorites = "star.fill"
+    public static let qlRenameList = "pencil"
+    public static let qlOptionsList = "ellipsis.circle"
 }

@@ -5,6 +5,19 @@ l'ensemble (US-04), renommage et suppression (US-05). Le module héberge ses
 ViewModels, ses vues SwiftUI et ses tests d'intégration aux protocoles
 `TaskListRepository` de `QuickListCore`.
 
+## Couverture US-05
+
+- `ListOptionsViewModel` : `draftName`, `canRename`, `rename()`, `delete()`,
+  `lastError`, `didRename`, `didDelete`. Émet `list_renamed` / `list_deleted`
+  / `list_rename_failed` / `list_delete_failed` via `QuickListAnalytics`.
+- `RenameListSheet` : sheet medium/large, TextField focus auto, bouton
+  « Valider » conditionnel sur `canRename`, `.alert` localisée pour les
+  erreurs, dismiss automatique sur `didRename`.
+- `HomeView` ajoute un `.contextMenu` (long-press) sur chaque `ListCard`
+  avec entrées « Renommer » (présente la sheet) et « Supprimer » (présente
+  une `.alert` de confirmation destructive). La suppression cascade les
+  items via `@Relationship(deleteRule: .cascade)`.
+
 ## Couverture US-04
 
 - `HomeViewModel` : expose `unfinishedItemsCount(in:)`, `totalItemsCount(in:)`,

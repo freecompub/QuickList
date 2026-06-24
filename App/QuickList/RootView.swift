@@ -16,6 +16,13 @@ struct RootView: View {
                 viewModelFactory: {
                     HomeViewModel(analytics: LoggingAnalyticsService())
                 },
+                optionsViewModelFactory: { list in
+                    ListOptionsViewModel(
+                        list: list,
+                        repository: SwiftDataTaskListRepository(context: modelContext),
+                        analytics: LoggingAnalyticsService()
+                    )
+                },
                 detailContent: { list in
                     let repository = SwiftDataListItemRepository(context: modelContext)
                     let analytics: AnalyticsService = LoggingAnalyticsService()

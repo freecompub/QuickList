@@ -36,8 +36,8 @@ En tant qu'utilisateur, je veux voir toutes mes listes sur l'écran d'accueil, a
 
 **US-05 — Renommer ou supprimer une liste**
 En tant qu'utilisateur, je veux renommer ou supprimer une liste, afin de garder mon espace propre.
-- CA : la suppression demande une confirmation et supprime les items rattachés (cascade).
-- CA : le renommage est instantané et synchronisé.
+- [x] CA : la suppression demande une confirmation et supprime les items rattachés (cascade).
+- [x] CA : le renommage est instantané et synchronisé.
 
 ---
 

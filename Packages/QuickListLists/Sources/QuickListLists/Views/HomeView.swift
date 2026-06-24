@@ -7,7 +7,10 @@ public struct HomeView<DetailContent: View>: View {
     @StateObject private var viewModel: HomeViewModel
     @Query(sort: [SortDescriptor(\TaskList.createdAt, order: .forward)])
     private var lists: [TaskList]
+    @State private var renameTarget: TaskList?
+    @State private var deleteTarget: TaskList?
     private let detailContent: (TaskList) -> DetailContent
+    private let optionsViewModelFactory: (TaskList) -> ListOptionsViewModel
 
     private let gridColumns = [
         GridItem(.flexible(), spacing: Spacing.qlL),
@@ -16,9 +19,11 @@ public struct HomeView<DetailContent: View>: View {
 
     public init(
         viewModelFactory: @escaping () -> HomeViewModel,
+        optionsViewModelFactory: @escaping (TaskList) -> ListOptionsViewModel,
         @ViewBuilder detailContent: @escaping (TaskList) -> DetailContent
     ) {
         self._viewModel = StateObject(wrappedValue: viewModelFactory())
+        self.optionsViewModelFactory = optionsViewModelFactory
         self.detailContent = detailContent
     }
 
@@ -38,6 +43,20 @@ public struct HomeView<DetailContent: View>: View {
                     viewModel.listDidOpen(list)
                 }
         }
+        .sheet(item: $renameTarget) { list in
+            RenameListSheetHost {
+                optionsViewModelFactory(list)
+            }
+        }
+        .overlay {
+            if let target = deleteTarget {
+                DeleteListAlertHost(
+                    listName: target.name,
+                    viewModelFactory: { optionsViewModelFactory(target) },
+                    onDismiss: { deleteTarget = nil }
+                )
+            }
+        }
     }
 
     private var gridContent: some View {
@@ -53,6 +72,24 @@ public struct HomeView<DetailContent: View>: View {
                         )
                     }
                     .buttonStyle(.plain)
+                    .contextMenu {
+                        Button {
+                            renameTarget = list
+                        } label: {
+                            Label(
+                                QuickListStrings.listOptionsRename,
+                                systemImage: Symbol.qlRenameList
+                            )
+                        }
+                        Button(role: .destructive) {
+                            deleteTarget = list
+                        } label: {
+                            Label(
+                                QuickListStrings.listOptionsDelete,
+                                systemImage: Symbol.qlDeleteItem
+                            )
+                        }
+                    }
                 }
             }
             .padding(Spacing.qlL)

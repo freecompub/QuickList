@@ -33,3 +33,15 @@
 "ql.list.itemCount.zero" = "0 items";
 "ql.list.card.accessibility.zero" = "%1$@ — %2$@, nothing to do";
 "ql.list.card.accessibility.unfinished" = "%1$@ — %2$@, %3$d to do";
+"ql.list.options.rename" = "Rename";
+"ql.list.options.delete" = "Delete";
+"ql.list.options.cancel" = "Cancel";
+"ql.list.options.confirm" = "Save";
+"ql.list.rename.title" = "Rename list";
+"ql.list.rename.placeholder" = "New name";
+"ql.list.delete.confirm.title" = "Delete \"%1$@\"?";
+"ql.list.delete.confirm.message" = "This list and all its items will be deleted. This action cannot be undone.";
+"ql.list.rename.error.title" = "Could not rename";
+"ql.list.rename.error.message" = "Could not rename this list. Try again.";
+"ql.list.delete.error.title" = "Could not delete";
+"ql.list.delete.error.message" = "Could not delete this list. Try again.";
