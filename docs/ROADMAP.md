@@ -12,7 +12,7 @@ Légende : `→` dépend de.
 
 ### 1.1 Ajout ultra-rapide
 - **US-01** — Ajouter un item en une frappe — *en revue*
-- **US-02** — Annuler un ajout par erreur (swipe + undo) → US-01
+- **US-02** — Annuler un ajout par erreur (swipe + undo) → US-01 — *en revue*
 
 ### 1.2 Listes multiples
 - **US-03** — Créer une liste (nom + type)

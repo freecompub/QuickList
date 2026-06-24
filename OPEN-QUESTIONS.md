@@ -35,6 +35,19 @@ résolue est déplacée vers la section « Résolues ».
   le deployment target, soit refactoriser le call site fautif.
 - **Statut** : ouverte.
 
+### SYNC-UNDO — Résolution de conflit pour undo CloudKit (US-10/US-11)
+- **Origine** : US-02 (ADR-003 dans `docs/decisions.md`).
+- **Nature** : sémantique de sync.
+- **Détail** : la stratégie "snapshot / restore" recrée un nouvel item
+  (`persistentModelID` différent) lors de l'undo. Si un autre device
+  supprime le même item entre `delete` local et `restore` local, CloudKit
+  verra deux `delete` puis un `create` côté device A — pas un conflit
+  classique. À implémenter lors de US-10/US-11 : soit accepter le doublon
+  (cas le plus simple), soit déduire par titre + createdAt pour merger.
+- **Action attendue** : décision technique avant US-10. Pas de blocage
+  pour US-02 (mono-device).
+- **Statut** : ouverte.
+
 ### CK-CONTAINER — Configuration du container iCloud
 - **Origine** : US-10 / US-21.
 - **Nature** : asset / config Apple Developer.

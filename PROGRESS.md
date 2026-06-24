@@ -18,8 +18,8 @@ Registre vivant de l'avancement, consommé et mis à jour par le skill
 
 | ID    | Phase    | Statut | Tentatives | PR | Note |
 |-------|----------|--------|-----------|----|------|
-| US-01 | MVP      | awaiting-merge | 1  | #1 | base: main · review approuvée (B1-B13 corrigés) |
-| US-02 | MVP      | todo   | 0         |    | |
+| US-01 | MVP      | done | 1  | #1 | merged 2026-06-24 |
+| US-02 | MVP      | awaiting-merge | 1  | #11 | base: main (rebased apres US-01 done) · review OK |
 | US-03 | MVP      | todo   | 0         |    | |
 | US-04 | MVP      | todo   | 0         |    | |
 | US-05 | MVP      | todo   | 0         |    | |

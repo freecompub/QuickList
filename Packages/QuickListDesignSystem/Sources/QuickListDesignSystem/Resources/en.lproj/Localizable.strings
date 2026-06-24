@@ -2,3 +2,11 @@
 "ql.addItem.submit" = "Add";
 "ql.list.empty.title" = "Empty list";
 "ql.list.empty.subtitle" = "Start typing to add your first item.";
+"ql.list.item.delete" = "Delete";
+"ql.undoToast.deleted" = "“%@” deleted";
+"ql.undoToast.undo" = "Undo";
+"ql.undoToast.undo.accessibility" = "Undo deletion";
+"ql.error.title" = "Something went wrong";
+"ql.error.delete" = "Could not delete this item. Try again.";
+"ql.error.restore" = "Could not restore this item. Try again.";
+"ql.error.dismiss" = "OK";
