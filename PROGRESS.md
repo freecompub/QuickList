@@ -24,7 +24,7 @@ Registre vivant de l'avancement, consommé et mis à jour par le skill
 | US-04 | MVP      | done | 1  | #13 | merged 2026-06-24 |
 | US-05 | MVP      | awaiting-merge | 1  | #5 | base: main (rebased) · ContextMenu + RenameSheet + alert delete |
 | US-06 | MVP      | awaiting-merge | 1  | #16 | redone propre sur main (rebase impossible) |
-| US-07 | MVP      | todo   | 0         |    | Foundation Models — prévoir fallback US-19 |
+| US-07 | MVP      | awaiting-merge | 1  | #18 | stacked sur #17 (US-19) · coordinator + groupage rayon |
 | US-08 | MVP      | todo   | 0         |    | Mode Courses = vue racine d'onglet (cf. design v0.2) |
 | US-09 | MVP      | todo   | 0         |    | |
 | US-10 | MVP      | todo   | 0         |    | iCloud container à configurer côté Apple Developer |
@@ -32,7 +32,7 @@ Registre vivant de l'avancement, consommé et mis à jour par le skill
 | US-12 | MVP      | todo   | 0         |    | Widget extension à ajouter au project.yml (XcodeGen) |
 | US-13 | MVP      | todo   | 0         |    | App Intents pour widget interactif |
 | US-14 | MVP      | todo   | 0         |    | |
-| US-19 | IA       | awaiting-merge | 1  | #17 | base: main · QuickListAI module — `LanguageModelService` protocol + fallback JSON local + `FoundationModels` derrière `#available(iOS 26)` |
+| US-19 | IA       | done   | 1  | #17 | merged 2026-06-24 |
 | US-15 | IA       | todo   | 0         |    | Derrière `LanguageModelService` mocké en CI, vrai modèle uniquement en dev iOS 26 |
 | US-16 | IA       | todo   | 0         |    | Speech + Foundation Models via le protocole |
 | US-17 | IA       | todo   | 0         |    | Entrée image — version 2026 du framework |
