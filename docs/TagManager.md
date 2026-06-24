@@ -34,6 +34,8 @@ commit** que l'implémentation qui émet l'événement (exigence `CLAUDE.md`).
 | `item_delete_undone` | US-02 | Tap sur « Annuler » du toast d'undo dans le délai | `list_type: string` | `QuickListAdd` |
 | `item_delete_failed` | US-02 | Échec de la persistance lors de la suppression d'un item | `list_type: string`, `reason: string` (`"persistence"`) | `QuickListAdd` |
 | `item_delete_undo_failed` | US-02 | Échec de la persistance lors du restore après undo | `list_type: string`, `reason: string` (`"persistence"`) | `QuickListAdd` |
+| `list_created` | US-03 | Création validée d'une liste depuis la sheet (`Créer`) | `list_type: string` | `QuickListLists` |
+| `list_create_failed` | US-03 | Échec de la persistance lors de la création d'une liste | `list_type: string`, `reason: string` (`"persistence"`) | `QuickListLists` |
 
 ## Tags retirés
 

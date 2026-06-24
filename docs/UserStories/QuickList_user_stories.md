@@ -26,8 +26,8 @@ En tant qu'utilisateur, je veux supprimer rapidement un item que je viens d'ajou
 
 **US-03 — Créer une liste**
 En tant qu'utilisateur, je veux créer une liste avec un nom et un type (Courses, Tâches, Idées, Projets, Favoris), afin de séparer mes contextes.
-- CA : la création se fait en moins de 3 taps.
-- CA : le type choisi détermine le comportement par défaut (ex. type Courses → tri par rayon).
+- [x] CA : la création se fait en moins de 3 taps.
+- [x] CA : le type choisi détermine le comportement par défaut (ex. type Courses → tri par rayon).
 
 **US-04 — Voir toutes mes listes**
 En tant qu'utilisateur, je veux voir toutes mes listes sur l'écran d'accueil, afin de naviguer rapidement.
