@@ -86,66 +86,6 @@ runtime sur iOS 17.0.
   TestFlight, mais le risque de crash runtime est levé pour la cible
   officiellement supportée.
 
----
-
-## ADR-003 — Suppression-puis-restore par snapshot (vs tombstone)
-
-**Statut** : adoptée, 2026-06-23.
-
-### Contexte
-
-US-02 demande une suppression « réversible quelques secondes ». Deux
-implémentations classiques :
-
-- **Tombstone** : marquer l'item `isDeleted = true` (champ ajouté au modèle
-  `ListItem`), filtrer dans les `@Query`, et le supprimer définitivement à
-  l'expiration du toast.
-- **Snapshot / restore** : supprimer immédiatement de SwiftData, conserver
-  une copie sérialisable (titre, catégorie, isDone, createdAt) en mémoire
-  le temps de l'undo, et la rejouer via le repository si l'utilisateur
-  annule.
-
-### Décision
-
-Adopter la stratégie **snapshot / restore** :
-
-- `ListItemSnapshot` (struct `Sendable`) capture les champs métier de
-  `ListItem` (sans `persistentModelID` qui sera regénéré).
-- `ListItemRepository.delete(_:)` supprime tout de suite via
-  `ModelContext.delete` + `save`.
-- `ListItemRepository.restore(_:in:)` ré-insère un nouveau `ListItem` avec
-  les valeurs du snapshot, en **conservant le `createdAt`** original pour
-  préserver l'ordre dans la liste.
-- `ListItemActionsViewModel` orchestre : timer de 4 s, événement
-  `item_deleted` à expiration, `item_delete_undone` à la restauration.
-
-### Conséquences
-
-- L'UI ne porte aucune connaissance du « tombstone » (filtre @Query
-  simplifié, code prédictible).
-- Le modèle `ListItem` reste minimal — pas de pollution par un flag
-  technique.
-- L'item restauré a un **nouveau `persistentModelID`** : neutre tant qu'on
-  est mono-device, mais devra être documenté pour US-10/US-11 (sync iCloud)
-  car la chaîne CloudKit verra : delete → create.
-
-### Alternatives écartées
-
-- **Tombstone** : refusé pour ne pas alourdir le modèle, pour ne pas avoir
-  à filtrer chaque `@Query`, et pour ne pas devoir purger périodiquement
-  les items définitivement supprimés.
-- **CoreData / NSPersistentHistory** : surdimensionné pour ce besoin
-  immédiat.
-
-### À surveiller (cf. `OPEN-QUESTIONS.md` § SYNC-UNDO à ouvrir avec US-10)
-
-- Si un autre device supprime aussi l'item entre `delete` local et `restore`
-  local, la résolution de conflit CloudKit doit accepter le doublon ou
-  rejeter le restore. Voir US-10/US-11.
-- L'`UndoToast` est porté en mémoire seulement. Un kill de l'app pendant
-  les 4 s entraîne une suppression définitive sans avertissement
-  utilisateur — acceptable pour la promesse « quelques secondes ».
-
 ### Conséquences
 
 - Les tests passent en local et serviront de base CI.
@@ -153,3 +93,68 @@ Adopter la stratégie **snapshot / restore** :
   symbole iOS 17.x sans être détecté par les tests iOS 26.1.
 - À documenter dans `OPEN-QUESTIONS.md` (`COMPAT-IOS17`) pour pousser
   une vérification device avant la première release.
+
+---
+
+## ADR-004 — Module `QuickListAI` + `LanguageModelService` (US-19)
+
+**Statut** : adoptée, 2026-06-24.
+
+### Contexte
+
+La phase 2 (US-15 → US-18, plus US-07 catégorisation par rayon) repose
+sur Foundation Models / Apple Intelligence — disponible uniquement à
+partir d'iOS 26 sur device éligible. La décision **ENV-IA**
+(`OPEN-QUESTIONS.md`) impose deux contraintes :
+
+1. Tout accès au modèle on-device passe par un **protocole injectable**
+   `LanguageModelService` pour rester testable et mockable en CI.
+2. Une **stratégie de repli** sans Apple Intelligence (mapping JSON
+   local) est livrée AVANT toute feature IA, ce qui fait l'objet de US-19.
+
+### Décision
+
+Créer un module SPM dédié `QuickListAI` qui isole tout le code
+intelligent on-device. Posé en US-19, il expose :
+
+- `LanguageModelService` (protocole `Sendable`) avec une méthode
+  `classify(itemTitle:) async throws -> ItemClassification`.
+- `ItemClassification` + `Rayon` (enum case-iterable couvrant les 9
+  rayons standards QuickList alignés sur le `@Guide(.anyOf(...))` du
+  modèle Foundation Models documenté dans la spec US).
+- `LanguageModelAvailability` (cas `.available` / `.unavailable(reason)`)
+  pour que l'UI puisse masquer les fonctions IA.
+- `LanguageModelServiceFactory` (`@MainActor`) : détecte l'availability
+  au lancement via `#if canImport(FoundationModels)` + `#available(iOS 26.0, *)`,
+  puis instancie soit `FoundationModelsLanguageService`, soit
+  `LocalRayonMappingService` (fallback).
+- `LocalRayonMappingService` : implémentation déterministe basée sur un
+  JSON bundlé (`rayon_mapping.json`), normalise les titres
+  (lowercase + diacritics-strip), retourne `.autres` si aucun mot-clé
+  ne correspond.
+- `FoundationModelsLanguageService` : squelette qui délègue au fallback
+  pour US-19 (la logique `@Generable` + `LanguageModelSession.respond(...)`
+  sera branchée en US-07 / US-15 / US-16).
+
+### Conséquences
+
+- Les call sites (`AddItemViewModel`, futur `RayonClassificationService`)
+  consomment uniquement le protocole — aucun import de `FoundationModels`
+  hors du module `QuickListAI`.
+- La sonde fine via `SystemLanguageModel.availability` (vérification
+  Apple Intelligence activé, device éligible) reste à brancher en US-07
+  quand on appellera réellement le modèle ; pour US-19 on s'arrête à la
+  détection du framework + version OS.
+- Le mapping JSON couvre les rayons standards français (alimentation
+  courante) ; il sera enrichi en US-07 et US-09 (corrections utilisateur).
+- L'UI peut désormais observer `LanguageModelAvailability` pour masquer
+  proprement les entrées IA (mic, scan) sur les devices non compatibles.
+
+### Alternatives écartées
+
+- **Coller le code Foundation Models directement dans `AddItemViewModel`**
+  : refusé, cassait la testabilité (impossible de mocker FM en CI iOS 17)
+  et la séparation par feature.
+- **Wrapper `FoundationModels` dans `QuickListCore`** : refusé pour ne
+  pas polluer le noyau SwiftData/CloudKit avec une dépendance optionnelle
+  fortement plateforme.

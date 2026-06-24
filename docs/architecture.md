@@ -20,7 +20,9 @@ QuickList.xcodeproj (généré par XcodeGen)
 │   ├── QuickListCore             ← modèles SwiftData + protocoles persistance
 │   ├── QuickListAnalytics        ← AnalyticsService (SwiftLog)
 │   ├── QuickListDesignSystem     ← tokens + composants UI partagés
-│   └── QuickListAdd                  ← feature US-01 (ajout ultra-rapide)
+│   ├── QuickListAdd              ← feature US-01 (ajout ultra-rapide)
+│   ├── QuickListLists            ← features listes (création, home, options, …)
+│   └── QuickListAI               ← protocole LanguageModelService + fallback JSON
 └── App/QuickListTests            ← test bundle unique, sous-dossier par module
 ```
 
