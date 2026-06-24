@@ -1,3 +1,4 @@
+import QuickListAI
 import QuickListCore
 import QuickListDesignSystem
 import SwiftData
@@ -78,23 +79,84 @@ public struct ListDetailView: View {
         let items = viewModel.itemsBelongingToList(in: allItems)
         if items.isEmpty {
             emptyState
+        } else if viewModel.list.type == .groceries {
+            groceriesGroupedList(items: items)
         } else {
-            List {
-                ForEach(items) { item in
-                    Text(item.title)
-                        .font(.qlBody)
-                        .foregroundStyle(Color.qlPrimaryLabel)
-                        .padding(.vertical, Spacing.qlXS)
-                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                            Button(role: .destructive) {
-                                actionsViewModel.delete(item)
-                            } label: {
-                                Label(QuickListStrings.listItemDelete, systemImage: "trash.fill")
-                            }
-                        }
+            plainList(items: items)
+        }
+    }
+
+    private func plainList(items: [ListItem]) -> some View {
+        List {
+            ForEach(items) { item in
+                itemRow(item)
+            }
+        }
+        .listStyle(.plain)
+    }
+
+    private func groceriesGroupedList(items: [ListItem]) -> some View {
+        let groups = groupedByRayon(items: items)
+        return List {
+            ForEach(groups, id: \.title) { group in
+                Section(header: rayonSectionHeader(group.title)) {
+                    ForEach(group.items) { item in
+                        itemRow(item)
+                    }
                 }
             }
-            .listStyle(.plain)
+        }
+        .listStyle(.insetGrouped)
+    }
+
+    private func rayonSectionHeader(_ title: String) -> some View {
+        Text(title.uppercased())
+            .font(.qlCaption1Bold)
+            .foregroundStyle(Color.qlSecondaryLabel)
+            .padding(.vertical, Spacing.qlXS)
+            .accessibilityLabel(title)
+    }
+
+    private func itemRow(_ item: ListItem) -> some View {
+        Text(item.title)
+            .font(.qlBody)
+            .foregroundStyle(Color.qlPrimaryLabel)
+            .padding(.vertical, Spacing.qlXS)
+            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                Button(role: .destructive) {
+                    actionsViewModel.delete(item)
+                } label: {
+                    Label(QuickListStrings.listItemDelete, systemImage: "trash.fill")
+                }
+            }
+    }
+
+    private struct RayonGroup {
+        let title: String
+        let items: [ListItem]
+    }
+
+    private func groupedByRayon(items: [ListItem]) -> [RayonGroup] {
+        let autresKey = Rayon.autres.rawValue
+        var bucketsByKey: [String: [ListItem]] = [:]
+        var order: [String] = []
+        for item in items {
+            let key = item.category ?? autresKey
+            if bucketsByKey[key] == nil {
+                bucketsByKey[key] = []
+                order.append(key)
+            }
+            bucketsByKey[key]?.append(item)
+        }
+        if let autres = bucketsByKey.removeValue(forKey: autresKey) {
+            order.removeAll { $0 == autresKey }
+            order.append(autresKey)
+            bucketsByKey[autresKey] = autres
+        }
+        return order.compactMap { key in
+            guard let bucketItems = bucketsByKey[key] else { return nil }
+            let title = (key == autresKey) ? QuickListStrings.rayonAutres : key
+            return RayonGroup(title: title, items: bucketItems)
         }
     }
 

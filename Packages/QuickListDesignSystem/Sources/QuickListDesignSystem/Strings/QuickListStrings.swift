@@ -259,4 +259,10 @@ public enum QuickListStrings {
         comment: "Body of the alert displayed when deleting a list failed."
     )
 
+    public static let rayonAutres = String(
+        localized: "ql.rayon.autres",
+        bundle: .module,
+        comment: "Fallback section title used when a grocery item has not been classified."
+    )
+
 }

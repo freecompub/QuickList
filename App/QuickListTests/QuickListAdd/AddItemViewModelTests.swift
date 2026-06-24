@@ -102,6 +102,57 @@ final class AddItemViewModelTests: XCTestCase {
         XCTAssertEqual(sut.pendingTitle, "")
     }
 
+    func test_submit_groceriesList_schedulesClassificationOnCoordinator() async {
+        let groceries = TaskList(name: "Courses", type: .groceries)
+        let repo = MockListItemRepository()
+        let aSpy = SpyAnalyticsService()
+        let langService = MockLanguageModelService()
+        langService.behavior = .success(.cremerie)
+        let coordinator = RayonClassificationCoordinator(
+            service: langService,
+            repository: repo,
+            analytics: aSpy
+        )
+        let viewModel = AddItemViewModel(
+            list: groceries,
+            repository: repo,
+            analytics: aSpy,
+            classificationCoordinator: coordinator
+        )
+        viewModel.pendingTitle = "Lait"
+
+        viewModel.submit()
+
+        for _ in 0..<50 where langService.classifyRequests.isEmpty {
+            try? await Task.sleep(nanoseconds: 20_000_000)
+        }
+        XCTAssertEqual(langService.classifyRequests, ["Lait"])
+    }
+
+    func test_submit_nonGroceriesList_doesNotCallLanguageModel() async {
+        let tasks = TaskList(name: "Tâches", type: .tasks)
+        let repo = MockListItemRepository()
+        let aSpy = SpyAnalyticsService()
+        let langService = MockLanguageModelService()
+        let coordinator = RayonClassificationCoordinator(
+            service: langService,
+            repository: repo,
+            analytics: aSpy
+        )
+        let viewModel = AddItemViewModel(
+            list: tasks,
+            repository: repo,
+            analytics: aSpy,
+            classificationCoordinator: coordinator
+        )
+        viewModel.pendingTitle = "Appeler le dentiste"
+
+        viewModel.submit()
+
+        try? await Task.sleep(nanoseconds: 80_000_000)
+        XCTAssertTrue(langService.classifyRequests.isEmpty)
+    }
+
     func test_submit_repositoryFailure_keepsFieldAndSurfacesError() {
         repository.behavior = .fail(ListItemRepositoryError.emptyTitle)
         sut.pendingTitle = "Lait"
