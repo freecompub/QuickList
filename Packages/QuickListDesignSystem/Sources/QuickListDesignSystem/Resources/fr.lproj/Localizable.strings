@@ -2,14 +2,6 @@
 "ql.addItem.submit" = "Ajouter";
 "ql.list.empty.title" = "Liste vide";
 "ql.list.empty.subtitle" = "Commencez à taper pour ajouter votre premier item.";
-"ql.list.item.delete" = "Supprimer";
-"ql.undoToast.deleted" = "« %@ » supprimé";
-"ql.undoToast.undo" = "Annuler";
-"ql.undoToast.undo.accessibility" = "Annuler la suppression";
-"ql.error.title" = "Une erreur est survenue";
-"ql.error.delete" = "Impossible de supprimer cet item. Réessayez.";
-"ql.error.restore" = "Impossible de restaurer cet item. Réessayez.";
-"ql.error.dismiss" = "OK";
 "ql.create.list.title" = "Nouvelle liste";
 "ql.create.list.namePlaceholder" = "Nom de la liste";
 "ql.create.list.create" = "Créer";
@@ -45,3 +37,10 @@
 "ql.list.rename.error.message" = "Impossible de renommer cette liste. Réessayez.";
 "ql.list.delete.error.title" = "Suppression impossible";
 "ql.list.delete.error.message" = "Impossible de supprimer cette liste. Réessayez.";
+"ql.sort.menu.title" = "Trier";
+"ql.sort.dateAdded" = "Ordre d'ajout";
+"ql.sort.alphabetical" = "Alphabétique";
+"ql.sort.status" = "Statut (à faire / fait)";
+"ql.sort.error.title" = "Tri impossible";
+"ql.sort.error.message" = "Impossible de changer le tri. Réessayez.";
+"ql.rayon.autres" = "Autres";

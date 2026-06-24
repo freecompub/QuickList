@@ -35,4 +35,9 @@ public final class SwiftDataListItemRepository: ListItemRepository {
         try context.save()
         return item
     }
+
+    public func updateCategory(_ item: ListItem, to category: String?) throws {
+        item.category = category
+        try context.save()
+    }
 }

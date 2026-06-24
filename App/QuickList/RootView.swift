@@ -1,4 +1,5 @@
 import QuickListAdd
+import QuickListAI
 import QuickListAnalytics
 import QuickListCore
 import QuickListDesignSystem
@@ -9,6 +10,16 @@ import SwiftUI
 struct RootView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var isCreateSheetPresented = false
+    private let languageModelService: LanguageModelService
+    private let languageModelAvailability: LanguageModelAvailability
+
+    init(
+        languageModelService: LanguageModelService,
+        languageModelAvailability: LanguageModelAvailability
+    ) {
+        self.languageModelService = languageModelService
+        self.languageModelAvailability = languageModelAvailability
+    }
 
     var body: some View {
         NavigationStack {
@@ -26,12 +37,18 @@ struct RootView: View {
                 detailContent: { list in
                     let repository = SwiftDataListItemRepository(context: modelContext)
                     let analytics: AnalyticsService = LoggingAnalyticsService()
+                    let coordinator = makeClassificationCoordinator(
+                        for: list,
+                        repository: repository,
+                        analytics: analytics
+                    )
                     ListDetailView(
                         viewModelFactory: {
                             AddItemViewModel(
                                 list: list,
                                 repository: repository,
-                                analytics: analytics
+                                analytics: analytics,
+                                classificationCoordinator: coordinator
                             )
                         },
                         actionsViewModelFactory: {
@@ -72,5 +89,18 @@ struct RootView: View {
                 )
             }
         }
+    }
+
+    private func makeClassificationCoordinator(
+        for list: TaskList,
+        repository: ListItemRepository,
+        analytics: AnalyticsService
+    ) -> RayonClassificationCoordinator? {
+        guard list.type == .groceries else { return nil }
+        return RayonClassificationCoordinator(
+            service: languageModelService,
+            repository: repository,
+            analytics: analytics
+        )
     }
 }

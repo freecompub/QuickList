@@ -15,6 +15,7 @@ let package = Package(
         .package(path: "../QuickListCore"),
         .package(path: "../QuickListAnalytics"),
         .package(path: "../QuickListDesignSystem"),
+        .package(path: "../QuickListAI"),
         .package(url: "https://github.com/apple/swift-log.git", from: "1.5.4")
     ],
     targets: [
@@ -24,6 +25,7 @@ let package = Package(
                 "QuickListCore",
                 "QuickListAnalytics",
                 "QuickListDesignSystem",
+                "QuickListAI",
                 .product(name: "Logging", package: "swift-log")
             ]
         )
