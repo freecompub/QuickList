@@ -36,4 +36,9 @@ public final class SwiftDataTaskListRepository: TaskListRepository {
         context.delete(list)
         try context.save()
     }
+
+    public func updateSortMode(_ list: TaskList, to mode: SortMode) throws {
+        list.sortMode = mode
+        try context.save()
+    }
 }

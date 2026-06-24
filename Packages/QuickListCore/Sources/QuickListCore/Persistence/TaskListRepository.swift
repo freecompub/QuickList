@@ -6,4 +6,5 @@ public protocol TaskListRepository: AnyObject {
     func create(name: String, type: ListType) throws -> TaskList
     func rename(_ list: TaskList, to newName: String) throws
     func delete(_ list: TaskList) throws
+    func updateSortMode(_ list: TaskList, to mode: SortMode) throws
 }

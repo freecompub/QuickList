@@ -78,6 +78,18 @@ final class TaskListRepositoryTests: XCTestCase {
         XCTAssertEqual(fetched.first?.name, "Idées")
     }
 
+    func test_updateSortMode_persistsNewMode() throws {
+        let repo = try makeRepository()
+        let list = try repo.create(name: "Tâches", type: .tasks)
+        XCTAssertEqual(list.sortMode, .dateAdded)
+
+        try repo.updateSortMode(list, to: .alphabetical)
+
+        XCTAssertEqual(list.sortMode, .alphabetical)
+        let fetched = try repo.fetchAll()
+        XCTAssertEqual(fetched.first?.sortMode, .alphabetical)
+    }
+
     func test_delete_cascadesItemsBelongingToTheList() throws {
         let schema = Schema([TaskList.self, ListItem.self])
         let config = ModelConfiguration(isStoredInMemoryOnly: true)

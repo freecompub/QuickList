@@ -65,4 +65,17 @@ final class MockTaskListRepository: TaskListRepository {
             throw error
         }
     }
+
+    var updateSortModeBehavior: Behavior = .success
+    private(set) var updatedSortModes: [(TaskList, SortMode)] = []
+
+    func updateSortMode(_ list: TaskList, to mode: SortMode) throws {
+        switch updateSortModeBehavior {
+        case .success:
+            list.sortMode = mode
+            updatedSortModes.append((list, mode))
+        case .fail(let error):
+            throw error
+        }
+    }
 }
