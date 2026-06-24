@@ -1,0 +1,40 @@
+{
+  "Fruits & Légumes": [
+    "pomme", "banane", "carotte", "tomate", "salade", "oignon", "ail",
+    "poivron", "courgette", "aubergine", "champignon", "fraise", "orange",
+    "citron", "concombre", "épinard", "brocoli", "chou", "patate", "pomme de terre",
+    "raisin", "kiwi", "ananas", "mangue", "avocat", "radis", "navet", "céleri"
+  ],
+  "Boucherie": [
+    "boeuf", "porc", "poulet", "agneau", "veau", "dinde", "canard", "lapin",
+    "steak", "côtelette", "saucisse", "jambon", "rôti", "escalope", "lardons", "merguez"
+  ],
+  "Crèmerie": [
+    "lait", "yaourt", "fromage", "beurre", "crème", "oeuf", "oeufs", "tofu",
+    "fromage blanc", "mozzarella", "camembert", "emmental", "comté", "feta",
+    "mascarpone", "ricotta"
+  ],
+  "Épicerie": [
+    "pâtes", "riz", "farine", "sucre", "sel", "poivre", "huile", "vinaigre",
+    "lentilles", "haricots", "pois chiches", "café", "thé", "miel", "confiture",
+    "céréales", "biscuits", "chocolat", "moutarde", "ketchup", "sauce tomate",
+    "soupe", "conserve"
+  ],
+  "Surgelés": [
+    "glace", "pizza surgelée", "frites surgelées", "légumes surgelés",
+    "poisson surgelé", "crevettes surgelées", "sorbet"
+  ],
+  "Boulangerie": [
+    "pain", "baguette", "croissant", "viennoiserie", "brioche", "pain au chocolat",
+    "chocolatine", "tarte", "gâteau", "cake", "muffin", "cookie"
+  ],
+  "Boissons": [
+    "eau", "jus", "soda", "bière", "vin", "champagne", "thé glacé", "limonade",
+    "smoothie", "café froid", "sirop", "boisson"
+  ],
+  "Hygiène": [
+    "savon", "shampoing", "dentifrice", "déodorant", "papier toilette",
+    "mouchoirs", "rasoir", "gel douche", "brosse à dents", "coton tige",
+    "lessive", "adoucissant", "liquide vaisselle"
+  ]
+}
