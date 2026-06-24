@@ -31,8 +31,8 @@ En tant qu'utilisateur, je veux créer une liste avec un nom et un type (Courses
 
 **US-04 — Voir toutes mes listes**
 En tant qu'utilisateur, je veux voir toutes mes listes sur l'écran d'accueil, afin de naviguer rapidement.
-- CA : chaque liste affiche son nom, son icône et le nombre d'items non faits.
-- CA : un tap ouvre la liste.
+- [x] CA : chaque liste affiche son nom, son icône et le nombre d'items non faits.
+- [x] CA : un tap ouvre la liste.
 
 **US-05 — Renommer ou supprimer une liste**
 En tant qu'utilisateur, je veux renommer ou supprimer une liste, afin de garder mon espace propre.
